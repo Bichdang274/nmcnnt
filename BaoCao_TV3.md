@@ -111,13 +111,15 @@ Kết quả kiểm thử ngày 26/10/2026:
 - Bản sao chứa 10 giao dịch và có kết quả integrity_check là ok.
 - Log: MinhChung/xuat_giao_dich.txt và MinhChung/sao_luu.txt.
 
-Hiện đã kiểm tra tính toàn vẹn và số lượng giao dịch của bản sao; chưa thực hiện kiểm thử phục hồi để chạy tiếp chương trình từ bản sao lưu.
+Đã phục hồi bản sao lưu vào database thử nghiệm riêng trong DuLieu/PhucHoiThu. Kết quả: 10 giao dịch và 1 bản ghi bộ đếm khớp hoàn toàn với bản sao lưu; integrity_check trả về ok.
 
+Log: MinhChung/kiem_tra_phuc_hoi.txt.
+
+Chưa kiểm thử tạo giao dịch mới bằng chương trình cửa hàng trên database đã phục hồi.
 ## 5. Công việc còn lại
 
 ### 5.1. Hoàn thiện kiểm thử chương trình
 
-- Kiểm thử phục hồi từ bản sao lưu trên database thử nghiệm riêng.
 - Kiểm tra khả năng tạo giao dịch mới sau phục hồi, bảo đảm bộ đếm tiếp tục cấp mã đúng.
 - Bổ sung kiểm thử trường hợp cùng mã giao dịch nhưng nội dung khác nhau.
 - Bổ sung kiểm thử trường hợp trụ sở đã lưu giao dịch nhưng cửa hàng chưa nhận được ACK.

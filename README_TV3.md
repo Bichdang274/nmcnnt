@@ -112,3 +112,26 @@ python Script/sao_luu.py
 - Kiểm tra toàn vẹn bản sao: ok.
 - Log: `MinhChung/xuat_giao_dich.txt` và `MinhChung/sao_luu.txt`.
 
+## 9. Kiểm thử phục hồi bản sao lưu
+
+Chạy tại thư mục gốc dự án:
+
+```powershell
+python Script/kiem_tra_phuc_hoi.py
+```
+
+- Bản sao được dùng: `DuLieu/SaoLuu/cuahang01_20261026_081101_081521.db`.
+- Phục hồi vào file thử nghiệm riêng trong `DuLieu/PhucHoiThu`.
+- Không ghi đè database cửa hàng đang sử dụng.
+- Đối chiếu toàn bộ dữ liệu của bảng `giao_dich` và `bo_dem` với bản sao lưu.
+- Kiểm tra tính toàn vẹn database sau phục hồi.
+
+Kết quả ngày 26/10/2026:
+
+- Bảng `giao_dich`: khớp 10 bản ghi.
+- Bảng `bo_dem`: khớp 1 bản ghi.
+- `integrity_check`: ok.
+- Log: `MinhChung/kiem_tra_phuc_hoi.txt`.
+
+Chưa kiểm thử tạo giao dịch mới bằng chương trình cửa hàng trên database đã phục hồi.
+
