@@ -75,7 +75,40 @@ Log:
 - Đã kiểm thử lỗi kết nối bằng cách dừng máy chủ trên laptop.
   Đây chưa phải minh chứng ngắt WAN trong Packet Tracer.
 - Phối hợp TV1, TV2 để thống nhất cấu trúc dữ liệu và kịch bản mạng.
-- Bổ sung xuất tập tin giao dịch mẫu và sao lưu kho cục bộ.
 - Bổ sung minh chứng mạng từ mô hình Packet Tracer của nhóm.
 - Hoàn thiện các mục báo cáo được phân công.
+
+## 8. Xuất giao dịch mẫu và sao lưu cục bộ
+
+### Xuất giao dịch ra CSV
+
+Chạy tại thư mục gốc dự án:
+
+```powershell
+python Script/xuat_giao_dich.py
+```
+
+- Xuất các giao dịch của cửa hàng CH01 vào thư mục `DuLieu/Xuat`.
+- File CSV có 6 cột: ma_gd, ma_cua_hang, ma_may, thoi_gian, so_tien, trang_thai.
+- Tên file chứa thời gian xuất để phân biệt các lần chạy.
+- Chương trình chỉ đọc database gốc.
+
+### Sao lưu SQLite
+
+```powershell
+python Script/sao_luu.py
+```
+
+- Sử dụng SQLite backup để sao lưu toàn bộ database cửa hàng.
+- Bản sao nằm trong `DuLieu/SaoLuu`, tên file có thời gian tạo.
+- Giữ cả bảng giao dịch và bảng bộ đếm mã.
+- Kiểm tra bản sao bằng `PRAGMA integrity_check`.
+- Hiện chạy sao lưu bằng lệnh thủ công, chưa lập lịch tự động.
+
+### Kết quả kiểm thử ngày 26/10/2026
+
+- Xuất CSV thành công: 10 giao dịch, tất cả ở trạng thái ACKED.
+- Sao lưu thành công: bản sao chứa 10 giao dịch.
+- Kiểm tra toàn vẹn bản sao: ok.
+- Log: `MinhChung/xuat_giao_dich.txt` và `MinhChung/sao_luu.txt`.
 
