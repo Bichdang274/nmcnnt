@@ -1,0 +1,25 @@
+==============================================================================
+KT3 – Khôi phục đường truyền, gửi lại, không mất / không đếm trùng   (chạy lúc 2026-10-17 10:26:27)
+==============================================================================
+
+$ python3 store_agent.py --ch 1 wan up
+[2026-10-17 10:26:27] === KHÔI PHỤC WAN cửa hàng CH01 ===
+
+$ python3 store_agent.py --ch 1 trang-thai
+[2026-10-17 10:26:27] Kho lưu tạm CH01: PENDING=8, SENT=2, ACKED=10, TONG=20
+
+$ python3 store_agent.py --ch 1 trang-thai
+[2026-10-17 10:26:27] Kho lưu tạm CH01: PENDING=0, SENT=0, ACKED=20, TONG=20
+
+$ python3 doi_chieu.py
+=== ĐỐI CHIẾU DỮ LIỆU (2026-10-17 10:26:27) ===
+Q1 – Số bản ghi tại trụ sở theo cửa hàng: CH01=20, CH02=15, CH03=10 | tổng 45
+Q2 – Mã giao dịch trùng (GROUP BY ma_gd HAVING COUNT(*) > 1): RỖNG – không có bản ghi trùng
+Q3 – Số lần trụ sở nhận bản trùng (bỏ qua, vẫn ACK): 2
+Cửa     PENDING   SENT  ACKED   Tổng    Trụ sở có  ACKED mà trụ sở thiếu
+CH01          0      0     20     20           20                      0
+CH02          0      0     15     15           15                      0
+CH03          0      0     10     10           10                      0
+
+[Lưu bản chụp CSDL → DuLieu/sau_khoi_phuc/]
+  → ĐẠT: gửi lại 10 giao dịch: trụ sở ghi mới 8, nhận trùng 2 (bỏ qua, vẫn ACK); trụ sở CH1: 12 → 20 (+8); cửa hàng 20/20 ACKED; truy vấn trùng rỗng

@@ -1,0 +1,12 @@
+! ===== SW-CH3 – phần TV2: giới hạn telnet vào switch =====
+! Dán vào CLI sau khi đăng nhập (console: cisco). Lệnh enable hỏi mật khẩu: class
+enable
+configure terminal
+access-list 10 permit host 192.168.0.20
+line vty 0 4
+ access-class 10 in
+line vty 5 15
+ access-class 10 in
+ exit
+end
+write memory

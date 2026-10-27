@@ -1,0 +1,37 @@
+! ===== KIỂM THỬ PHẦN TV2 trên Nhom02_v2.pkt =====
+! Trước mỗi ảnh: trên router chạy  show clock  (đặt giờ: clock set 14:00:00 20 Oct 2026)
+
+! ---- SEC-1: truy cập được phép ----
+! POS1-1 > Desktop > Command Prompt:
+ping 192.168.0.10                 ! mong đợi: Reply, TTL=126
+! POS1-1 > Desktop > Web Browser:  http://192.168.0.10   -> hiện trang Máy chủ trung tâm
+! Lặp lại trên POS2-1, POS3-1 (kiểm tra ACL không chặn nhầm KT1)
+
+! ---- SEC-2: truy cập bị chặn ----
+! POS1-1 > Command Prompt:
+ping 192.168.0.11                 ! máy chủ sao lưu  -> Destination host unreachable
+ping 192.168.20.11                ! POS cửa hàng 2   -> Destination host unreachable
+telnet 192.168.10.1               ! telnet router    -> bị từ chối (access-class 10)
+! R-CH1# (xem bộ đếm, cột match phải tăng ở dòng deny)
+show access-lists CH1_LAN_IN
+! R-HQ#
+show access-lists HQ_SERVERS_OUT
+
+! ---- Quyền của PC quản trị ----
+! PC-Admin > Command Prompt:
+ping 192.168.10.11                ! PC-Admin ping POS -> Reply
+telnet 192.168.10.2               ! vào SW-CH1, mật khẩu cisco -> được
+telnet 10.0.1.2                   ! vào R-CH1 -> được
+
+! ---- Sao lưu cấu hình qua ACL (phối hợp TV1) ----
+! R-CH1#
+copy running-config tftp:
+! Address: 192.168.0.11  Filename: R-CH1-confg-<yyyymmdd>
+! SW-CH1#  (nguồn 192.168.10.2 được ACL cho phép)
+copy running-config tftp:
+! Server-Backup > Services > TFTP -> thấy file vừa gửi
+
+! ---- Gỡ lỗi nếu ACL chặn nhầm ----
+! show access-lists        -> dòng nào đang khớp (match)
+! show ip interface g0/0   -> "Inbound/Outgoing access list is ..."
+! Sửa một dòng: ip access-list extended CH1_LAN_IN / no <số thứ tự> / <số thứ tự> permit ...

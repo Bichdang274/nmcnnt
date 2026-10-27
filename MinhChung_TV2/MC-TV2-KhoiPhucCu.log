@@ -1,0 +1,50 @@
+MC-TV2 – Khôi phục CSDL trụ sở từ bản sao lưu CŨ và gửi bù (dữ liệu thử riêng, chạy lúc 2026-10-27 11:58:19)
+
+$ python3 store_agent.py --ch 2 tao --so 6 --seed 5
+[2026-10-27 11:58:20] Tạo 6 giao dịch PENDING: CH02-POS01-20261027-000001 … CH02-POS01-20261027-000002
+
+$ python3 store_agent.py --ch 2 gui
+[2026-10-27 11:58:20] Bắt đầu gửi 6 giao dịch chưa ACKED, 1 bản/yêu cầu
+[2026-10-27 11:58:20] Kết thúc lượt gửi: 6 yêu cầu HTTP, gửi 6, ACK 6 (trụ sở: mới 6, trùng 0)
+
+$ python3 sao_luu.py sao-luu
+[2026-10-27 11:58:20] Sao lưu CSDL trụ sở → hq_20261027_115820.db (6 bản ghi)
+
+$ python3 store_agent.py --ch 2 tao --so 2 --seed 6
+[2026-10-27 11:58:20] Tạo 2 giao dịch PENDING: CH02-POS01-20261027-000003 … CH02-POS02-20261027-000002
+
+$ python3 store_agent.py --ch 2 gui
+[2026-10-27 11:58:20] Bắt đầu gửi 2 giao dịch chưa ACKED, 1 bản/yêu cầu
+[2026-10-27 11:58:20] Kết thúc lượt gửi: 2 yêu cầu HTTP, gửi 2, ACK 2 (trụ sở: mới 2, trùng 0)
+
+$ python3 doi_chieu.py --ch 2
+=== ĐỐI CHIẾU DỮ LIỆU (2026-10-27 11:58:20) ===
+Q1 – Số bản ghi tại trụ sở theo cửa hàng: CH02=8 | tổng 8
+Q2 – Mã giao dịch trùng (GROUP BY ma_gd HAVING COUNT(*) > 1): RỖNG – không có bản ghi trùng
+Q3 – Số lần trụ sở nhận bản trùng (bỏ qua, vẫn ACK): 0
+Cửa     PENDING   SENT  ACKED   Tổng    Trụ sở có  ACKED mà trụ sở thiếu
+CH02          0      0      8      8            8                      0
+
+$ python3 sao_luu.py khoi-phuc
+[2026-10-27 11:58:20] Khôi phục CSDL trụ sở từ hq_20261027_115820.db: 8 → 6 bản ghi
+[2026-10-27 11:58:20] CẢNH BÁO: CH02 có 2 giao dịch đã ACKED nhưng trụ sở không còn → chạy: python3 store_agent.py --ch 2 gui --lap
+
+$ python3 doi_chieu.py --ch 2
+=== ĐỐI CHIẾU DỮ LIỆU (2026-10-27 11:58:21) ===
+Q1 – Số bản ghi tại trụ sở theo cửa hàng: CH02=6 | tổng 6
+Q2 – Mã giao dịch trùng (GROUP BY ma_gd HAVING COUNT(*) > 1): RỖNG – không có bản ghi trùng
+Q3 – Số lần trụ sở nhận bản trùng (bỏ qua, vẫn ACK): 0
+Cửa     PENDING   SENT  ACKED   Tổng    Trụ sở có  ACKED mà trụ sở thiếu
+CH02          0      0      8      8            6                      2
+
+$ python3 store_agent.py --ch 2 gui --lap
+[2026-10-27 11:58:21] Bắt đầu gửi 8 giao dịch (GỬI LẶP toàn bộ, kể cả đã ACKED), 1 bản/yêu cầu
+[2026-10-27 11:58:21] Kết thúc lượt gửi: 8 yêu cầu HTTP, gửi 8, ACK 8 (trụ sở: mới 2, trùng 6)
+
+$ python3 doi_chieu.py --ch 2
+=== ĐỐI CHIẾU DỮ LIỆU (2026-10-27 11:58:21) ===
+Q1 – Số bản ghi tại trụ sở theo cửa hàng: CH02=8 | tổng 8
+Q2 – Mã giao dịch trùng (GROUP BY ma_gd HAVING COUNT(*) > 1): RỖNG – không có bản ghi trùng
+Q3 – Số lần trụ sở nhận bản trùng (bỏ qua, vẫn ACK): 6
+Cửa     PENDING   SENT  ACKED   Tổng    Trụ sở có  ACKED mà trụ sở thiếu
+CH02          0      0      8      8            8                      0

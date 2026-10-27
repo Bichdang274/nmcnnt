@@ -1,0 +1,29 @@
+! ===== R-CH1 – phần TV2: ACL LAN cửa hàng (áp IN trên G0/0, gần nguồn) + giới hạn telnet =====
+! Dán vào CLI sau khi đăng nhập (console: cisco). Lệnh enable hỏi mật khẩu: class
+enable
+configure terminal
+! 1) Khai báo ACL trước, áp sau
+ip access-list extended CH1_LAN_IN
+ permit tcp 192.168.10.0 0.0.0.255 host 192.168.0.10 eq www
+ permit tcp 192.168.10.0 0.0.0.255 host 192.168.0.10 eq 443
+ permit icmp 192.168.10.0 0.0.0.255 host 192.168.0.10
+ permit icmp 192.168.10.0 0.0.0.255 host 192.168.10.1
+ permit icmp 192.168.10.0 0.0.0.255 host 192.168.0.20 echo-reply
+ permit tcp host 192.168.10.2 host 192.168.0.20 established
+ permit udp host 192.168.10.2 host 192.168.0.11
+ deny ip 192.168.10.0 0.0.0.255 host 192.168.0.11
+ deny ip 192.168.10.0 0.0.0.255 192.168.20.0 0.0.0.255
+ deny ip 192.168.10.0 0.0.0.255 192.168.30.0 0.0.0.255
+ deny ip any any
+ exit
+! 2) Áp ACL vào cổng LAN đúng hướng
+interface GigabitEthernet0/0
+ ip access-group CH1_LAN_IN in
+ exit
+! 3) Chỉ PC-Admin 192.168.0.20 được telnet vào router
+access-list 10 permit host 192.168.0.20
+line vty 0 4
+ access-class 10 in
+ exit
+end
+write memory

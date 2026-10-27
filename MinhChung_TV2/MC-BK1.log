@@ -1,0 +1,41 @@
+==============================================================================
+BK-1 – Sao lưu, xóa thử, khôi phục CSDL trụ sở; sao lưu kho lưu tạm cuối ca   (chạy lúc 2026-10-17 10:26:27)
+==============================================================================
+
+$ python3 sao_luu.py dem
+[2026-10-17 10:26:27] CSDL trụ sở hiện có 45 bản ghi
+
+$ python3 sao_luu.py sao-luu
+[2026-10-17 10:26:27] Sao lưu CSDL trụ sở → hq_20261017_102627.db (45 bản ghi)
+
+$ python3 sao_luu.py sao-luu --ch 1
+[2026-10-17 10:26:27] Sao lưu kho lưu tạm CH01 → ch1_20261017_102627.db (0 giao dịch chưa ACKED)
+
+$ python3 sao_luu.py sao-luu --ch 2
+[2026-10-17 10:26:27] Sao lưu kho lưu tạm CH02 → ch2_20261017_102627.db (0 giao dịch chưa ACKED)
+
+$ python3 sao_luu.py sao-luu --ch 3
+[2026-10-17 10:26:27] Sao lưu kho lưu tạm CH03 → ch3_20261017_102627.db (0 giao dịch chưa ACKED)
+
+$ python3 sao_luu.py xoa-thu --chac-chan
+[2026-10-17 10:26:27] XÓA THỬ dữ liệu trụ sở (giả lập sự cố mất dữ liệu): 45 → 0 bản ghi
+
+$ python3 sao_luu.py khoi-phuc
+[2026-10-17 10:26:27] Khôi phục CSDL trụ sở từ hq_20261017_102627.db: 0 → 45 bản ghi
+
+$ python3 doi_chieu.py
+=== ĐỐI CHIẾU DỮ LIỆU (2026-10-17 10:26:28) ===
+Q1 – Số bản ghi tại trụ sở theo cửa hàng: CH01=20, CH02=15, CH03=10 | tổng 45
+Q2 – Mã giao dịch trùng (GROUP BY ma_gd HAVING COUNT(*) > 1): RỖNG – không có bản ghi trùng
+Q3 – Số lần trụ sở nhận bản trùng (bỏ qua, vẫn ACK): 22
+Cửa     PENDING   SENT  ACKED   Tổng    Trụ sở có  ACKED mà trụ sở thiếu
+CH01          0      0     20     20           20                      0
+CH02          0      0     15     15           15                      0
+CH03          0      0     10     10           10                      0
+
+$ python3 sao_luu.py danh-sach
+hq_20261017_102627.db
+ch1_20261017_102627.db
+ch2_20261017_102627.db
+ch3_20261017_102627.db
+  → ĐẠT: trước sao lưu 45 → sau xóa thử 0 → sau khôi phục 45 bản ghi

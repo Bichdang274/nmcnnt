@@ -1,0 +1,11 @@
+# ===== SAO LƯU – KHÔI PHỤC CSDL TRỤ SỞ (BK-1) và ĐỐI CHIẾU (KT3) – chạy trong demo-cisco/Script =====
+python3 sao_luu.py dem                       # số bản ghi hiện có (M)
+python3 sao_luu.py sao-luu                   # tạo DuLieu/sao_luu/hq_yyyymmdd_hhmmss.db, giữ 7 bản
+python3 sao_luu.py sao-luu --ch 1            # sao lưu kho lưu tạm cửa hàng 1 (cuối ca)
+python3 sao_luu.py xoa-thu --chac-chan       # giả lập mất dữ liệu: M -> 0
+python3 doi_chieu.py                         # thấy trụ sở còn 0 bản ghi
+python3 sao_luu.py khoi-phuc                 # khôi phục bản mới nhất: 0 -> M
+python3 doi_chieu.py                         # Q1 đủ M bản, Q2 RỖNG
+# Nếu khôi phục từ bản CŨ, script cảnh báo cửa hàng nào thiếu -> gửi bù:
+python3 store_agent.py --ch 1 gui --lap
+# Chạy tự động toàn bộ (xóa dữ liệu cũ!): python3 chay_kiem_thu.py  -> MinhChung/MC-BK1.log

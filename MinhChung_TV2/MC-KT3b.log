@@ -1,0 +1,16 @@
+==============================================================================
+KT3-b – Cố ý gửi lặp toàn bộ, không phát sinh bản ghi trùng   (chạy lúc 2026-10-17 10:26:27)
+==============================================================================
+
+$ python3 doi_chieu.py
+=== ĐỐI CHIẾU DỮ LIỆU (2026-10-17 10:26:27) ===
+Q1 – Số bản ghi tại trụ sở theo cửa hàng: CH01=20, CH02=15, CH03=10 | tổng 45
+Q2 – Mã giao dịch trùng (GROUP BY ma_gd HAVING COUNT(*) > 1): RỖNG – không có bản ghi trùng
+Q3 – Số lần trụ sở nhận bản trùng (bỏ qua, vẫn ACK): 22
+Cửa     PENDING   SENT  ACKED   Tổng    Trụ sở có  ACKED mà trụ sở thiếu
+CH01          0      0     20     20           20                      0
+CH02          0      0     15     15           15                      0
+CH03          0      0     10     10           10                      0
+
+[Lưu bản chụp CSDL → DuLieu/sau_gui_lap/]
+  → ĐẠT: gửi lặp 20 giao dịch: trụ sở ghi mới 0, nhận trùng 20; số bản ghi CH1 giữ nguyên 20; truy vấn trùng rỗng
