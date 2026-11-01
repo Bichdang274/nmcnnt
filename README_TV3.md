@@ -54,29 +54,23 @@ python Script/kiem_tra_trung.py
 - Cùng mã nhưng nội dung khác: trả lỗi 409.
 - Hiện tại người dùng chủ động chạy lệnh gửi lại, chưa có gửi tự động.
 
-## 6. Kết quả kiểm thử ngày 24/10/2026
-- Gửi ban đầu: 5 giao dịch được xác nhận.
-- Dừng máy chủ, tạo thêm 5 giao dịch và thử gửi:
-  cửa hàng giữ đủ 10 giao dịch, trong đó 5 giao dịch mới ở trạng thái SENT.
-- Bật lại máy chủ và gửi lại:
-  trụ sở có 10 giao dịch, cửa hàng có 10 giao dịch ACKED.
-- Cố ý gửi lặp cả 10 giao dịch:
-  nhận 10 xác nhận hợp lệ, trụ sở vẫn có 10 bản ghi,
-  không có mã trùng và nội dung hai bên khớp.
+## 6. Bộ kết quả chính ngày 01/11/2026
 
-Log:
-- MinhChung/KT2_khong_ket_noi.txt
-- MinhChung/KT3_truoc_gui.txt
-- MinhChung/KT3_gui_lai.txt
-- MinhChung/KT3_sau_gui.txt
-- MinhChung/KT3b_gui_lap.txt
+- KT2: tạo 5 giao dịch mới khi dịch vụ nhận dừng; thử gửi bị từ chối kết nối. Cửa hàng giữ đủ 15 giao dịch (10 ACKED cũ và 5 SENT mới).
+- KT3: bật lại dịch vụ và gửi 5 giao dịch còn chờ. Trụ sở tăng từ 10 lên 15; hai bên khớp toàn bộ 5 trường dữ liệu; cửa hàng có 15 ACKED.
+- KT3-b: gửi lặp 15 giao dịch, nhận 15 ACK hợp lệ; trụ sở vẫn 15, không có mã trùng.
+- Packet Tracer V2: đã có ảnh ping/HTTP mất WAN và HTTP phục hồi.
+- Đọc [danh mục minh chứng](MinhChung/README.md) và [báo cáo TV3](BaoCao_TV3.md). Các ca trên đã có kết quả, không cần chạy lại để tạo thêm ảnh/log.
+- Log cũ và ảnh TV1 đã chuyển vào `MinhChung/LichSu`; không dùng chúng để thay cho kết quả V2 ngày 01/11.
 
-## 7. Phạm vi và công việc còn lại
-- Đã kiểm thử lỗi kết nối bằng cách dừng máy chủ trên laptop.
-  Đây chưa phải minh chứng ngắt WAN trong Packet Tracer.
-- Phối hợp TV1, TV2 để thống nhất cấu trúc dữ liệu và kịch bản mạng.
-- Bổ sung minh chứng mạng từ mô hình Packet Tracer của nhóm.
-- Hoàn thiện các mục báo cáo được phân công.
+## 7. Phạm vi và sử dụng đúng dữ liệu
+
+- Mở mô hình hiện tại: `PacketTracer/Nhom02_TV3_KiemThu_TuBanV2.pkt`. Bản `TuBanTV1` chỉ để đối chiếu lịch sử.
+- Python chạy tại `127.0.0.1:8000`, độc lập với mạng mô phỏng Packet Tracer. Trong thử nghiệm Python, dừng/bật receiver mô phỏng mất/khôi phục khả năng truy cập dịch vụ.
+- CSDL hiện tại có 15 giao dịch; CSV, sao lưu và bản phục hồi ngày 26/10 có 10 giao dịch. Đây là khác thời điểm, không phải mất dữ liệu.
+- Các lệnh mục 4 là hướng dẫn tái hiện khi cần. Chọn 1 sẽ tạo thêm dữ liệu; để chỉ xem, chọn 2.
+- Cần thống nhất schema và phần ghép báo cáo với TV2; gói này chưa chứng minh tích hợp CSDL TV2.
+- Khi đóng receiver, chọn đúng terminal đang chạy `hq_receiver.py`, nhấn Ctrl+C, chờ dấu nhắc trở lại rồi mới nén thư mục.
 
 ## 8. Xuất giao dịch mẫu và sao lưu cục bộ
 

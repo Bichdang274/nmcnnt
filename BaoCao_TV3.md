@@ -1,149 +1,727 @@
-# Báo cáo tiến độ – Thành viên 3
+# Phần báo cáo TV3 – Lưu cục bộ, gửi lại và chống trùng
 
-- Họ tên: Phan Hải Đức.
-- Đề tài: Thiết kế hạ tầng CNTT cho chuỗi cửa hàng bán lẻ.
-- Nhánh Git: tv3.
-- Ngày cập nhật: 26/10/2026.
+**Sinh viên:** Phan Hải Đức — B24DCCC072 — D24CQCC06-B  
+**Đề tài:** Thiết kế hạ tầng CNTT cho chuỗi cửa hàng bán lẻ  
+**Cập nhật:** 01/11/2026. Phần nội dung để ghép vào báo cáo nhóm, không thay thế báo cáo toàn nhóm.
 
-## 1. Nhiệm vụ phụ trách
+## Phạm vi triển khai
 
-Xây dựng chương trình lưu giao dịch tại cửa hàng bằng Python và SQLite; gửi giao dịch về trụ sở, xử lý xác nhận ACK và gửi lại khi kết nối được khôi phục. Kiểm tra chống ghi trùng, xuất giao dịch mẫu và sao lưu dữ liệu cục bộ.
+Python 3 và SQLite mô phỏng cửa hàng CH01/POS01 và trụ sở trên cùng laptop, trao đổi HTTP POST tại `127.0.0.1:8000/giao-dich`. Packet Tracer dùng mô hình `Nhom02_TV3_KiemThu_TuBanV2.pkt` để kiểm tra mạng. Hai môi trường được kiểm thử độc lập: kết quả ping/HTTP chứng minh khả năng kết nối, còn log và CSDL chứng minh đồng bộ giao dịch. Đây phù hợp cách phân biệt minh chứng trong tài liệu phân công; không tuyên bố Python truyền qua WAN của Packet Tracer.
 
-## 2. Phạm vi đã triển khai
+## 2.7. Mã giao dịch duy nhất và xử lý trùng
 
-Chương trình hiện mô phỏng cửa hàng CH01, máy POS01 và máy chủ trụ sở trên cùng một máy tính, giao tiếp qua địa chỉ 127.0.0.1:8000.
+Mã có dạng `CH01-POS01-YYYYMMDD-XXXXXX`. Mã cửa hàng và máy POS hiện cố định cho bản demo. Bảng `bo_dem` lưu số cuối theo ngày; việc tăng bộ đếm và thêm giao dịch nằm trong giao dịch SQLite dùng `BEGIN IMMEDIATE`. Vì bộ đếm lưu trên đĩa, mở lại chương trình không làm đặt lại số thứ tự.
 
-- Cơ sở dữ liệu cửa hàng: DuLieu/cuahang01.db.
-- Cơ sở dữ liệu trụ sở: DuLieu/truso.db.
-- Mã nguồn: thư mục Script.
-- Log kiểm thử: thư mục MinhChung.
-- Giao dịch mẫu CSV: thư mục DuLieu/Xuat.
-- Bản sao lưu cửa hàng: thư mục DuLieu/SaoLuu.
+Trụ sở dùng `ma_gd` làm khóa chính. Khi nhận mã mới, máy chủ ghi dữ liệu và commit trước khi trả ACK. Với mã cũ, máy chủ so sánh đủ năm trường: cùng nội dung thì trả `DA_TON_TAI` và ACK, không thêm dòng; khác nội dung thì trả HTTP 409. Cửa hàng chỉ đánh dấu ACKED khi ACK hợp lệ và đúng mã. Giao dịch chưa được xác nhận vẫn được giữ để gửi lại.
 
-Các kết quả hiện tại là kiểm thử chương trình trên máy cục bộ, chưa chứng minh hoạt động qua mạng WAN thực tế hoặc mô hình Packet Tracer của nhóm.
+## 3.3. Lưu cục bộ, gửi lại và chống trùng
 
-Việc gửi lại giao dịch và sao lưu hiện được thực hiện bằng lệnh thủ công, chưa có cơ chế chạy tự động theo lịch.
+`Script/store_agent.py` tạo, xem và gửi giao dịch; `Script/hq_receiver.py` nhận, ghi và xác nhận. `Script/kiem_tra_trung.py` gửi lặp dữ liệu đã đồng bộ rồi so sánh CSDL trước/sau.
 
-## 3. Cơ chế hoạt động
+| Trạng thái | Ý nghĩa |
+|---|---|
+| PENDING | Đã lưu cục bộ, chưa thử gửi |
+| SENT | Đã thử gửi, chưa nhận ACK hợp lệ; không đồng nghĩa trụ sở đã lưu |
+| ACKED | Đã nhận ACK đúng mã giao dịch |
 
-### 3.1. Lưu giao dịch tại cửa hàng
+Chương trình gửi lại các dòng PENDING/SENT bằng lệnh thủ công. Lỗi kết nối, phản hồi không hợp lệ hoặc lỗi đọc phản hồi không làm xóa giao dịch. Chưa triển khai gửi lại tự động hoặc lịch sao lưu tự động.
 
-Mỗi giao dịch được lưu vào SQLite trước khi gửi về trụ sở, gồm mã giao dịch, mã cửa hàng, mã máy POS, thời gian, số tiền và trạng thái.
+Đoạn mã kiểm tra ACK, trích từ `store_agent.py` (8 dòng):
 
-Mã giao dịch có dạng CH01-POS01-YYYYMMDD-XXXXXX. Bộ đếm được lưu trong database để tiếp tục cấp mã khi chạy lại chương trình.
+```python
+if (
+    not isinstance(xac_nhan, dict)
+    or xac_nhan.get("ack") is not True
+    or xac_nhan.get("ma_gd") != ma_gd
+):
+    raise ValueError("Xac nhan khong hop le")
+# Chỉ sau khi vượt qua kiểm tra này, chương trình cập nhật ACKED.
+```
 
-Các trạng thái xử lý:
-
-- PENDING: giao dịch mới tạo, chưa gửi.
-- SENT: đã bắt đầu gửi nhưng chưa nhận được ACK hợp lệ.
-- ACKED: đã nhận được xác nhận hợp lệ từ trụ sở.
-
-### 3.2. Gửi giao dịch và nhận ACK
-
-Chương trình chọn các giao dịch có trạng thái PENDING hoặc SENT để gửi bằng HTTP POST.
-
-Trụ sở lưu giao dịch và commit vào SQLite trước khi trả ACK. Cửa hàng chỉ chuyển giao dịch sang ACKED khi phản hồi có ack bằng true và mã giao dịch khớp với giao dịch đã gửi.
-
-Nếu kết nối thất bại hoặc phản hồi không hợp lệ, giao dịch vẫn được giữ tại cửa hàng để gửi lại trong lần chạy sau.
-
-### 3.3. Chống ghi trùng tại trụ sở
-
-Trụ sở sử dụng mã giao dịch làm khóa chính và kiểm tra dữ liệu khi nhận:
-
-- Mã chưa tồn tại: lưu giao dịch và trả ACK với kết quả DA_LUU.
-- Mã đã tồn tại, nội dung giống nhau: không thêm bản ghi, trả ACK với kết quả DA_TON_TAI.
-- Mã đã tồn tại, nội dung khác nhau: trả lỗi HTTP 409, không xác nhận thành công.
-
-Nhờ đó, cửa hàng có thể gửi lại giao dịch mà không làm tăng số bản ghi nếu trụ sở đã nhận giao dịch trước đó.
+Phần chống trùng ở receiver kiểm tra bản ghi cũ trong cùng giao dịch ghi SQLite; nhánh `ban_cu == gia_tri` chỉ đặt kết quả `DA_TON_TAI`, không INSERT. Mã nguồn đầy đủ nằm trong Phụ lục C.
 
 ## 4. Kết quả kiểm thử
 
-### 4.1. Không kết nối được tới trụ sở – KT2
+Bộ kết quả chính ngày 01/11/2026 có sẵn trong [danh mục minh chứng](MinhChung/README.md). Thời gian dưới đây lấy nguyên từ nội dung log trên máy người thực hiện.
 
-Cách thực hiện:
+| Ca | Thao tác và thời điểm | Kết quả thực tế | Đánh giá |
+|---|---|---|---|
+| KT2 | Dừng receiver; 15:45:03 tạo 5 giao dịch, 15:47:18 thử gửi | 5 mới PENDING rồi SENT; lỗi WinError 10061; giữ đủ 15 dòng ở cửa hàng | Đạt giữ giao dịch khi không kết nối được dịch vụ |
+| KT3 | 18:07:59 trụ sở có 10; bật receiver; 18:13:05 gửi lại | 5 mới ACKED; 18:15:24 hai bên đều 15, dữ liệu khớp True, 15 ACKED | Đạt gửi lại và đối chiếu trong demo TV3 |
+| KT3-b | 18:17:06 gửi lặp toàn bộ 15 giao dịch | 15 ACK hợp lệ với DA_TON_TAI; trụ sở vẫn 15; mã trùng 0; dữ liệu không đổi | Đạt chống ghi trùng |
 
-- Dừng chương trình nhận tại trụ sở.
-- Tạo thêm 5 giao dịch tại cửa hàng.
-- Chạy lệnh gửi giao dịch.
+Minh chứng chính:
 
-Kết quả:
+- KT2: [tạo giao dịch](MinhChung/KT2_PENDING_20261101.txt), [gửi lỗi và giữ dữ liệu](MinhChung/KT2_GUI_LOI_20261101.txt).
+- KT3: [trước gửi](MinhChung/KT3_TRUOC_GUI_20261101.txt), [gửi lại](MinhChung/KT3_GUI_LAI_20261101.txt), [đối chiếu sau gửi](MinhChung/KT3_SAU_GUI_20261101.txt).
+- KT3-b: [log gửi lặp](MinhChung/KT3b_GUI_LAP_20261101.txt).
 
-- Cả 5 giao dịch gửi không thành công và được giữ ở trạng thái SENT.
-- Cửa hàng vẫn có đủ 10 giao dịch: 5 giao dịch đã ACKED trước đó và 5 giao dịch chờ gửi lại.
-- Log: MinhChung/KT2_khong_ket_noi.txt.
+### Minh chứng mạng V2 bổ trợ
 
-Phép thử này mô phỏng tình huống không kết nối được tới dịch vụ nhận bằng cách dừng dịch vụ trên máy cục bộ.
+Khi tắt cả Serial0/0/0 và Serial0/0/1 của R-CH1, POS1-1 vẫn ping được gateway `192.168.10.1` nhưng không ping được HQ `192.168.0.10`; HTTP tới HQ báo timeout. Sau khi bật lại các cổng, trang HQ truy cập được.
 
-### 4.2. Gửi lại sau khi khôi phục dịch vụ – KT3
+![V2: ping gateway thành công, ping HQ thất bại khi mất WAN](MinhChung/PT_V2_KT2_mat_WAN.png)
 
-Cách thực hiện:
+![V2: HTTP timeout khi mất WAN](MinhChung/PT_V2_KT2_HTTP_mat_WAN.png)
 
-- Khởi động lại chương trình nhận tại trụ sở.
-- Chạy lại lệnh gửi giao dịch từ cửa hàng.
+![V2: HTTP hoạt động sau khôi phục](MinhChung/PT_V2_KT3_HTTP_phuc_hoi.png)
 
-Kết quả:
+Ảnh HTTP ban đầu trên TV1 được lưu ở thư mục lịch sử. Dù trang web giống ảnh phục hồi V2, hai ảnh thuộc hai giai đoạn khác nhau. Không sử dụng ảnh TV1 làm ảnh ban đầu của V2. Gói hiện không có ảnh ping phục hồi V2 riêng.
 
-- 5 giao dịch còn chờ được gửi và nhận ACK thành công.
-- Cả 10 giao dịch tại cửa hàng chuyển sang ACKED.
-- Trụ sở có tổng cộng 10 giao dịch.
-- Log: MinhChung/KT3_gui_lai.txt và MinhChung/KT3_sau_gui.txt.
+### Xuất CSV, sao lưu và phục hồi ngày 26/10/2026
 
-### 4.3. Gửi lặp giao dịch – KT3-b
+Đã xuất 10 giao dịch ACKED ra CSV; sao lưu bằng SQLite backup có `integrity_check = ok`. Phục hồi bản sao vào file thử riêng: 10 giao dịch và 1 bản ghi bộ đếm khớp bản sao; toàn vẹn ok. Xem [xuất CSV](MinhChung/xuat_giao_dich.txt), [sao lưu](MinhChung/sao_luu.txt), [phục hồi](MinhChung/kiem_tra_phuc_hoi.txt).
 
-Cách thực hiện:
+Bản sao và bản phục hồi có dữ liệu giống nhau là kết quả mong đợi, cần giữ cả hai vai trò. Chúng phản ánh ngày 26/10 với 10 giao dịch; không phải bản sao mới nhất của dữ liệu 15 giao dịch ngày 01/11. Không dùng kết quả này để tuyên bố đã hoàn thành ca sao lưu CSDL trụ sở của TV2.
 
-- Gửi lại toàn bộ 10 giao dịch đã có tại trụ sở bằng chương trình kiểm tra trùng.
+## Giới hạn và phần ghép báo cáo còn lại
 
-Kết quả:
+- Cần thống nhất schema với TV2 trước khi tuyên bố tích hợp vào CSDL chung. Đối chiếu hiện tại là giữa hai CSDL của demo TV3.
+- Bản demo mới cấu hình CH01/POS01; không tuyên bố đã chạy đồng thời 15 máy POS.
+- Nhánh xử lý cùng mã khác nội dung có trong mã nguồn, nhưng bộ log này chưa có phép thử riêng cho HTTP 409 hay mất ACK sau khi trụ sở đã commit.
+- Phục hồi đã đối chiếu dữ liệu và bộ đếm; chưa kiểm thử tạo giao dịch mới trực tiếp trên file phục hồi.
+- Khi ghép báo cáo nhóm, bổ sung phiên bản công cụ thực dùng, nguồn tham khảo và khai báo phần hỗ trợ AI theo yêu cầu môn học, dựa trên quá trình thực tế. Không suy đoán thông tin chưa có trong gói.
 
-- Cả 10 phản hồi đều có ACK hợp lệ và kết quả DA_TON_TAI.
-- Số giao dịch tại trụ sở vẫn là 10.
-- Không có mã giao dịch bị trùng.
-- Dữ liệu trụ sở trước và sau phép thử giống nhau.
-- Log: MinhChung/KT3b_gui_lap.txt.
+## Phụ lục C. Mã nguồn, CSDL và dữ liệu mẫu
 
-### 4.4. Xuất CSV và sao lưu cục bộ
+### Mã nguồn đầy đủ
 
-Kết quả kiểm thử ngày 26/10/2026:
+#### hq_receiver.py
 
-- Xuất thành công 10 giao dịch ra CSV, tất cả có trạng thái ACKED.
-- Tạo thành công bản sao database cửa hàng bằng SQLite backup.
-- Bản sao chứa 10 giao dịch và có kết quả integrity_check là ok.
-- Log: MinhChung/xuat_giao_dich.txt và MinhChung/sao_luu.txt.
+```python
+import json
+import sqlite3
+from datetime import datetime
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
 
-Đã phục hồi bản sao lưu vào database thử nghiệm riêng trong DuLieu/PhucHoiThu. Kết quả: 10 giao dịch và 1 bản ghi bộ đếm khớp hoàn toàn với bản sao lưu; integrity_check trả về ok.
+THU_MUC_GOC = Path(__file__).resolve().parent.parent
+FILE_DB = THU_MUC_GOC / "DuLieu" / "truso.db"
 
-Log: MinhChung/kiem_tra_phuc_hoi.txt.
+CAC_COT = ("ma_gd", "ma_cua_hang", "ma_may", "thoi_gian", "so_tien")
 
-Chưa kiểm thử tạo giao dịch mới bằng chương trình cửa hàng trên database đã phục hồi.
-## 5. Công việc còn lại
 
-### 5.1. Hoàn thiện kiểm thử chương trình
+def khoi_tao():
+    FILE_DB.parent.mkdir(parents=True, exist_ok=True)
 
-- Kiểm tra khả năng tạo giao dịch mới sau phục hồi, bảo đảm bộ đếm tiếp tục cấp mã đúng.
-- Bổ sung kiểm thử trường hợp cùng mã giao dịch nhưng nội dung khác nhau.
-- Bổ sung kiểm thử trường hợp trụ sở đã lưu giao dịch nhưng cửa hàng chưa nhận được ACK.
+    with sqlite3.connect(FILE_DB) as ket_noi:
+        ket_noi.execute("""
+            CREATE TABLE IF NOT EXISTS giao_dich (
+                ma_gd TEXT PRIMARY KEY NOT NULL,
+                ma_cua_hang TEXT NOT NULL,
+                ma_may TEXT NOT NULL,
+                thoi_gian TEXT NOT NULL,
+                so_tien INTEGER NOT NULL CHECK (so_tien > 0)
+            )
+        """)
 
-### 5.2. Phối hợp với các thành viên
 
-- Thống nhất với TV2 cấu trúc dữ liệu và quy tắc chống ghi trùng tại trụ sở.
-- Phối hợp với TV1 về địa chỉ máy chủ, kết nối giữa cửa hàng và trụ sở, kịch bản mất và khôi phục kết nối.
-- Phân biệt minh chứng kiểm thử chương trình Python với minh chứng mạng trên Packet Tracer.
-- Thống nhất cách mở rộng cấu hình cho 3 cửa hàng, mỗi cửa hàng 5 máy POS.
+class BoNhan(BaseHTTPRequestHandler):
+    def tra_json(self, ma_http, noi_dung):
+        du_lieu = json.dumps(noi_dung).encode("utf-8")
 
-### 5.3. Hoàn thiện báo cáo chung
+        self.send_response(ma_http)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(du_lieu)))
+        self.end_headers()
+        self.wfile.write(du_lieu)
 
-- Đưa nội dung phần TV3 vào các mục được phân công trong báo cáo nhóm.
-- Bổ sung ảnh minh chứng và giải thích kết quả kiểm thử.
-- Cập nhật hướng dẫn chạy khi có thay đổi sau tích hợp.
+    def do_POST(self):
+        if self.path != "/giao-dich":
+            self.tra_json(404, {"loi": "Duong dan khong ton tai"})
+            return
 
-## 6. Tổng kết tiến độ
+        # Đọc và kiểm tra giao dịch cửa hàng gửi lên
+        try:
+            do_dai = int(self.headers.get("Content-Length", "0"))
 
-Đã xây dựng và kiểm thử trên máy cục bộ các chức năng: lưu giao dịch bằng SQLite, gửi và nhận ACK, giữ giao dịch khi không kết nối được, gửi lại bằng lệnh thủ công, chống ghi trùng, xuất CSV và sao lưu database cửa hàng.
+            if not 0 < do_dai <= 10000:
+                raise ValueError("Kich thuoc du lieu khong hop le")
 
-Mã nguồn, dữ liệu mẫu, log và hướng dẫn sử dụng đã được đẩy lên nhánh tv3. Hai commit đã đẩy:
+            giao_dich = json.loads(self.rfile.read(do_dai))
 
-- 97bd688: lưu giao dịch, gửi lại, ACK và kiểm tra trùng.
-- 95094b8: bổ sung xuất CSV, sao lưu SQLite và minh chứng.
+            if not isinstance(giao_dich, dict):
+                raise ValueError("Can gui mot doi tuong JSON")
 
-Phần tích hợp với hệ thống chung và các kiểm thử bổ sung vẫn đang tiếp tục. Báo cáo này ghi nhận tiến độ hiện tại, chưa phải kết quả nghiệm thu toàn bộ đề tài.
+            gia_tri = tuple(giao_dich[cot] for cot in CAC_COT)
+
+            for gia_tri_chuoi in gia_tri[:4]:
+                if not isinstance(gia_tri_chuoi, str) or not gia_tri_chuoi.strip():
+                    raise ValueError("Truong thong tin bi trong")
+
+            if type(gia_tri[4]) is not int or gia_tri[4] <= 0:
+                raise ValueError("So tien phai la so nguyen duong")
+
+        except (ValueError, KeyError, TypeError):
+            self.tra_json(400, {"loi": "Du lieu giao dich khong hop le"})
+            return
+
+        ma_gd = giao_dich["ma_gd"]
+
+        try:
+            with sqlite3.connect(FILE_DB) as ket_noi:
+                ket_noi.execute("BEGIN IMMEDIATE")
+
+                ban_cu = ket_noi.execute("""
+                    SELECT ma_gd, ma_cua_hang, ma_may, thoi_gian, so_tien
+                    FROM giao_dich
+                    WHERE ma_gd = ?
+                """, (ma_gd,)).fetchone()
+
+                if ban_cu is None:
+                    ket_noi.execute("""
+                        INSERT INTO giao_dich
+                            (ma_gd, ma_cua_hang, ma_may, thoi_gian, so_tien)
+                        VALUES (?, ?, ?, ?, ?)
+                    """, gia_tri)
+                    ket_qua = "DA_LUU"
+
+                elif ban_cu == gia_tri:
+                    # Gửi lại đúng giao dịch cũ: không thêm bản ghi
+                    ket_qua = "DA_TON_TAI"
+
+                else:
+                    # Cùng mã nhưng nội dung khác: báo lỗi để kiểm tra
+                    self.tra_json(409, {
+                        "loi": "Cung ma giao dich nhung khac noi dung",
+                        "ma_gd": ma_gd
+                    })
+                    return
+
+            # Ra khỏi khối with thành công: dữ liệu đã được commit
+        except sqlite3.Error as loi:
+            print("Loi SQLite:", loi, flush=True)
+            self.tra_json(500, {"loi": "Chua luu duoc giao dich"})
+            return
+
+        thoi_gian = datetime.now().isoformat(timespec="seconds")
+        print(f"[{thoi_gian}] {ma_gd} | {ket_qua}", flush=True)
+
+        # Chỉ xác nhận sau khi đã lưu thành công
+        self.tra_json(200, {
+            "ack": True,
+            "ma_gd": ma_gd,
+            "ket_qua": ket_qua
+        })
+
+
+if __name__ == "__main__":
+    khoi_tao()
+
+    may_chu = HTTPServer(("127.0.0.1", 8000), BoNhan)
+    print("TRU SO DANG CHO NHAN GIAO DICH")
+    print("Dia chi: http://127.0.0.1:8000/giao-dich")
+    print("Du lieu:", FILE_DB)
+    print("Nhan Ctrl + C de dung.")
+
+    try:
+        may_chu.serve_forever()
+    except KeyboardInterrupt:
+        print("\nDa dung may chu.")
+    finally:
+        may_chu.server_close()
+```
+
+#### kiem_tra_phuc_hoi.py
+
+```python
+import sqlite3
+from pathlib import Path
+from datetime import datetime
+
+GOC = Path(__file__).resolve().parent.parent
+BAN_SAO = (
+    GOC / "DuLieu" / "SaoLuu"
+    / "cuahang01_20261026_081101_081521.db"
+)
+
+
+def kiem_tra_phuc_hoi():
+    if not BAN_SAO.is_file():
+        raise FileNotFoundError(f"Khong tim thay ban sao: {BAN_SAO}")
+
+    thu_muc = GOC / "DuLieu" / "PhucHoiThu"
+    thu_muc.mkdir(parents=True, exist_ok=True)
+
+    moc = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    file_thu = thu_muc / f"cuahang01_phuchoi_{moc}.db"
+
+    nguon = sqlite3.connect(BAN_SAO.as_uri() + "?mode=ro", uri=True)
+    try:
+        file_thu.touch(exist_ok=False)
+        dich = sqlite3.connect(file_thu)
+        try:
+            nguon.backup(dich)
+
+            toan_ven = dich.execute("PRAGMA integrity_check").fetchall()
+            if toan_ven != [("ok",)]:
+                raise RuntimeError("Database phuc hoi khong toan ven")
+
+            for bang, cot in [
+                ("giao_dich", "ma_gd"),
+                ("bo_dem", "ngay"),
+            ]:
+                sql = f"SELECT * FROM {bang} ORDER BY {cot}"
+                du_lieu_goc = nguon.execute(sql).fetchall()
+                du_lieu_thu = dich.execute(sql).fetchall()
+
+                if du_lieu_goc != du_lieu_thu:
+                    raise RuntimeError(f"Du lieu bang {bang} khong khop")
+
+                print(f"Bang {bang}: khop, {len(du_lieu_thu)} ban ghi")
+
+            print("Kiem tra toan ven: ok")
+        finally:
+            dich.close()
+    finally:
+        nguon.close()
+
+    print("Thoi gian:", datetime.now().isoformat(timespec="seconds"))
+    print("File phuc hoi thu:", file_thu)
+    print("KET QUA: Phuc hoi va doi chieu du lieu thanh cong")
+
+
+if __name__ == "__main__":
+    kiem_tra_phuc_hoi()
+```
+
+#### kiem_tra_trung.py
+
+```python
+import json
+import sqlite3
+from datetime import datetime
+from pathlib import Path
+from urllib.request import Request, urlopen
+
+THU_MUC_GOC = Path(__file__).resolve().parent.parent
+DB_CUA_HANG = THU_MUC_GOC / "DuLieu" / "cuahang01.db"
+DB_TRU_SO = THU_MUC_GOC / "DuLieu" / "truso.db"
+
+CAU_LENH = """
+    SELECT ma_gd, ma_cua_hang, ma_may, thoi_gian, so_tien
+    FROM giao_dich
+    ORDER BY ma_gd
+"""
+
+
+def doc_du_lieu(duong_dan):
+    # Chỉ đọc file đã có, không tự tạo cơ sở dữ liệu mới
+    ket_noi = sqlite3.connect(
+        duong_dan.resolve().as_uri() + "?mode=ro",
+        uri=True
+    )
+    ket_noi.row_factory = sqlite3.Row
+
+    try:
+        return [
+            dict(dong)
+            for dong in ket_noi.execute(CAU_LENH).fetchall()
+        ]
+    finally:
+        ket_noi.close()
+
+
+def kiem_tra():
+    print("KIEM THU GUI LAP:", datetime.now().isoformat())
+
+    cua_hang = doc_du_lieu(DB_CUA_HANG)
+    truoc_gui = doc_du_lieu(DB_TRU_SO)
+
+    print("So giao dich cua hang:", len(cua_hang))
+    print("So giao dich tru so truoc gui:", len(truoc_gui))
+
+    if not cua_hang or cua_hang != truoc_gui:
+        print("CHUA DAT: Du lieu hai ben chua khop truoc khi thu.")
+        return
+
+    so_xac_nhan = 0
+
+    for giao_dich in cua_hang:
+        yeu_cau = Request(
+            "http://127.0.0.1:8000/giao-dich",
+            data=json.dumps(giao_dich).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+
+        with urlopen(yeu_cau, timeout=5) as phan_hoi:
+            xac_nhan = json.loads(phan_hoi.read())
+
+        hop_le = (
+            isinstance(xac_nhan, dict)
+            and xac_nhan.get("ack") is True
+            and xac_nhan.get("ma_gd") == giao_dich["ma_gd"]
+            and xac_nhan.get("ket_qua") == "DA_TON_TAI"
+        )
+
+        if not hop_le:
+            print("CHUA DAT: Phan hoi khong dung:", xac_nhan)
+            return
+
+        so_xac_nhan += 1
+        print(giao_dich["ma_gd"], "| DA_TON_TAI | ACK hop le")
+
+    sau_gui = doc_du_lieu(DB_TRU_SO)
+    so_ma_trung = len(sau_gui) - len({
+        dong["ma_gd"] for dong in sau_gui
+    })
+
+    print("\n--- KET QUA ---")
+    print("So phan hoi xac nhan hop le:", so_xac_nhan)
+    print("So giao dich tru so sau gui:", len(sau_gui))
+    print("So ban ghi du ma:", so_ma_trung)
+    print("Du lieu hai ben khop:", cua_hang == sau_gui)
+
+    if sau_gui == truoc_gui and so_ma_trung == 0:
+        print("DAT: Gui lap khong lam thay doi du lieu tru so.")
+    else:
+        print("CHUA DAT: Can kiem tra lai du lieu.")
+
+
+if __name__ == "__main__":
+    try:
+        kiem_tra()
+    except Exception as loi:
+        print("KIEM THU CHUA HOAN TAT:", loi)
+        raise
+```
+
+#### sao_luu.py
+
+```python
+import sqlite3
+from pathlib import Path
+from datetime import datetime
+
+THU_MUC_GOC = Path(__file__).resolve().parent.parent
+FILE_DB = THU_MUC_GOC / "DuLieu" / "cuahang01.db"
+
+
+def sao_luu():
+    thu_muc = THU_MUC_GOC / "DuLieu" / "SaoLuu"
+    thu_muc.mkdir(parents=True, exist_ok=True)
+
+    thoi_gian = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    file_sao_luu = thu_muc / f"cuahang01_{thoi_gian}.db"
+
+    # Mở dữ liệu gốc ở chế độ chỉ đọc.
+    nguon = sqlite3.connect(FILE_DB.as_uri() + "?mode=ro", uri=True)
+
+    try:
+        # Không ghi đè bản sao lưu đã có.
+        file_sao_luu.touch(exist_ok=False)
+        dich = sqlite3.connect(file_sao_luu)
+
+        try:
+            # Sao lưu toàn bộ cơ sở dữ liệu bằng SQLite.
+            nguon.backup(dich)
+
+            ket_qua = dich.execute("PRAGMA integrity_check").fetchall()
+            if ket_qua != [("ok",)]:
+                raise RuntimeError("Ban sao luu khong dat kiem tra toan ven")
+
+            so_luong = dich.execute(
+                "SELECT COUNT(*) FROM giao_dich"
+            ).fetchone()[0]
+        finally:
+            dich.close()
+    finally:
+        nguon.close()
+
+    print("Thoi gian:", datetime.now().isoformat(timespec="seconds"))
+    print("Sao luu thanh cong:", file_sao_luu)
+    print("Kiem tra toan ven: ok")
+    print("So giao dich trong ban sao:", so_luong)
+
+
+if __name__ == "__main__":
+    sao_luu()
+```
+
+#### store_agent.py
+
+```python
+import json
+from urllib.request import Request, urlopen
+from urllib.error import URLError
+from datetime import datetime
+import sqlite3
+from pathlib import Path
+
+# Xác định thư mục gốc của dự án nmcnnt
+THU_MUC_GOC = Path(__file__).resolve().parent.parent
+
+# File cơ sở dữ liệu của cửa hàng 01
+FILE_DB = THU_MUC_GOC / "DuLieu" / "cuahang01.db"
+
+
+def khoi_tao():
+    # Tạo thư mục dữ liệu nếu chưa có
+    FILE_DB.parent.mkdir(parents=True, exist_ok=True)
+
+    # Mở cơ sở dữ liệu; nếu chưa có file thì SQLite tự tạo
+    ket_noi = sqlite3.connect(FILE_DB)
+
+    # Mỗi giao dịch có một mã duy nhất, không được trùng
+    ket_noi.execute("""
+        CREATE TABLE IF NOT EXISTS giao_dich (
+            ma_gd TEXT PRIMARY KEY,
+            ma_cua_hang TEXT NOT NULL,
+            ma_may TEXT NOT NULL,
+            thoi_gian TEXT NOT NULL,
+            so_tien INTEGER NOT NULL CHECK (so_tien > 0),
+            trang_thai TEXT NOT NULL DEFAULT 'PENDING'
+                CHECK (trang_thai IN ('PENDING', 'SENT', 'ACKED'))
+        )
+    """)
+
+    ket_noi.commit()
+    ket_noi.close()
+
+    print("Da khoi tao kho luu giao dich cua cua hang 01.")
+    print("Vi tri:", FILE_DB)
+
+
+def tao_giao_dich(so_tien):
+    hien_tai = datetime.now()
+    ngay = hien_tai.strftime("%Y%m%d")
+    thoi_gian = hien_tai.isoformat(timespec="seconds")
+
+    ket_noi = sqlite3.connect(FILE_DB)
+
+    try:
+        # Lưu số thứ tự vào SQLite để mở lại chương trình không bị reset
+        ket_noi.execute("""
+            CREATE TABLE IF NOT EXISTS bo_dem (
+                ngay TEXT PRIMARY KEY,
+                so_cuoi INTEGER NOT NULL
+            )
+        """)
+
+        # Khóa lượt ghi để hai lần tạo không lấy cùng một số thứ tự
+        ket_noi.execute("BEGIN IMMEDIATE")
+
+        ket_noi.execute("""
+            INSERT INTO bo_dem (ngay, so_cuoi)
+            VALUES (?, 0)
+            ON CONFLICT(ngay) DO NOTHING
+        """, (ngay,))
+
+        ket_noi.execute("""
+            UPDATE bo_dem
+            SET so_cuoi = so_cuoi + 1
+            WHERE ngay = ?
+        """, (ngay,))
+
+        so_thu_tu = ket_noi.execute(
+            "SELECT so_cuoi FROM bo_dem WHERE ngay = ?",
+            (ngay,)
+        ).fetchone()[0]
+
+        ma_gd = f"CH01-POS01-{ngay}-{so_thu_tu:06d}"
+
+        # Ghi giao dịch xuống ổ đĩa trước khi thực hiện gửi
+        ket_noi.execute("""
+            INSERT INTO giao_dich
+                (ma_gd, ma_cua_hang, ma_may,
+                 thoi_gian, so_tien, trang_thai)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (ma_gd, "CH01", "POS01", thoi_gian, so_tien, "PENDING"))
+
+        ket_noi.commit()
+        print(f"Da luu: {ma_gd} | {so_tien} VND | PENDING")
+
+    except Exception:
+        ket_noi.rollback()
+        raise
+
+    finally:
+        ket_noi.close()
+
+
+def xem_giao_dich():
+    ket_noi = sqlite3.connect(FILE_DB)
+
+    danh_sach = ket_noi.execute("""
+        SELECT ma_gd, so_tien, trang_thai
+        FROM giao_dich
+        ORDER BY ma_gd
+    """).fetchall()
+
+    ket_noi.close()
+
+    print("\n--- GIAO DICH DANG LUU TAI CUA HANG ---")
+
+    for ma_gd, so_tien, trang_thai in danh_sach:
+        print(f"{ma_gd} | {so_tien} VND | {trang_thai}")
+
+    print(f"Tong cong: {len(danh_sach)} giao dich")
+
+def gui_giao_dich():
+    dia_chi = "http://127.0.0.1:8000/giao-dich"
+    ket_noi = sqlite3.connect(FILE_DB)
+    ket_noi.row_factory = sqlite3.Row
+
+    try:
+        # Chỉ lấy giao dịch chưa được trụ sở xác nhận
+        danh_sach = ket_noi.execute("""
+            SELECT ma_gd, ma_cua_hang, ma_may, thoi_gian, so_tien
+            FROM giao_dich
+            WHERE trang_thai IN ('PENDING', 'SENT')
+            ORDER BY ma_gd
+        """).fetchall()
+
+        print(f"Co {len(danh_sach)} giao dich dang cho gui.")
+
+        for dong in danh_sach:
+            giao_dich = dict(dong)
+            ma_gd = giao_dich["ma_gd"]
+
+            # Ghi lại việc đã thử gửi, nhưng chưa có xác nhận
+            ket_noi.execute("""
+                UPDATE giao_dich
+                SET trang_thai = 'SENT'
+                WHERE ma_gd = ?
+            """, (ma_gd,))
+            ket_noi.commit()
+
+            du_lieu = json.dumps(giao_dich).encode("utf-8")
+            yeu_cau = Request(
+                dia_chi,
+                data=du_lieu,
+                headers={"Content-Type": "application/json"},
+                method="POST"
+            )
+
+            try:
+                with urlopen(yeu_cau, timeout=5) as phan_hoi:
+                    xac_nhan = json.loads(phan_hoi.read())
+
+                # Phải nhận xác nhận đúng mã giao dịch
+                if (
+                    not isinstance(xac_nhan, dict)
+                    or xac_nhan.get("ack") is not True
+                    or xac_nhan.get("ma_gd") != ma_gd
+                ):
+                    raise ValueError("Xac nhan khong hop le")
+
+            except (URLError, OSError, ValueError) as loi:
+                print(f"Chua xac nhan: {ma_gd} | {loi}")
+                print("Van giu giao dich trong kho de gui lai.")
+                continue
+
+            ket_noi.execute("""
+                UPDATE giao_dich
+                SET trang_thai = 'ACKED'
+                WHERE ma_gd = ?
+            """, (ma_gd,))
+            ket_noi.commit()
+
+            print(f"Da xac nhan: {ma_gd} | ACKED")
+
+    finally:
+        ket_noi.close()
+
+
+if __name__ == "__main__":
+    khoi_tao()
+
+    print("\n1. Tao them 5 giao dich mau")
+    print("2. Xem giao dich da luu")
+    lua_chon = input("Chon 1 hoac 2: ").strip()
+
+    if lua_chon == "1":
+        for so_tien in [50000, 75000, 120000, 35000, 200000]:
+            tao_giao_dich(so_tien)
+        xem_giao_dich()
+
+    elif lua_chon == "2":
+        xem_giao_dich()
+
+    else:
+        print("Lua chon khong hop le.")
+```
+
+#### xuat_giao_dich.py
+
+```python
+import csv
+import sqlite3
+from pathlib import Path
+from datetime import datetime
+
+THU_MUC_GOC = Path(__file__).resolve().parent.parent
+FILE_DB = THU_MUC_GOC / "DuLieu" / "cuahang01.db"
+
+
+def xuat_giao_dich():
+    # Mở chỉ đọc để không thay đổi dữ liệu đang có.
+    ket_noi = sqlite3.connect(FILE_DB.as_uri() + "?mode=ro", uri=True)
+
+    try:
+        con_tro = ket_noi.execute("""
+            SELECT ma_gd, ma_cua_hang, ma_may,
+                   thoi_gian, so_tien, trang_thai
+            FROM giao_dich
+            ORDER BY ma_gd
+        """)
+        ten_cot = [cot[0] for cot in con_tro.description]
+        danh_sach = con_tro.fetchall()
+    finally:
+        ket_noi.close()
+
+    thu_muc_xuat = THU_MUC_GOC / "DuLieu" / "Xuat"
+    thu_muc_xuat.mkdir(parents=True, exist_ok=True)
+
+    moc_thoi_gian = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    file_csv = thu_muc_xuat / f"giao_dich_CH01_{moc_thoi_gian}.csv"
+
+    # UTF-8 có BOM giúp Excel đọc tiếng Việt.
+    with file_csv.open("x", newline="", encoding="utf-8-sig") as tep:
+        ghi = csv.writer(tep)
+        ghi.writerow(ten_cot)
+        ghi.writerows(danh_sach)
+
+    print("Thoi gian:", datetime.now().isoformat(timespec="seconds"))
+    print("Da xuat:", len(danh_sach), "giao dich")
+    print("File:", file_csv)
+
+
+if __name__ == "__main__":
+    xuat_giao_dich()
+```
+
+### Cấu trúc CSDL thực tế
+
+**cuahang01.db**
+
+```sql
+CREATE TABLE bo_dem (
+                ngay TEXT PRIMARY KEY,
+                so_cuoi INTEGER NOT NULL
+            );
+CREATE TABLE giao_dich (
+            ma_gd TEXT PRIMARY KEY,
+            ma_cua_hang TEXT NOT NULL,
+            ma_may TEXT NOT NULL,
+            thoi_gian TEXT NOT NULL,
+            so_tien INTEGER NOT NULL CHECK (so_tien > 0),
+            trang_thai TEXT NOT NULL DEFAULT 'PENDING'
+                CHECK (trang_thai IN ('PENDING', 'SENT', 'ACKED'))
+        );
+```
+
+**truso.db**
+
+```sql
+CREATE TABLE giao_dich (
+                ma_gd TEXT PRIMARY KEY NOT NULL,
+                ma_cua_hang TEXT NOT NULL,
+                ma_may TEXT NOT NULL,
+                thoi_gian TEXT NOT NULL,
+                so_tien INTEGER NOT NULL CHECK (so_tien > 0)
+            );
+```
+
+Dữ liệu mẫu hiện tại: cửa hàng và trụ sở cùng 15 giao dịch, tổng tiền 1.440.000 đồng; cửa hàng có 15 ACKED. File CSV ngày 26/10 chứa 10 giao dịch, tổng 960.000 đồng. Hai bộ khác thời điểm và không được trộn số liệu.
