@@ -1,0 +1,66 @@
+! =====================================================================
+! Thiet bi : R-CH3
+! Model    : Cisco 2911 + 1 x HWIC-2T
+! Vai tro  : Router cua hang 3, chua co duong du phong
+! Nguoi cau hinh : TV1 - Le Minh Dao (Nhom 02)
+! Cach dung: mo CLI cua thiet bi o che do Router>/Switch>, dan toan bo file.
+! Ghi chu  : mat khau cisco/class chi dung cho mo phong.
+! =====================================================================
+enable
+configure terminal
+!
+! ---------- 1. Thong tin chung ----------
+hostname R-CH3
+service password-encryption
+enable secret class
+no ip domain-lookup
+!
+! ---------- 2a. Interface ----------
+interface GigabitEthernet0/0
+ description LAN cua hang 3 - noi SW-CH3 G0/1
+ ip address 192.168.30.1 255.255.255.0
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description Khong su dung
+ shutdown
+!
+interface GigabitEthernet0/2
+ description Khong su dung
+ shutdown
+!
+interface Serial0/0/0
+ description WAN chinh den R-HQ Serial0/1/0
+ ip address 10.0.3.2 255.255.255.252
+ no shutdown
+!
+interface Serial0/0/1
+ description Khong su dung
+ shutdown
+!
+! ---------- 2b. Dinh tuyen OSPF (area 0) ----------
+router ospf 1
+ router-id 4.4.4.4
+ passive-interface GigabitEthernet0/0
+ network 192.168.30.0 0.0.0.255 area 0
+ network 10.0.3.0 0.0.0.3 area 0
+!
+! ---------- 3. Bao mat truy cap thiet bi ----------
+! Gioi han nguon Telnet (access-list 10 + access-class tren VTY)
+! do TV2 cau hinh trong Nhom02_v2.pkt theo bang phan quyen muc 2.5
+!
+banner motd #R-CH3 - Chi danh cho quan tri vien duoc phep truy cap#
+!
+line console 0
+ password cisco
+ login
+ exec-timeout 10 0
+!
+line vty 0 4
+ password cisco
+ login
+ transport input telnet
+ exec-timeout 10 0
+!
+end
+write memory

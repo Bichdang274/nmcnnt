@@ -1,0 +1,81 @@
+! =====================================================================
+! Thiet bi : R-HQ
+! Model    : Cisco 2911 + 2 x HWIC-2T
+! Vai tro  : Router tru so, DCE cho 3 duong WAN chinh
+! Nguoi cau hinh : TV1 - Le Minh Dao (Nhom 02)
+! Cach dung: mo CLI cua thiet bi o che do Router>/Switch>, dan toan bo file.
+! Ghi chu  : mat khau cisco/class chi dung cho mo phong.
+! =====================================================================
+enable
+configure terminal
+!
+! ---------- 1. Thong tin chung ----------
+hostname R-HQ
+service password-encryption
+enable secret class
+no ip domain-lookup
+!
+! ---------- 2a. Interface ----------
+interface GigabitEthernet0/0
+ description LAN tru so - noi SW-HQ G0/1
+ ip address 192.168.0.1 255.255.255.0
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description Khong su dung
+ shutdown
+!
+interface GigabitEthernet0/2
+ description Khong su dung
+ shutdown
+!
+interface Serial0/0/0
+ description WAN chinh den R-CH1 Serial0/0/0
+ ip address 10.0.1.1 255.255.255.252
+ clock rate 128000
+ no shutdown
+!
+interface Serial0/0/1
+ description WAN chinh den R-CH2 Serial0/0/0
+ ip address 10.0.2.1 255.255.255.252
+ clock rate 128000
+ no shutdown
+!
+interface Serial0/1/0
+ description WAN chinh den R-CH3 Serial0/0/0
+ ip address 10.0.3.1 255.255.255.252
+ clock rate 128000
+ no shutdown
+!
+interface Serial0/1/1
+ description Khong su dung
+ shutdown
+!
+! ---------- 2b. Dinh tuyen OSPF (area 0) ----------
+router ospf 1
+ router-id 1.1.1.1
+ passive-interface GigabitEthernet0/0
+ network 192.168.0.0 0.0.0.255 area 0
+ network 10.0.1.0 0.0.0.3 area 0
+ network 10.0.2.0 0.0.0.3 area 0
+ network 10.0.3.0 0.0.0.3 area 0
+!
+! ---------- 3. Bao mat truy cap thiet bi ----------
+! Gioi han nguon Telnet (access-list 10 + access-class tren VTY)
+! do TV2 cau hinh trong Nhom02_v2.pkt theo bang phan quyen muc 2.5
+!
+banner motd #R-HQ - Chi danh cho quan tri vien duoc phep truy cap#
+!
+line console 0
+ password cisco
+ login
+ exec-timeout 10 0
+!
+line vty 0 4
+ password cisco
+ login
+ transport input telnet
+ exec-timeout 10 0
+!
+end
+write memory
