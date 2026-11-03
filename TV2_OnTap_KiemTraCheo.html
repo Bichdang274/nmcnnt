@@ -60,12 +60,12 @@
   <a href="#phanquyen">4. Bảng phân quyền</a>
   <a href="#aclch">5. ACL cửa hàng (từng dòng)</a>
   <a href="#aclhq">6. ACL trụ sở</a>
-  <a href="#vty">7. Giới hạn Telnet</a>
+  <a href="#vty">7. SSH, port security, NTP + Syslog</a>
   <a href="#luonggoi">8. Lần theo gói tin</a>
   <a href="#maychu">9. Máy chủ</a>
   <a href="#saoluu">10. Sao lưu – khôi phục</a>
   <a href="#csdl">11. CSDL và đối chiếu</a>
-  <a href="#kiemthu">12. Kiểm thử SEC-1, SEC-2</a>
+  <a href="#kiemthu">12. Kiểm thử SEC-1 – SEC-4, LOG-1</a>
   <a href="#lenh">13. Lệnh hay dùng, gỡ lỗi</a>
   <a href="#hanche">14. Hạn chế (thành thật)</a>
   <a href="#hoidap">15. Câu hỏi kiểm tra chéo</a>
@@ -85,11 +85,11 @@
   <tr><th>Hạng mục</th><th>Nội dung</th></tr>
   <tr><td>Phụ trách</td><td>LAN, máy chủ, bảo mật (phân quyền, ACL), sao lưu. Kiêm vai trò <b>SV2</b> (cấu hình mạng: phần LAN, máy chủ, phân quyền) và phần <b>đối chiếu dữ liệu</b> của SV4.</td></tr>
   <tr><td>Nhận từ TV1</td><td><code>Nhom02_TV1.pkt</code>: topology 4 địa điểm, WAN Serial, OSPF, IP máy trạm, dịch vụ máy chủ – <b>chưa có ACL</b>.</td></tr>
-  <tr><td>TV2 làm thêm</td><td>3 ACL <code>CHx_LAN_IN</code> + 1 ACL <code>HQ_SERVERS_OUT</code>; <code>access-class</code> trên VTY của 8 thiết bị; lịch sao lưu; CSDL trung tâm; sao lưu – khôi phục (BK-1); đối chiếu dữ liệu sau sự cố WAN.</td></tr>
+  <tr><td>TV2 làm thêm</td><td>3 ACL <code>CHx_LAN_IN</code> + 1 ACL <code>HQ_SERVERS_OUT</code>; <code>access-class</code> + <b>SSH thay Telnet</b> trên 8 thiết bị; <b>port security</b> 4 switch; <b>NTP + Syslog</b> về Server-Backup; lịch sao lưu (có lịch tự động trong demo); CSDL trung tâm; sao lưu – khôi phục (BK-1); đối chiếu dữ liệu sau sự cố WAN.</td></tr>
   <tr><td>Sản phẩm</td><td><code>Nhom02_v2.pkt</code> (= bản final), script CLI, running-config, <code>schema_tru_so.sql</code>, <code>truy_van_doi_chieu.sql</code>, log minh chứng, báo cáo mục 2.5, 2.6, 3.2, 3.4, 3.5 (đối chiếu), 5.1.</td></tr>
   <tr><td>Giao cho</td><td>TV1 (chạy lại KT1 trên bản có ACL), TV3 (dùng cho KT2, KT3; điền tiếp báo cáo).</td></tr>
 </table>
-<div class="box">Câu "một hơi" để mở đầu khi bị hỏi: <i>"Em là TV2, em nhận file mạng của TV1 rồi thêm phân quyền: mỗi cửa hàng chỉ được vào máy chủ trung tâm bằng web và ping, không vào được máy sao lưu và không thấy cửa hàng khác; chỉ máy quản trị được Telnet vào thiết bị. Ngoài ra em thiết kế CSDL trụ sở, lịch sao lưu, thử sao lưu – xóa – khôi phục và đối chiếu số giao dịch sau khi mất WAN."</i></div>
+<div class="box">Câu "một hơi" để mở đầu khi bị hỏi: <i>"Em là TV2, em nhận file mạng của TV1 rồi thêm phân quyền: mỗi cửa hàng chỉ được vào máy chủ trung tâm bằng web và ping, không vào được máy sao lưu và không thấy cửa hàng khác; chỉ máy quản trị được vào thiết bị, và chỉ bằng SSH; máy lạ cắm vào cổng switch ở quầy thì cổng tự tắt; mọi thiết bị cùng giờ và tự gửi nhật ký sự cố về trụ sở. Ngoài ra em thiết kế CSDL trụ sở, lịch sao lưu, thử sao lưu – xóa – khôi phục và đối chiếu số giao dịch sau khi mất WAN."</i></div>
 
 <!-- ============================================================ -->
 <h2 id="sodo">2. Sơ đồ và địa chỉ IP</h2>
@@ -134,7 +134,7 @@
     <text x="710" y="262" font-size="11" text-anchor="middle" fill="#2e7d4f">G0/0 IN: CH3_LAN_IN</text>
     <text x="710" y="300" font-size="11.5" text-anchor="middle">POS3-1…5: .11–.15</text>
   </g>
-  <text x="12" y="322" font-size="11" fill="#5d6470">Mọi router/switch: access-class 10 trên VTY (chỉ PC-Admin 192.168.0.20 được Telnet). Tất cả là VLAN 1.</text>
+  <text x="12" y="322" font-size="11" fill="#5d6470">Mọi router/switch: access-class 10 trên VTY (chỉ PC-Admin 192.168.0.20, chỉ SSH). Tất cả là VLAN 1.</text>
 </svg>
 
 <h3>Quy ước IP cần thuộc</h3>
@@ -153,7 +153,7 @@
 <h2 id="nen">3. Kiến thức nền ACL (phải nắm chắc)</h2>
 <table>
   <tr><th>Khái niệm</th><th>Giải thích ngắn</th></tr>
-  <tr><td>ACL chuẩn (1–99)</td><td>Chỉ xét <b>địa chỉ nguồn</b>. Dùng cho <code>access-list 10</code> (lọc ai được Telnet).</td></tr>
+  <tr><td>ACL chuẩn (1–99)</td><td>Chỉ xét <b>địa chỉ nguồn</b>. Dùng cho <code>access-list 10</code> (lọc ai được vào quản trị).</td></tr>
   <tr><td>ACL mở rộng (100–199 hoặc có tên)</td><td>Xét nguồn, đích, giao thức, cổng. Dùng cho <code>CHx_LAN_IN</code>, <code>HQ_SERVERS_OUT</code>.</td></tr>
   <tr><td>ACL có tên (named)</td><td><code>ip access-list extended TÊN</code>. Mỗi dòng tự có số thứ tự 10, 20, 30… nên chèn/xóa từng dòng được.</td></tr>
   <tr><td>Wildcard mask</td><td>Ngược với subnet mask: bit 0 = phải khớp, bit 1 = bỏ qua. <code>192.168.10.0 0.0.0.255</code> = cả dải 192.168.10.x. <code>host 192.168.0.10</code> = đúng 1 máy (= wildcard 0.0.0.0).</td></tr>
@@ -162,7 +162,7 @@
   <tr><td>in / out</td><td>Nhìn <b>từ router</b>: <code>in</code> = gói đi vào router qua cổng đó; <code>out</code> = gói rời router ra cổng đó.</td></tr>
   <tr><td>Quy tắc đặt</td><td>ACL mở rộng đặt <b>gần nguồn</b> (chặn sớm, không tốn băng thông WAN). ACL chuẩn đặt gần đích (vì chỉ biết nguồn).</td></tr>
   <tr><td><code>access-group</code> vs <code>access-class</code></td><td><code>ip access-group</code> áp ACL lên <b>interface</b> (lọc gói đi qua). <code>access-class</code> áp ACL lên <b>line vty</b> (lọc ai được đăng nhập Telnet/SSH vào chính thiết bị).</td></tr>
-  <tr><td><code>established</code></td><td>Chỉ khớp gói TCP có cờ ACK hoặc RST, tức là gói <b>trả lời</b> trong phiên đã mở. Dùng để cho phiên Telnet từ PC-Admin quay về, nhưng không cho cửa hàng tự mở kết nối TCP tới PC-Admin.</td></tr>
+  <tr><td><code>established</code></td><td>Chỉ khớp gói TCP có cờ ACK hoặc RST, tức là gói <b>trả lời</b> trong phiên đã mở. Dùng để cho phiên SSH từ PC-Admin quay về, nhưng không cho cửa hàng tự mở kết nối TCP tới PC-Admin.</td></tr>
   <tr><td><code>eq www</code></td><td>Cổng TCP 80 (HTTP). <code>eq 443</code> là HTTPS.</td></tr>
 </table>
 
@@ -175,8 +175,10 @@
   <tr><td>LAN cửa hàng</td><td>Server-Backup</td><td>Mọi dịch vụ</td><td><span class="tag bad">Chặn</span></td><td>Chỉ trụ sở được truy cập bản sao lưu</td></tr>
   <tr><td>LAN cửa hàng X</td><td>LAN cửa hàng Y</td><td>Mọi dịch vụ</td><td><span class="tag bad">Chặn</span></td><td>Cửa hàng không xem dữ liệu của nhau</td></tr>
   <tr><td>PC-Admin</td><td>Mọi thiết bị</td><td>Mọi dịch vụ</td><td><span class="tag ok">Cho phép</span></td><td>Quản trị, sao lưu, xử lý sự cố</td></tr>
-  <tr><td>Router, switch (VTY)</td><td>—</td><td>Telnet</td><td><span class="tag warn">Chỉ PC-Admin</span></td><td>Hạn chế người cấu hình thiết bị</td></tr>
+  <tr><td>Router, switch (VTY)</td><td>—</td><td><b>SSH</b> (Telnet bị từ chối)</td><td><span class="tag warn">Chỉ PC-Admin</span></td><td>Hạn chế người cấu hình thiết bị</td></tr>
   <tr><td>Switch, router cửa hàng</td><td>Server-Backup</td><td>TFTP (UDP)</td><td><span class="tag ok">Cho phép</span></td><td>Sao lưu cấu hình thiết bị</td></tr>
+  <tr><td>Router, switch</td><td>Server-Backup</td><td>NTP (UDP 123), Syslog (UDP 514)</td><td><span class="tag ok">Cho phép</span></td><td>Cùng giờ, nhật ký sự cố về trụ sở</td></tr>
+  <tr><td>Máy lạ cắm vào cổng switch cửa hàng</td><td>LAN cửa hàng</td><td>Mọi dịch vụ</td><td><span class="tag bad">Chặn</span></td><td>Port security: cổng chỉ nhận máy POS đã đăng ký</td></tr>
 </table>
 <p><b>Triển khai bằng 2 lớp:</b></p>
 <ul>
@@ -196,7 +198,7 @@
   <tr><td>30</td><td><code>permit icmp 192.168.10.0 0.0.0.255 host 192.168.0.10</code></td><td>Ping Server-TT (KT1, giám sát).</td></tr>
   <tr><td>40</td><td><code>permit icmp 192.168.10.0 0.0.0.255 host 192.168.10.1</code></td><td>Ping gateway của chính cửa hàng – để thử "LAN vẫn chạy" lúc mất WAN (KT2, WAN-1b).</td></tr>
   <tr><td>50</td><td><code>permit icmp 192.168.10.0 0.0.0.255 host 192.168.0.20 echo-reply</code></td><td>Chỉ cho <b>gói trả lời ping</b> về PC-Admin → PC-Admin ping được POS, nhưng POS không chủ động ping PC-Admin.</td></tr>
-  <tr><td>60</td><td><code>permit tcp host 192.168.10.2 host 192.168.0.20 established</code></td><td>Gói trả lời của phiên Telnet PC-Admin → SW-CH1 được quay về.</td></tr>
+  <tr><td>60</td><td><code>permit tcp host 192.168.10.2 host 192.168.0.20 established</code></td><td>Gói trả lời của phiên SSH PC-Admin → SW-CH1 được quay về.</td></tr>
   <tr><td>70</td><td><code>permit udp host 192.168.10.2 host 192.168.0.11</code></td><td>SW-CH1 gửi file sao lưu cấu hình (TFTP) lên Server-Backup. <b>Phải đứng trước dòng 80</b> vì 192.168.10.2 cũng thuộc dải 192.168.10.0/24 – nếu đặt sau thì bị dòng 80 chặn trước.</td></tr>
   <tr><td>80</td><td><code>deny ip 192.168.10.0 0.0.0.255 host 192.168.0.11</code></td><td>Chặn POS truy cập máy sao lưu.</td></tr>
   <tr><td>90</td><td><code>deny ip 192.168.10.0 0.0.0.255 192.168.20.0 0.0.0.255</code></td><td>Chặn sang LAN cửa hàng 2.</td></tr>
@@ -218,7 +220,7 @@
  permit udp 10.0.0.0 0.0.255.255 host 192.168.0.11    ! router cửa hàng sao lưu bằng IP cổng WAN
  permit icmp 10.0.0.0 0.0.255.255 host 192.168.0.10
  permit icmp any host 192.168.0.20                    ! trả lời ping về PC-Admin
- permit tcp any host 192.168.0.20 established         ! trả lời Telnet về PC-Admin
+ permit tcp any host 192.168.0.20 established         ! trả lời SSH về PC-Admin
  deny ip any any
 !
 interface GigabitEthernet0/0
@@ -231,13 +233,48 @@ interface GigabitEthernet0/0
 </ul>
 
 <!-- ============================================================ -->
-<h2 id="vty">7. Giới hạn Telnet (cả 8 thiết bị)</h2>
-<pre>access-list 10 permit host 192.168.0.20     ! ACL chuẩn: chỉ PC-Admin
-line vty 0 4
- access-class 10 in
-line vty 5 15                               ! chỉ có trên switch
- access-class 10 in</pre>
-<p>Bổ sung cho phần TV1 đã làm (mật khẩu console/VTY <code>cisco</code>, enable secret <code>class</code>, <code>service password-encryption</code>, banner). Không có <code>access-class</code> thì ai biết mật khẩu cũng Telnet vào được; có rồi thì phải <b>vừa đúng máy vừa đúng mật khẩu</b>.</p>
+<h2 id="vty">7. SSH, port security, NTP + Syslog (phần bảo mật bổ sung)</h2>
+<h3>7a. SSH thay Telnet – "khóa cửa phòng máy" (8 thiết bị)</h3>
+<pre>username admin privilege 15 secret cisco    ! tài khoản riêng
+ip domain-name nhom02.local                 ! cần để tạo khóa RSA
+crypto key generate rsa general-keys modulus 1024
+ip ssh version 2
+access-list 10 permit host 192.168.0.20     ! ACL chuẩn: chỉ PC-Admin
+line vty 0 4                                ! switch: 0 15
+ access-class 10 in                         ! AI được vào: chỉ .20
+ login local                                ! đăng nhập bằng username
+ transport input ssh                        ! VÀO BẰNG GÌ: chỉ SSH</pre>
+<ul>
+  <li><b>Vì sao:</b> Telnet gửi mật khẩu dạng chữ thường trên dây, bắt gói là đọc được; SSH mã hóa cả phiên. Báo cáo tự nêu hạn chế này ở mục 3.1.5 → TV2 khắc phục.</li>
+  <li><b>Hai lớp:</b> <code>access-class</code> lọc <b>ai</b> (chỉ PC-Admin); <code>transport input ssh</code> lọc <b>bằng gì</b> (chỉ SSH). Bổ sung cho phần TV1 (enable secret, mật khẩu console, banner).</li>
+  <li><b>Khóa RSA:</b> SSH cần cặp khóa; <code>Nhom02_v2.pkt</code> đã tạo sẵn khóa 1024 bit trên cả 8 thiết bị (lưu trong Packet Tracer).</li>
+  <li>Thử: PC-Admin <code>ssh -l admin 192.168.10.2</code> → vào được; <code>telnet 192.168.10.2</code> → <i>Connection refused</i>; POS <code>ssh</code> → bị từ chối.</li>
+</ul>
+<h3>7b. Port security – "ổ cắm chỉ nhận đúng máy của nó" (4 switch)</h3>
+<pre>interface range fa0/1 - 5                   ! SW-HQ: fa0/1 - 3
+ switchport mode access
+ switchport port-security                   ! bật
+ switchport port-security maximum 1         ! mỗi cổng 1 máy
+ switchport port-security mac-address sticky ! tự nhớ MAC máy POS
+ switchport port-security violation shutdown ! máy lạ -> tắt cổng (err-disabled)
+ spanning-tree portfast                     ! máy trạm cắm vào dùng ngay
+ spanning-tree bpduguard enable             ! cắm switch lạ -> cũng tắt
+interface range fa0/6 - 24
+ shutdown                                   ! cổng không dùng</pre>
+<ul>
+  <li><b>MAC</b> = mã riêng của card mạng (như số CCCD của máy). Switch nhớ MAC máy POS ở từng cổng; máy khác cắm vào → cổng tắt. File đã ghi sẵn MAC sticky của 18 máy trạm.</li>
+  <li><b>Vì sao cần dù đã có ACL:</b> ACL lọc theo <b>IP</b> – laptop lạ tự đặt IP giống POS là qua. Port security lọc theo <b>MAC</b> ngay tại cổng.</li>
+  <li>Mở lại cổng bị khóa: gỡ máy lạ, cắm lại POS → <code>interface fa0/5</code> → <code>shutdown</code> → <code>no shutdown</code>.</li>
+</ul>
+<h3>7c. NTP + Syslog – "đồng hồ chung, sổ nhật ký chung" (8 thiết bị + Server-Backup)</h3>
+<pre>service timestamps log datetime msec   ! ghi giờ vào từng dòng nhật ký
+ntp server 192.168.0.11                ! lấy giờ từ Server-Backup
+logging 192.168.0.11                   ! gửi nhật ký về Server-Backup</pre>
+<ul>
+  <li><b>NTP:</b> 8 thiết bị cùng một giờ. <b>Syslog:</b> cổng đứt/nối lại, neighbor OSPF đổi trạng thái, port security khóa cổng… tự gửi 1 dòng kèm giờ về Server-Backup (Services → SYSLOG) – khỏi ghi tay <code>show clock</code>.</li>
+  <li><b>Không sửa ACL:</b> NTP (UDP 123), Syslog (UDP 514) tới .11 khớp dòng <code>permit udp … host 192.168.0.11</code> đã có cho TFTP (switch: dòng 70 ACL cửa hàng; router gửi bằng IP WAN 10.0.x.x: dòng <code>permit udp 10.0.0.0 0.0.255.255</code> ở R-HQ).</li>
+  <li><b>Giới hạn phải nói đúng:</b> cửa hàng 1 bị cô lập thì R-CH1 không gửi được Syslog (mất đường) – nhưng R-HQ và R-CH2 vẫn ghi sự kiện mất neighbor 2.2.2.2. NTP đồng bộ thiết bị trong PT với nhau; script Python dùng giờ máy tính.</li>
+</ul>
 
 <!-- ============================================================ -->
 <h2 id="luonggoi">8. Lần theo gói tin (luyện trả lời "tại sao được / tại sao bị chặn")</h2>
@@ -248,11 +285,14 @@ line vty 5 15                               ! chỉ có trên switch
   <tr><td>POS1-1 ping 192.168.0.11</td><td><span class="tag bad">Destination host unreachable</span></td><td>R-CH1 dòng 80 deny. Router trả về ICMP unreachable.</td></tr>
   <tr><td>POS1-1 ping 192.168.20.11</td><td><span class="tag bad">Destination host unreachable</span></td><td>R-CH1 dòng 90 deny – chặn ngay tại cửa hàng 1, kể cả khi gói định đi đường dự phòng.</td></tr>
   <tr><td>POS1-1 ping 192.168.10.1</td><td><span class="tag ok">Reply</span></td><td>Dòng 40. Vẫn được khi mất WAN.</td></tr>
-  <tr><td>POS1-1 telnet 192.168.10.2 (SW-CH1, cùng LAN)</td><td><span class="tag bad">Bị từ chối</span></td><td>Không qua router. Bị chặn bởi <b>access-class 10</b> trên SW-CH1 (nguồn không phải 192.168.0.20). Đây là cách kiểm tra <code>access-class</code> rõ nhất.</td></tr>
+  <tr><td>POS1-1 ssh 192.168.10.2 (SW-CH1, cùng LAN)</td><td><span class="tag bad">Bị từ chối</span></td><td>Không qua router. Bị chặn bởi <b>access-class 10</b> trên SW-CH1 (nguồn không phải 192.168.0.20). Đây là cách kiểm tra <code>access-class</code> rõ nhất.</td></tr>
   <tr><td>POS1-1 telnet 192.168.10.1 (router)</td><td><span class="tag bad">Không vào được</span></td><td>Gói vào G0/0 đã bị <code>CH1_LAN_IN</code> dòng 110 (deny any any) chặn trước; <code>access-class</code> là lớp thứ hai.</td></tr>
   <tr><td>PC-Admin ping 192.168.10.11</td><td><span class="tag ok">Reply</span></td><td>Đi: R-HQ G0/0 là cổng <b>vào</b> (không ACL in), R-CH1 G0/0 là cổng <b>ra</b> (không ACL out). Về: R-CH1 dòng 50 (echo-reply) và R-HQ <code>permit icmp any host .20</code>.</td></tr>
-  <tr><td>PC-Admin telnet 192.168.10.2</td><td><span class="tag ok">Vào được (mật khẩu cisco)</span></td><td>access-class cho phép .20. Gói trả lời: R-CH1 dòng 60 (established), R-HQ <code>permit tcp any host .20 established</code>.</td></tr>
-  <tr><td>PC-Admin telnet 10.0.1.2 (R-CH1)</td><td><span class="tag ok">Vào được</span></td><td>Gói vào R-CH1 qua Serial (không có ACL), access-class cho phép. Trả lời qua R-HQ dòng established.</td></tr>
+  <tr><td>PC-Admin ssh -l admin 192.168.10.2</td><td><span class="tag ok">Vào được (admin / cisco)</span></td><td>access-class cho phép .20, transport cho SSH. Gói trả lời: R-CH1 dòng 60 (established), R-HQ <code>permit tcp any host .20 established</code>.</td></tr>
+  <tr><td>PC-Admin <b>telnet</b> 192.168.10.2</td><td><span class="tag bad">Connection refused</span></td><td>Tới được SW-CH1 nhưng <code>transport input ssh</code> → switch không nhận Telnet.</td></tr>
+  <tr><td>PC-Admin ssh -l admin 10.0.1.2 (R-CH1)</td><td><span class="tag ok">Vào được</span></td><td>Gói vào R-CH1 qua Serial (không có ACL), access-class cho phép. Trả lời qua R-HQ dòng established.</td></tr>
+  <tr><td>SW-CH1 gửi Syslog / hỏi NTP tới 192.168.0.11</td><td><span class="tag ok">Được</span></td><td>R-CH1 dòng 70 (<code>permit udp host 192.168.10.2 host 192.168.0.11</code>), R-HQ <code>permit udp host 192.168.10.2 …</code>.</td></tr>
+  <tr><td>Laptop lạ thay POS1-5 ở SW-CH1 Fa0/5</td><td><span class="tag bad">Cổng tắt</span></td><td>Không tới được router: MAC khác MAC sticky của POS1-5 → port security đưa Fa0/5 vào err-disabled.</td></tr>
   <tr><td>POS1-1 ping PC-Admin 192.168.0.20</td><td><span class="tag bad">Bị chặn</span></td><td>Dòng 50 chỉ cho echo-<b>reply</b>; echo-request rơi xuống dòng 110 deny.</td></tr>
 </table>
 
@@ -341,14 +381,16 @@ SELECT ma_ch, COUNT(*), SUM(tong_tien) FROM giao_dich GROUP BY ma_ch;</pre>
 <p>Hiểu cho được dòng 1: "mất ACK" = trụ sở <b>đã ghi</b> nhưng câu xác nhận không về tới cửa hàng → cửa hàng vẫn để SENT → khi gửi lại, trụ sở thấy mã đã có nên bỏ qua (2 trùng) nhưng vẫn ACK → cửa hàng chuyển ACKED. Vì thế 12 + 8 = <b>20</b>, không phải 22.</p>
 
 <!-- ============================================================ -->
-<h2 id="kiemthu">12. Kiểm thử SEC-1, SEC-2 <span class="tag warn">chưa chạy – phải làm trước buổi tối</span></h2>
+<h2 id="kiemthu">12. Kiểm thử SEC-1 – SEC-4, LOG-1 <span class="tag warn">chưa chạy – phải làm trước khi gặp thầy</span></h2>
 <p>Lệnh đầy đủ ở <code>Script_TV2/KiemThu_TV2.txt</code>. Trước mỗi ảnh chạy <code>show clock</code> trên router (đặt giờ: <code>clock set 14:00:00 20 Oct 2026</code>).</p>
 <table>
   <tr><th>Ca</th><th>Thao tác</th><th>Mong đợi</th><th>Ảnh</th></tr>
   <tr><td>SEC-1 (được phép)</td><td>POS1-1, POS2-1, POS3-1: <code>ping 192.168.0.10</code>; Web Browser <code>http://192.168.0.10</code></td><td>Reply (TTL=126); hiện trang máy chủ</td><td>MC-TV2-SEC1</td></tr>
   <tr><td>SEC-2 (bị chặn)</td><td>POS1-1: <code>ping 192.168.0.11</code>, <code>ping 192.168.20.11</code>, <code>telnet 192.168.10.1</code> (theo script); nên thử thêm <code>telnet 192.168.10.2</code></td><td>Destination host unreachable ×2; Telnet không vào được. Lưu ý: với 10.1 gói bị <code>CH1_LAN_IN</code> chặn trước (thường báo timeout); với 10.2 mới thấy đúng tác dụng của <code>access-class</code> (bị từ chối). Ghi đúng thông báo PT hiện ra.</td><td>MC-TV2-SEC2</td></tr>
   <tr><td>Bộ đếm ACL</td><td>R-CH1: <code>show access-lists CH1_LAN_IN</code>; R-HQ: <code>show access-lists HQ_SERVERS_OUT</code></td><td>Cột <code>(n match(es))</code> tăng ở dòng deny tương ứng</td><td>MC-TV2-ACL</td></tr>
-  <tr><td>Quyền PC-Admin</td><td><code>ping 192.168.10.11</code>, <code>telnet 192.168.10.2</code>, <code>telnet 10.0.1.2</code></td><td>Reply; vào được (mật khẩu cisco)</td><td>MC-TV2-TELNET</td></tr>
+  <tr><td>SEC-3 (SSH)</td><td>PC-Admin: <code>ssh -l admin 192.168.10.2</code>, <code>ssh -l admin 10.0.1.2</code>, <code>telnet 192.168.10.2</code>; POS1-1: <code>ssh -l admin 192.168.10.2</code>; R-CH1: <code>show ip ssh</code></td><td>PC-Admin SSH vào được (admin/cisco); Telnet: Connection refused; POS bị từ chối; SSH Enabled – version 2.0</td><td>MC-TV2-SSH</td></tr>
+  <tr><td>SEC-4 (port security)</td><td>SW-CH1: <code>show port-security</code>; thêm Laptop (192.168.10.50/24, gw .1), thay POS1-5 ở Fa0/5, laptop <code>ping 192.168.10.1</code>; <code>show port-security interface fa0/5</code></td><td>Laptop không ping được; Fa0/5 <b>Secure-shutdown</b>, Violation Count 1</td><td>MC-TV2-PORTSEC</td></tr>
+  <tr><td>LOG-1 (NTP + Syslog)</td><td><code>show ntp status</code> trên R-CH1, R-HQ; R-CH1 <code>int s0/0/0</code> → <code>shutdown</code> → <code>no shutdown</code>; Server-Backup → Services → SYSLOG</td><td>Clock is synchronized (192.168.0.11); SYSLOG có Serial0/0/0 down/up, OSPF neighbor kèm giờ</td><td>MC-TV2-SYSLOG</td></tr>
   <tr><td>Kiểm tra áp ACL</td><td><code>show ip interface g0/0</code></td><td>"Inbound access list is CH1_LAN_IN" / R-HQ: "Outgoing access list is HQ_SERVERS_OUT"</td><td>–</td></tr>
 </table>
 <div class="box">TTL=126 nghĩa là gói đi qua <b>2 router</b> (128 − 2). Nếu thấy TTL=125 → đang đi đường vòng 3 router (ví dụ qua đường dự phòng).</div>
@@ -374,11 +416,13 @@ interface g0/0
 <!-- ============================================================ -->
 <h2 id="hanche">14. Hạn chế – nói thật khi bị hỏi</h2>
 <ul>
-  <li><b>Telnet không mã hóa</b> – mật khẩu đi dạng rõ. Thực tế nên dùng SSH (<code>ip domain-name</code>, <code>crypto key generate rsa</code>, <code>transport input ssh</code>). Nhóm dùng Telnet vì đề bài và PT dễ minh họa.</li>
+  <li><b>Đã chuyển Telnet → SSH</b>, nhưng mật khẩu vẫn là mật khẩu thử nghiệm (<code>cisco</code>, <code>class</code>) – thực tế phải đặt mật khẩu mạnh.</li>
+  <li><b>Port security chặn được máy lạ cắm vào, chưa chống giả mạo MAC</b> (kẻ xấu sao chép MAC của POS). Muốn chặt hơn cần 802.1X.</li>
+  <li><b>Syslog đi bằng UDP</b>, không gửi lại nếu mất; lúc cửa hàng bị cô lập, R-CH1 không báo về được.</li>
   <li><b>ACL không phải tường lửa có trạng thái.</b> <code>established</code> chỉ xem cờ TCP, có thể bị giả mạo; thực tế dùng firewall/zone-based firewall.</li>
   <li><b>Một VLAN mỗi địa điểm</b> (VLAN 1): POS, máy chủ, PC-Admin cùng một mạng ở trụ sở. Tách VLAN máy chủ / quản trị sẽ tốt hơn.</li>
   <li><b>Cửa hàng 3 không có đường dự phòng</b> (R-CH2 đã dùng hết 2 cổng của module HWIC-2T).</li>
-  <li><b>Sao lưu trong bản demo nằm cùng máy</b> (thư mục <code>DuLieu/sao_luu</code>), chưa tách sang máy/địa điểm khác; chưa có lịch tự động (cron), chạy bằng lệnh tay.</li>
+  <li><b>Sao lưu trong bản demo nằm cùng máy</b>, chưa tách sang máy/địa điểm khác. Lịch tự động: trang demo có nút ⏱ (chu kỳ rút ngắn 30 giây); thực tế cài cron <code>0 23 * * *</code> hoặc Task Scheduler.</li>
   <li>Kho cửa hàng phải giữ giao dịch ACKED ít nhất tới sau lần sao lưu trụ sở kế tiếp, nếu không thì cách "gửi bù" ở mục 10 không còn dữ liệu để gửi.</li>
   <li>Packet Tracer chỉ chứng minh cấu hình và kết nối, <b>không</b> chứng minh thông lượng hay khả năng chịu tải thật (README repo của nhóm cũng ghi rõ điều này).</li>
   <li><b>Vấn đề nội bộ cần thống nhất với nhóm:</b> số liệu BK-1 và đối chiếu được chạy bằng bộ script thử nghiệm trong <code>demo-cisco/Script/</code>, còn TV3 có bộ script riêng ở nhánh <code>tv3</code>. Cần chạy lại trên script của TV3 (hoặc thống nhất dùng một bộ) để báo cáo khớp.</li>
@@ -416,7 +460,7 @@ Không. Gói trả lời vào R-HQ qua G0/0 (chiều in, không có ACL) và ra 
 <code>ip access-list extended CH1_LAN_IN</code> → <code>no 30</code> (xóa dòng số 30) → <code>30 permit …</code> (ghi lại). Số thứ tự xem bằng <code>show access-lists</code>.</details>
 <details><summary>14. access-group và access-class khác nhau?</summary>
 access-group gắn ACL vào interface, lọc gói đi qua router. access-class gắn ACL vào line vty, lọc ai được đăng nhập vào chính thiết bị.</details>
-<details><summary>15. POS1-1 Telnet vào SW-CH1 cùng LAN – gói không qua router – vậy cái gì chặn?</summary>
+<details><summary>15. POS1-1 SSH vào SW-CH1 cùng LAN – gói không qua router – vậy cái gì chặn?</summary>
 <code>access-class 10 in</code> trên VTY của SW-CH1: nguồn 192.168.10.11 không phải 192.168.0.20 → bị từ chối. Đây là lý do phải áp access-class trên cả switch chứ không chỉ router.</details>
 
 <h3>Sao lưu, CSDL, đối chiếu</h3>
@@ -437,6 +481,20 @@ Bản trùng nghĩa là trụ sở đã có giao dịch – thường do ACK l�
 <details><summary>23. Ai sao lưu cấu hình thiết bị, ACL có ảnh hưởng không?</summary>
 TV1 chạy <code>copy running-config tftp:</code> lên Server-Backup 192.168.0.11. ACL của TV2 có dòng permit udp riêng cho switch (192.168.x0.2) và router (10.0.x.2) để việc này không bị chặn.</details>
 
+<h3>SSH, port security, NTP + Syslog</h3>
+<details><summary>26. Vì sao chuyển sang SSH? Cấu hình cần những gì?</summary>
+Telnet gửi mật khẩu dạng rõ, SSH mã hóa cả phiên. Cần: <code>username … secret</code>, <code>ip domain-name</code>, <code>crypto key generate rsa</code> (1024 bit cho SSH v2), <code>ip ssh version 2</code>, trên line vty <code>login local</code> + <code>transport input ssh</code>; giữ <code>access-class 10</code>.</details>
+<details><summary>27. PC-Admin gõ telnet 192.168.10.2 thì sao? POS gõ ssh thì sao? Khác nhau chỗ nào?</summary>
+PC-Admin Telnet: bị từ chối vì <code>transport input ssh</code> (đúng máy, sai cách vào). POS SSH: bị từ chối vì <code>access-class 10</code> (đúng cách vào, sai máy). Phải đúng cả hai mới vào được.</details>
+<details><summary>28. Đã có ACL rồi sao còn cần port security?</summary>
+ACL lọc theo IP. Laptop lạ rút dây POS cắm vào, tự đặt IP của POS là ACL coi như POS. Port security lọc theo MAC ngay tại cổng switch, nên máy lạ bị tắt cổng trước khi gửi được gì.</details>
+<details><summary>29. Sticky nghĩa là gì? Cổng bị khóa thì mở lại thế nào?</summary>
+Sticky: switch tự học MAC máy đầu tiên cắm vào và ghi vào running-config (lưu được khi write memory). Mở lại: gỡ máy lạ, cắm đúng máy, <code>interface fa0/x</code> → <code>shutdown</code> → <code>no shutdown</code>.</details>
+<details><summary>30. NTP và Syslog dùng để làm gì trong bài? Có phải sửa ACL không?</summary>
+NTP cho 8 thiết bị cùng giờ; Syslog tự gửi sự kiện (WAN đứt/nối, OSPF, port security) kèm giờ về Server-Backup – lấy giờ sự cố cho KT2, KT3 thay vì ghi tay. Không sửa ACL: UDP tới .11 đã được cho phép (dòng dùng cho TFTP).</details>
+<details><summary>31. Cửa hàng 1 mất cả hai đường WAN thì Syslog có ghi được không?</summary>
+R-CH1 không gửi được (không còn đường tới trụ sở). Nhưng R-HQ và R-CH2 ở đầu bên kia cũng thấy cổng đứt và mất neighbor 2.2.2.2, nên Server-Backup vẫn có mốc thời gian sự cố.</details>
+
 <h3>Tổng quát</h3>
 <details><summary>24. Phần nào của bạn ảnh hưởng tới TV1 và TV3?</summary>
 TV1: phải chạy lại KT1 trên bản có ACL (ACL không được chặn nhầm POS → Server-TT), sao lưu cấu hình phải qua được ACL. TV3: script đồng bộ đi bằng HTTP – ACL phải cho TCP 80 tới Server-TT; CSDL trụ sở của TV3 phải dùng mã giao dịch làm khóa chính.</details>
@@ -449,17 +507,20 @@ Trả lời thật: dùng Claude Code để sinh cấu hình ACL, file .pkt, scr
 <p><button onclick="grade()">Chấm điểm</button> <button class="ghost" onclick="resetQuiz()">Làm lại</button><span id="score"></span></p>
 
 <!-- ============================================================ -->
-<h2 id="checklist">17. Checklist trước buổi kiểm tra chéo</h2>
+<h2 id="checklist">17. Checklist trước khi gặp thầy</h2>
 <ul class="check">
   <li><label><input type="checkbox"> Mở <code>Nhom02_TV1.pkt</code>, tự dán script <code>Script_TV2/</code> vào 4 router + 4 switch (hiểu từng lệnh)</label></li>
-  <li><label><input type="checkbox"> Chạy SEC-1, SEC-2, chụp MC-TV2-SEC1, SEC2, ACL, TELNET (có <code>show clock</code>)</label></li>
+  <li><label><input type="checkbox"> Chạy SEC-1 – SEC-4, LOG-1, chụp MC-TV2-SEC1, SEC2, ACL, SSH, PORTSEC, SYSLOG (có <code>show clock</code>)</label></li>
+  <li><label><input type="checkbox"> Nói được 2 lớp quản trị: access-class (ai) + transport input ssh (bằng gì)</label></li>
+  <li><label><input type="checkbox"> Demo được cắm laptop lạ → cổng err-disabled → mở lại cổng</label></li>
+  <li><label><input type="checkbox"> Giải thích vì sao NTP/Syslog không phải sửa ACL, và giới hạn lúc cửa hàng bị cô lập</label></li>
   <li><label><input type="checkbox"> Nói được ACL CH1_LAN_IN từng dòng mà không nhìn</label></li>
   <li><label><input type="checkbox"> Giải thích được "vì sao 2 lớp ACL" (đường dự phòng CH1–CH2)</label></li>
   <li><label><input type="checkbox"> Lần theo được gói POS1-1 → Server-TT và PC-Admin → SW-CH1 (mục 8)</label></li>
   <li><label><input type="checkbox"> Nói được lịch sao lưu + RPO + 4 bước khôi phục</label></li>
   <li><label><input type="checkbox"> Giải thích được 12 + 8 = 20 (không phải 22) trong Bảng 3.4</label></li>
   <li><label><input type="checkbox"> Thống nhất với TV3: dùng bộ script nào để số liệu BK-1, đối chiếu khớp</label></li>
-  <li><label><input type="checkbox"> Nhắc TV1 sửa tên trong báo cáo cá nhân (đang ghi Lê Minh Đạo)</label></li>
+  <li><label><input type="checkbox"> Nhắc Bích (TV1) sửa tên trong báo cáo cá nhân (đang ghi Lê Minh Đạo)</label></li>
   <li><label><input type="checkbox"> Điền MSSV, lớp, ngày trong báo cáo cá nhân</label></li>
 </ul>
 <p class="sub">Trạng thái checklist được lưu trong trình duyệt (localStorage) của máy này.</p>
@@ -481,8 +542,14 @@ const QUIZ = [
   { q: "Tại sao không ghi 'eq tftp' trong dòng cho sao lưu?", a: ["TFTP dùng TCP", "TFTP chỉ dùng cổng 69 cho gói đầu, dữ liệu đi cổng tạm", "Packet Tracer không có TFTP", "Để tiết kiệm dòng"], c: 1,
     why: "Ghi eq tftp sẽ chặn phần dữ liệu → sao lưu thất bại." },
   { q: "'established' khớp gói nào?", a: ["Mọi gói TCP", "Gói TCP có cờ ACK hoặc RST (trả lời trong phiên đã mở)", "Gói ICMP echo-reply", "Gói UDP đã gửi trước đó"], c: 1,
-    why: "Cho trả lời Telnet về PC-Admin, không cho cửa hàng tự mở kết nối." },
-  { q: "POS1-1 Telnet SW-CH1 (cùng LAN). Cái gì chặn?", a: ["CH1_LAN_IN", "HQ_SERVERS_OUT", "access-class 10 trên VTY của SW-CH1", "Không bị chặn"], c: 2,
+    why: "Cho trả lời SSH về PC-Admin, không cho cửa hàng tự mở kết nối." },
+  { q: "PC-Admin gõ telnet 192.168.10.2 (SW-CH1). Kết quả?", a: ["Vào được", "Bị từ chối vì transport input ssh", "Bị ACL CH1_LAN_IN chặn", "Bị port security chặn"], c: 1,
+    why: "Đúng máy nhưng sai cách vào: thiết bị chỉ nhận SSH." },
+  { q: "Vì sao cần port security dù đã có ACL?", a: ["ACL không chạy trên switch", "ACL lọc theo IP – laptop lạ đặt IP giống POS vẫn qua; port security lọc MAC tại cổng", "Để tăng tốc mạng", "Để OSPF hội tụ nhanh"], c: 1,
+    why: "Port security chặn ngay tại cổng switch theo MAC." },
+  { q: "NTP và Syslog của router cửa hàng gửi tới 192.168.0.11 có phải sửa ACL không?", a: ["Có, phải thêm dòng mới", "Không – dòng permit udp tới .11 đã có (dùng cho TFTP)", "Có, phải gỡ ACL", "Không gửi được qua WAN"], c: 1,
+    why: "UDP tới Server-Backup đã được cho phép từ trước." },
+  { q: "POS1-1 SSH vào SW-CH1 (cùng LAN). Cái gì chặn?", a: ["CH1_LAN_IN", "HQ_SERVERS_OUT", "access-class 10 trên VTY của SW-CH1", "Không bị chặn"], c: 2,
     why: "Gói không qua router nên ACL interface không có tác dụng; access-class trên switch chặn." },
   { q: "BK-1 cho kết quả số bản ghi trụ sở:", a: ["45 → 0 → 45", "20 → 0 → 20", "12 → 20 → 20", "8 → 6 → 8"], c: 0,
     why: "Sao lưu 45, xóa thử còn 0, khôi phục đủ 45." },
