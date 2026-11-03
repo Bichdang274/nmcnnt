@@ -14,9 +14,9 @@ Demo trực tuyến: https://fimbrillate-uncraven-antonietta.ngrok-free.dev (l�
 | **Port security** | 4 switch: mỗi cổng POS chỉ nhận 1 MAC (sticky, ghi sẵn MAC 18 máy), vi phạm thì tắt cổng; portfast, bpduguard; tắt cổng không dùng | Máy POS đặt ngoài quầy, ai cũng có thể cắm laptop lạ vào | **SEC-4**: cắm laptop lạ thì cổng Secure-shutdown |
 
 **Ảnh hưởng tới thành viên khác:**
-- Script dữ liệu của TV3 (HTTP tới Server-TT) **không bị ảnh hưởng**.
-- TV3 **đừng thêm hoặc đổi máy vào switch** trong Packet Tracer, vì port security sẽ khóa cổng đó.
-- Bản v1 của TV1 giữ nguyên.
+- Script dữ liệu của TV3 – Đức (HTTP tới Server-TT) **không bị ảnh hưởng**.
+- TV3 (Đức) **đừng thêm hoặc đổi máy vào switch** trong Packet Tracer, vì port security sẽ khóa cổng đó.
+- Bản v1 của TV1 (Bích) giữ nguyên.
 
 **Mở `Nhom02_v2.pkt` lần đầu phải làm thêm 1 bước:** trên 8 thiết bị chạy
 `crypto key generate rsa general-keys modulus 1024`, rồi `ip ssh version 2`, rồi `write memory`.
@@ -73,6 +73,6 @@ Một trang đi xuyên suốt 15 bước theo thứ tự dựng hệ thống. Pa
 - [ ] **TV2:** tạo khóa RSA, chạy SEC-1 – SEC-4, LOG-1 trong Packet Tracer, chụp ảnh, điền các ô `[...]` trong báo cáo.
 - [ ] **Cả nhóm:** thống nhất **một bộ script** (của TV3 cộng 2 script TV2) và chạy lại số liệu BK-1 và đối chiếu,
   để báo cáo chỉ có một bộ số.
-- [ ] **TV3:** nếu cần chụp lại ảnh KT2, KT3 thì dùng `Nhom02_v2.pkt` mới. Ảnh cũ vẫn hợp lệ vì phần WAN không đổi.
-- [ ] **TV1:** sửa tên trong báo cáo cá nhân (đang ghi Lê Minh Đạo). Ảnh KT1 nên chụp lại trên bản v2.
+- [ ] **TV3 (Đức):** nếu cần chụp lại ảnh KT2, KT3 thì dùng `Nhom02_v2.pkt` mới. Ảnh cũ vẫn hợp lệ vì phần WAN không đổi.
+- [ ] **TV1 (Bích):** sửa tên trong báo cáo cá nhân (đang ghi Lê Minh Đạo). Ảnh KT1 nên chụp lại trên bản v2.
 - [ ] **Video:** quay theo 15 bước của trang demo. Mỗi người trình bày phần của mình.

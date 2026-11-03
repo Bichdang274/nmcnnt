@@ -64,7 +64,7 @@ Trang demo tích hợp nối hai nửa này thành một kịch bản liền m�
 
 ## 3. Phân công 3 thành viên
 
-| | TV1 | **TV2 (Lê Minh Đạo)** | TV3 (Phan Hải Đức) |
+| | TV1 (Đặng Thị Bích) | **TV2 (Lê Minh Đạo)** | TV3 (Phan Hải Đức) |
 |---|---|---|---|
 | Phụ trách | WAN, định tuyến, đặc tả đồng bộ | **LAN, máy chủ, bảo mật, sao lưu, đối chiếu dữ liệu** | Lưu tạm, gửi lại, chống trùng |
 | Sản phẩm chính | `Nhom02_TV1.pkt` (topology, Serial, OSPF, IP, mật khẩu cơ bản), so sánh PA1/PA2 | `Nhom02_v2.pkt` = file TV1 + phân quyền và bảo mật, CSDL trụ sở, lịch sao lưu, script sao lưu/đối chiếu | `store_agent.py`, `hq_receiver.py`, `kiem_tra_trung.py`, `sao_luu.py` (kho cửa hàng) |
@@ -305,7 +305,7 @@ Cả nhóm **dùng chung một phiên**. Lúc tập chỉ nên để một ngư�
 - [ ] Mở `Nhom02_v2.pkt`, tạo khóa RSA trên 8 thiết bị (`crypto key generate rsa general-keys modulus 1024`), lưu file.
 - [ ] Chạy SEC-1 – SEC-4, LOG-1, chụp ảnh (có `show clock`), gửi kết quả để điền vào các ô `[...]` trong báo cáo.
 - [ ] Thống nhất với TV3 dùng một bộ script để có một bộ số liệu.
-- [ ] Nhắc TV1 sửa tên trong báo cáo cá nhân (đang ghi tên Lê Minh Đạo).
+- [ ] Nhắc TV1 (Bích) sửa tên trong báo cáo cá nhân (đang ghi tên Lê Minh Đạo).
 - [ ] Điền mã sinh viên, lớp, ngày trong báo cáo cá nhân.
 
 ## 8. Câu hỏi hay gặp (trả lời ngắn)
