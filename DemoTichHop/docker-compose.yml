@@ -1,0 +1,7 @@
+services:
+  demo:
+    build: .
+    image: demo-nhom02
+    container_name: demo-nhom02
+    ports:
+      - "8765:8765"

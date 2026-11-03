@@ -1,0 +1,22 @@
+! ===== R-CH2 – phần TV2 bổ sung: SSH thay Telnet, NTP, Syslog =====
+! Dán vào CLI sau khi đăng nhập (console: cisco). Lệnh enable hỏi mật khẩu: class
+! Làm sau file R-CH2_ACL.txt (ACL / access-class).
+enable
+configure terminal
+! SSH: tài khoản riêng + tên miền + khóa RSA (Packet Tracer không lưu sẵn khóa trong file)
+username admin privilege 15 secret cisco
+ip domain-name nhom02.local
+crypto key generate rsa general-keys modulus 1024
+ip ssh version 2
+! Chỉ nhận SSH (Telnet bị từ chối); access-class 10 đã có vẫn giữ nguyên
+line vty 0 4
+ login local
+ transport input ssh
+ exit
+! NTP: lấy giờ từ Server-Backup (Services > NTP: On)
+ntp server 192.168.0.11
+! Syslog: gửi nhật ký kèm giờ về Server-Backup (Services > SYSLOG: On)
+service timestamps log datetime msec
+logging 192.168.0.11
+end
+write memory

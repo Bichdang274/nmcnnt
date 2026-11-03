@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ôn tập TV2 – Nhóm 02 – Kiểm tra chéo</title>
+<style>
+  :root {
+    --bg: #fbfaf7; --fg: #1f2328; --muted: #5d6470; --line: #e3e0d8;
+    --accent: #2f5d8a; --ok: #2e7d4f; --bad: #b3412e; --warn: #9a6b00;
+    --code: #f3f1ec; --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.6 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--fg); background: var(--bg); }
+  nav { position: fixed; top: 0; left: 0; width: 250px; height: 100vh; overflow-y: auto; padding: 20px 16px; border-right: 1px solid var(--line); background: #f5f3ee; font-size: 14px; }
+  nav h2 { font-size: 15px; margin: 0 0 10px; }
+  nav a { display: block; color: var(--fg); text-decoration: none; padding: 3px 6px; border-radius: 4px; }
+  nav a:hover { background: #e9e5dc; }
+  main { margin-left: 250px; max-width: 920px; padding: 28px 40px 80px; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 21px; margin: 44px 0 10px; padding-top: 10px; border-top: 2px solid var(--line); }
+  h3 { font-size: 17px; margin: 24px 0 8px; }
+  .sub { color: var(--muted); margin: 0 0 16px; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 16px; font-size: 14.5px; background: var(--card); }
+  th, td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; vertical-align: top; }
+  th { background: #efece5; }
+  code, pre { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 13.5px; }
+  code { background: var(--code); padding: 1px 4px; border-radius: 3px; }
+  pre { background: var(--code); padding: 12px 14px; border-radius: 6px; overflow-x: auto; line-height: 1.45; border: 1px solid var(--line); }
+  .box { border-left: 4px solid var(--accent); background: var(--card); padding: 10px 14px; margin: 14px 0; border-radius: 0 6px 6px 0; }
+  .box.ok { border-color: var(--ok); } .box.bad { border-color: var(--bad); } .box.warn { border-color: var(--warn); }
+  .tag { display: inline-block; font-size: 12px; padding: 1px 7px; border-radius: 10px; color: #fff; background: var(--accent); vertical-align: middle; }
+  .tag.ok { background: var(--ok); } .tag.bad { background: var(--bad); } .tag.warn { background: var(--warn); }
+  details { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 8px 12px; margin: 8px 0; }
+  details summary { cursor: pointer; font-weight: 600; }
+  details[open] summary { margin-bottom: 6px; }
+  .acl td:first-child { white-space: nowrap; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 13px; }
+  .quiz .q { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; margin: 10px 0; }
+  .quiz label { display: block; padding: 3px 6px; border-radius: 4px; cursor: pointer; }
+  .quiz label:hover { background: #f1eee7; }
+  .quiz .right { background: #dcefe3; } .quiz .wrong { background: #f6dcd6; }
+  .quiz .why { display: none; color: var(--muted); font-size: 14px; margin-top: 6px; }
+  .quiz .done .why { display: block; }
+  button { font: inherit; padding: 6px 14px; border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 5px; cursor: pointer; }
+  button.ghost { background: transparent; color: var(--accent); }
+  #score { font-weight: 600; margin-left: 10px; }
+  .check li { list-style: none; }
+  .check input { margin-right: 6px; }
+  svg text { font-family: -apple-system, "Segoe UI", Arial, sans-serif; }
+  @media (max-width: 900px) { nav { position: static; width: auto; height: auto; border-right: none; } main { margin-left: 0; padding: 20px; } }
+  @media print { nav { display: none; } main { margin: 0; max-width: none; } details { break-inside: avoid; } details:not([open]) > *:not(summary) { display: block; } }
+</style>
+</head>
+<body>
+<nav>
+  <h2>Ôn tập TV2</h2>
+  <a href="#tongquan">1. Vai trò TV2</a>
+  <a href="#sodo">2. Sơ đồ và IP</a>
+  <a href="#nen">3. Kiến thức nền ACL</a>
+  <a href="#phanquyen">4. Bảng phân quyền</a>
+  <a href="#aclch">5. ACL cửa hàng (từng dòng)</a>
+  <a href="#aclhq">6. ACL trụ sở</a>
+  <a href="#vty">7. Giới hạn Telnet</a>
+  <a href="#luonggoi">8. Lần theo gói tin</a>
+  <a href="#maychu">9. Máy chủ</a>
+  <a href="#saoluu">10. Sao lưu – khôi phục</a>
+  <a href="#csdl">11. CSDL và đối chiếu</a>
+  <a href="#kiemthu">12. Kiểm thử SEC-1, SEC-2</a>
+  <a href="#lenh">13. Lệnh hay dùng, gỡ lỗi</a>
+  <a href="#hanche">14. Hạn chế (thành thật)</a>
+  <a href="#hoidap">15. Câu hỏi kiểm tra chéo</a>
+  <a href="#quiz">16. Trắc nghiệm tự chấm</a>
+  <a href="#checklist">17. Checklist trước buổi tối</a>
+</nav>
+
+<main>
+<h1>Ôn tập phần Thành viên 2 – Lê Minh Đạo</h1>
+<p class="sub">Nhóm 02 · RIPT1304 · Đề 02 – Hạ tầng CNTT cho chuỗi cửa hàng bán lẻ (3 cửa hàng + 1 trụ sở). Mọi số liệu và cấu hình trong trang này lấy từ <code>Nhom02_v2.pkt</code>, <code>Script_TV2/</code>, <code>CSDL/</code>, <code>MinhChung_TV2/</code> và báo cáo <code>cong_nghe_nen_tang_TV2.docx</code>.</p>
+
+<div class="box">Cách học gợi ý: đọc mục 3 → 8 (ACL là phần dễ bị hỏi nhất), rồi 10 → 11, sau đó tự trả lời mục 15 <b>trước khi</b> mở đáp án, cuối cùng làm trắc nghiệm mục 16.</div>
+
+<!-- ============================================================ -->
+<h2 id="tongquan">1. Vai trò TV2</h2>
+<table>
+  <tr><th>Hạng mục</th><th>Nội dung</th></tr>
+  <tr><td>Phụ trách</td><td>LAN, máy chủ, bảo mật (phân quyền, ACL), sao lưu. Kiêm vai trò <b>SV2</b> (cấu hình mạng: phần LAN, máy chủ, phân quyền) và phần <b>đối chiếu dữ liệu</b> của SV4.</td></tr>
+  <tr><td>Nhận từ TV1</td><td><code>Nhom02_TV1.pkt</code>: topology 4 địa điểm, WAN Serial, OSPF, IP máy trạm, dịch vụ máy chủ – <b>chưa có ACL</b>.</td></tr>
+  <tr><td>TV2 làm thêm</td><td>3 ACL <code>CHx_LAN_IN</code> + 1 ACL <code>HQ_SERVERS_OUT</code>; <code>access-class</code> trên VTY của 8 thiết bị; lịch sao lưu; CSDL trung tâm; sao lưu – khôi phục (BK-1); đối chiếu dữ liệu sau sự cố WAN.</td></tr>
+  <tr><td>Sản phẩm</td><td><code>Nhom02_v2.pkt</code> (= bản final), script CLI, running-config, <code>schema_tru_so.sql</code>, <code>truy_van_doi_chieu.sql</code>, log minh chứng, báo cáo mục 2.5, 2.6, 3.2, 3.4, 3.5 (đối chiếu), 5.1.</td></tr>
+  <tr><td>Giao cho</td><td>TV1 (chạy lại KT1 trên bản có ACL), TV3 (dùng cho KT2, KT3; điền tiếp báo cáo).</td></tr>
+</table>
+<div class="box">Câu "một hơi" để mở đầu khi bị hỏi: <i>"Em là TV2, em nhận file mạng của TV1 rồi thêm phân quyền: mỗi cửa hàng chỉ được vào máy chủ trung tâm bằng web và ping, không vào được máy sao lưu và không thấy cửa hàng khác; chỉ máy quản trị được Telnet vào thiết bị. Ngoài ra em thiết kế CSDL trụ sở, lịch sao lưu, thử sao lưu – xóa – khôi phục và đối chiếu số giao dịch sau khi mất WAN."</i></div>
+
+<!-- ============================================================ -->
+<h2 id="sodo">2. Sơ đồ và địa chỉ IP</h2>
+<svg viewBox="0 0 860 330" width="100%" role="img" aria-label="Sơ đồ 4 địa điểm và vị trí ACL">
+  <rect x="0" y="0" width="860" height="330" fill="#fff" stroke="#e3e0d8"/>
+  <!-- links -->
+  <line x1="430" y1="95" x2="150" y2="215" stroke="#b3412e" stroke-width="2.5"/>
+  <line x1="430" y1="95" x2="430" y2="215" stroke="#b3412e" stroke-width="2.5"/>
+  <line x1="430" y1="95" x2="710" y2="215" stroke="#b3412e" stroke-width="2.5"/>
+  <line x1="150" y1="235" x2="430" y2="235" stroke="#b3412e" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="250" y="150" font-size="12" fill="#5d6470">10.0.1.0/30</text>
+  <text x="438" y="160" font-size="12" fill="#5d6470">10.0.2.0/30</text>
+  <text x="575" y="150" font-size="12" fill="#5d6470">10.0.3.0/30</text>
+  <text x="225" y="256" font-size="12" fill="#5d6470">dự phòng 10.0.12.0/30 (cost 100)</text>
+  <!-- HQ -->
+  <rect x="360" y="20" width="140" height="75" rx="8" fill="#e8eef5" stroke="#2f5d8a"/>
+  <text x="430" y="42" font-size="14" text-anchor="middle" font-weight="600">R-HQ (trụ sở)</text>
+  <text x="430" y="60" font-size="12" text-anchor="middle">LAN 192.168.0.0/24</text>
+  <text x="430" y="77" font-size="11" text-anchor="middle" fill="#2e7d4f">G0/0 OUT: HQ_SERVERS_OUT</text>
+  <text x="530" y="32" font-size="11.5">Server-TT .10 (HTTP/HTTPS)</text>
+  <text x="530" y="48" font-size="11.5">Server-Backup .11 (TFTP/FTP)</text>
+  <text x="530" y="64" font-size="11.5">PC-Admin .20</text>
+  <!-- stores -->
+  <g>
+    <rect x="80" y="205" width="140" height="75" rx="8" fill="#f5efe3" stroke="#9a6b00"/>
+    <text x="150" y="227" font-size="14" text-anchor="middle" font-weight="600">R-CH1</text>
+    <text x="150" y="245" font-size="12" text-anchor="middle">192.168.10.0/24</text>
+    <text x="150" y="262" font-size="11" text-anchor="middle" fill="#2e7d4f">G0/0 IN: CH1_LAN_IN</text>
+    <text x="150" y="300" font-size="11.5" text-anchor="middle">POS1-1…5: .11–.15</text>
+  </g>
+  <g>
+    <rect x="360" y="205" width="140" height="75" rx="8" fill="#f5efe3" stroke="#9a6b00"/>
+    <text x="430" y="227" font-size="14" text-anchor="middle" font-weight="600">R-CH2</text>
+    <text x="430" y="245" font-size="12" text-anchor="middle">192.168.20.0/24</text>
+    <text x="430" y="262" font-size="11" text-anchor="middle" fill="#2e7d4f">G0/0 IN: CH2_LAN_IN</text>
+    <text x="430" y="300" font-size="11.5" text-anchor="middle">POS2-1…5: .11–.15</text>
+  </g>
+  <g>
+    <rect x="640" y="205" width="140" height="75" rx="8" fill="#f5efe3" stroke="#9a6b00"/>
+    <text x="710" y="227" font-size="14" text-anchor="middle" font-weight="600">R-CH3</text>
+    <text x="710" y="245" font-size="12" text-anchor="middle">192.168.30.0/24</text>
+    <text x="710" y="262" font-size="11" text-anchor="middle" fill="#2e7d4f">G0/0 IN: CH3_LAN_IN</text>
+    <text x="710" y="300" font-size="11.5" text-anchor="middle">POS3-1…5: .11–.15</text>
+  </g>
+  <text x="12" y="322" font-size="11" fill="#5d6470">Mọi router/switch: access-class 10 trên VTY (chỉ PC-Admin 192.168.0.20 được Telnet). Tất cả là VLAN 1.</text>
+</svg>
+
+<h3>Quy ước IP cần thuộc</h3>
+<table>
+  <tr><th>Thành phần</th><th>Quy ước</th><th>Ví dụ</th></tr>
+  <tr><td>LAN địa điểm</td><td>Trụ sở 192.168.0.0/24; cửa hàng N: 192.168.<b>N0</b>.0/24</td><td>CH2 → 192.168.20.0/24</td></tr>
+  <tr><td>Gateway</td><td>.1 (cổng G0/0 router)</td><td>192.168.10.1</td></tr>
+  <tr><td>Switch (quản trị)</td><td>.2 (interface VLAN1)</td><td>SW-CH1 = 192.168.10.2</td></tr>
+  <tr><td>POS</td><td>POSn-k = 192.168.n0.(10+k)</td><td>POS1-3 = 192.168.10.13</td></tr>
+  <tr><td>Máy chủ, quản trị</td><td>Server-TT .10 · Server-Backup .11 · PC-Admin .20 (trụ sở)</td><td>–</td></tr>
+  <tr><td>WAN</td><td>/30 (255.255.255.252), R-HQ là .1 và DCE</td><td>R-CH1 S0/0/0 = 10.0.1.2</td></tr>
+</table>
+<p>Vì sao IP tĩnh mà không dùng DHCP: mỗi POS cần địa chỉ cố định để đối chiếu với bộ đếm ACL và log giao dịch; mỗi cửa hàng chỉ 5 máy; bớt một dịch vụ có thể hỏng.</p>
+
+<!-- ============================================================ -->
+<h2 id="nen">3. Kiến thức nền ACL (phải nắm chắc)</h2>
+<table>
+  <tr><th>Khái niệm</th><th>Giải thích ngắn</th></tr>
+  <tr><td>ACL chuẩn (1–99)</td><td>Chỉ xét <b>địa chỉ nguồn</b>. Dùng cho <code>access-list 10</code> (lọc ai được Telnet).</td></tr>
+  <tr><td>ACL mở rộng (100–199 hoặc có tên)</td><td>Xét nguồn, đích, giao thức, cổng. Dùng cho <code>CHx_LAN_IN</code>, <code>HQ_SERVERS_OUT</code>.</td></tr>
+  <tr><td>ACL có tên (named)</td><td><code>ip access-list extended TÊN</code>. Mỗi dòng tự có số thứ tự 10, 20, 30… nên chèn/xóa từng dòng được.</td></tr>
+  <tr><td>Wildcard mask</td><td>Ngược với subnet mask: bit 0 = phải khớp, bit 1 = bỏ qua. <code>192.168.10.0 0.0.0.255</code> = cả dải 192.168.10.x. <code>host 192.168.0.10</code> = đúng 1 máy (= wildcard 0.0.0.0).</td></tr>
+  <tr><td>Xét từ trên xuống</td><td>Gói khớp dòng nào đầu tiên thì áp dòng đó và <b>dừng</b>. Vì vậy thứ tự dòng rất quan trọng.</td></tr>
+  <tr><td>Deny ngầm cuối ACL</td><td>Không khớp dòng nào → bị chặn. Nhóm vẫn ghi <code>deny ip any any</code> tường minh để <code>show access-lists</code> đếm được số gói bị chặn.</td></tr>
+  <tr><td>in / out</td><td>Nhìn <b>từ router</b>: <code>in</code> = gói đi vào router qua cổng đó; <code>out</code> = gói rời router ra cổng đó.</td></tr>
+  <tr><td>Quy tắc đặt</td><td>ACL mở rộng đặt <b>gần nguồn</b> (chặn sớm, không tốn băng thông WAN). ACL chuẩn đặt gần đích (vì chỉ biết nguồn).</td></tr>
+  <tr><td><code>access-group</code> vs <code>access-class</code></td><td><code>ip access-group</code> áp ACL lên <b>interface</b> (lọc gói đi qua). <code>access-class</code> áp ACL lên <b>line vty</b> (lọc ai được đăng nhập Telnet/SSH vào chính thiết bị).</td></tr>
+  <tr><td><code>established</code></td><td>Chỉ khớp gói TCP có cờ ACK hoặc RST, tức là gói <b>trả lời</b> trong phiên đã mở. Dùng để cho phiên Telnet từ PC-Admin quay về, nhưng không cho cửa hàng tự mở kết nối TCP tới PC-Admin.</td></tr>
+  <tr><td><code>eq www</code></td><td>Cổng TCP 80 (HTTP). <code>eq 443</code> là HTTPS.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="phanquyen">4. Bảng phân quyền (Bảng 2.5 trong báo cáo)</h2>
+<table>
+  <tr><th>Nguồn</th><th>Đích</th><th>Dịch vụ</th><th>Quyết định</th><th>Lý do</th></tr>
+  <tr><td>LAN cửa hàng 1, 2, 3</td><td>Server-TT</td><td>HTTP 80, HTTPS 443</td><td><span class="tag ok">Cho phép</span></td><td>Gửi giao dịch, tra cứu</td></tr>
+  <tr><td>LAN cửa hàng 1, 2, 3</td><td>Server-TT</td><td>ICMP</td><td><span class="tag ok">Cho phép</span></td><td>Kiểm thử, giám sát</td></tr>
+  <tr><td>LAN cửa hàng</td><td>Server-Backup</td><td>Mọi dịch vụ</td><td><span class="tag bad">Chặn</span></td><td>Chỉ trụ sở được truy cập bản sao lưu</td></tr>
+  <tr><td>LAN cửa hàng X</td><td>LAN cửa hàng Y</td><td>Mọi dịch vụ</td><td><span class="tag bad">Chặn</span></td><td>Cửa hàng không xem dữ liệu của nhau</td></tr>
+  <tr><td>PC-Admin</td><td>Mọi thiết bị</td><td>Mọi dịch vụ</td><td><span class="tag ok">Cho phép</span></td><td>Quản trị, sao lưu, xử lý sự cố</td></tr>
+  <tr><td>Router, switch (VTY)</td><td>—</td><td>Telnet</td><td><span class="tag warn">Chỉ PC-Admin</span></td><td>Hạn chế người cấu hình thiết bị</td></tr>
+  <tr><td>Switch, router cửa hàng</td><td>Server-Backup</td><td>TFTP (UDP)</td><td><span class="tag ok">Cho phép</span></td><td>Sao lưu cấu hình thiết bị</td></tr>
+</table>
+<p><b>Triển khai bằng 2 lớp:</b></p>
+<ul>
+  <li><b>Lớp 1 – tại nguồn:</b> <code>CH1/2/3_LAN_IN</code> áp <code>in</code> trên G0/0 router cửa hàng.</li>
+  <li><b>Lớp 2 – trước vùng máy chủ:</b> <code>HQ_SERVERS_OUT</code> áp <code>out</code> trên G0/0 của R-HQ. Bảo vệ máy chủ kể cả khi ACL ở một cửa hàng bị cấu hình sai.</li>
+  <li><b>Quản trị:</b> <code>access-list 10</code> + <code>access-class 10 in</code> trên VTY 8 thiết bị.</li>
+</ul>
+<div class="box warn"><b>Câu hỏi bẫy hay gặp:</b> "Sao không đặt hết ở R-HQ cho gọn?" → Vì có <b>đường dự phòng CH1–CH2</b> (10.0.12.0/30). Gói CH1 → CH2 đi thẳng qua đường này, <b>không qua R-HQ</b>. Nếu chỉ có ACL ở R-HQ thì CH1 và CH2 vẫn thấy nhau. Đặt ở cửa hàng còn chặn sớm, không tốn băng thông WAN.</div>
+
+<!-- ============================================================ -->
+<h2 id="aclch">5. ACL cửa hàng – giải thích từng dòng (R-CH1)</h2>
+<p>R-CH2, R-CH3 giống hệt, chỉ thay dải nguồn (192.168.20.0, 192.168.30.0), IP gateway, IP switch, và hai cửa hàng bị chặn.</p>
+<table class="acl">
+  <tr><th>#</th><th>Dòng</th><th>Ý nghĩa</th></tr>
+  <tr><td>10</td><td><code>permit tcp 192.168.10.0 0.0.0.255 host 192.168.0.10 eq www</code></td><td>POS vào web Server-TT (HTTP) – script đồng bộ gửi giao dịch qua HTTP.</td></tr>
+  <tr><td>20</td><td><code>permit tcp 192.168.10.0 0.0.0.255 host 192.168.0.10 eq 443</code></td><td>HTTPS tới Server-TT.</td></tr>
+  <tr><td>30</td><td><code>permit icmp 192.168.10.0 0.0.0.255 host 192.168.0.10</code></td><td>Ping Server-TT (KT1, giám sát).</td></tr>
+  <tr><td>40</td><td><code>permit icmp 192.168.10.0 0.0.0.255 host 192.168.10.1</code></td><td>Ping gateway của chính cửa hàng – để thử "LAN vẫn chạy" lúc mất WAN (KT2, WAN-1b).</td></tr>
+  <tr><td>50</td><td><code>permit icmp 192.168.10.0 0.0.0.255 host 192.168.0.20 echo-reply</code></td><td>Chỉ cho <b>gói trả lời ping</b> về PC-Admin → PC-Admin ping được POS, nhưng POS không chủ động ping PC-Admin.</td></tr>
+  <tr><td>60</td><td><code>permit tcp host 192.168.10.2 host 192.168.0.20 established</code></td><td>Gói trả lời của phiên Telnet PC-Admin → SW-CH1 được quay về.</td></tr>
+  <tr><td>70</td><td><code>permit udp host 192.168.10.2 host 192.168.0.11</code></td><td>SW-CH1 gửi file sao lưu cấu hình (TFTP) lên Server-Backup. <b>Phải đứng trước dòng 80</b> vì 192.168.10.2 cũng thuộc dải 192.168.10.0/24 – nếu đặt sau thì bị dòng 80 chặn trước.</td></tr>
+  <tr><td>80</td><td><code>deny ip 192.168.10.0 0.0.0.255 host 192.168.0.11</code></td><td>Chặn POS truy cập máy sao lưu.</td></tr>
+  <tr><td>90</td><td><code>deny ip 192.168.10.0 0.0.0.255 192.168.20.0 0.0.0.255</code></td><td>Chặn sang LAN cửa hàng 2.</td></tr>
+  <tr><td>100</td><td><code>deny ip 192.168.10.0 0.0.0.255 192.168.30.0 0.0.0.255</code></td><td>Chặn sang LAN cửa hàng 3.</td></tr>
+  <tr><td>110</td><td><code>deny ip any any</code></td><td>Deny tường minh – để đếm gói bị chặn trong <code>show access-lists</code>.</td></tr>
+</table>
+<pre>interface GigabitEthernet0/0
+ ip access-group CH1_LAN_IN in      ! lọc gói từ LAN cửa hàng đi VÀO router</pre>
+<div class="box"><b>Vì sao TFTP không ghi <code>eq tftp</code>?</b> TFTP chỉ dùng cổng 69 cho gói đầu tiên; phần truyền dữ liệu chạy trên cổng tạm (ngẫu nhiên). Ghi <code>eq tftp</code> thì gói đầu qua được nhưng dữ liệu bị chặn → sao lưu thất bại. Nhóm đã gặp đúng lỗi này và sửa.</div>
+
+<!-- ============================================================ -->
+<h2 id="aclhq">6. ACL bảo vệ vùng máy chủ (R-HQ)</h2>
+<pre>ip access-list extended HQ_SERVERS_OUT
+ permit tcp  192.168.10.0 0.0.0.255 host 192.168.0.10 eq www
+ permit tcp  192.168.10.0 0.0.0.255 host 192.168.0.10 eq 443
+ permit icmp 192.168.10.0 0.0.0.255 host 192.168.0.10
+ ... (3 dòng tương tự cho 192.168.20.0 và 192.168.30.0)
+ permit udp host 192.168.10.2 host 192.168.0.11       ! switch CH1 sao lưu (tương tự .20.2, .30.2)
+ permit udp 10.0.0.0 0.0.255.255 host 192.168.0.11    ! router cửa hàng sao lưu bằng IP cổng WAN
+ permit icmp 10.0.0.0 0.0.255.255 host 192.168.0.10
+ permit icmp any host 192.168.0.20                    ! trả lời ping về PC-Admin
+ permit tcp any host 192.168.0.20 established         ! trả lời Telnet về PC-Admin
+ deny ip any any
+!
+interface GigabitEthernet0/0
+ ip access-group HQ_SERVERS_OUT out   ! lọc gói rời router ĐI VÀO LAN trụ sở</pre>
+<ul>
+  <li>Cửa hàng chỉ tới được Server-TT bằng HTTP, HTTPS, ICMP. Mọi thứ khác từ WAN vào LAN trụ sở bị chặn.</li>
+  <li>Hai loại dòng TFTP: <b>router</b> cửa hàng gửi bằng IP cổng WAN (10.0.x.2), <b>switch</b> cửa hàng gửi bằng IP VLAN1 (192.168.x0.2).</li>
+  <li>Chiều <code>out</code> trên G0/0 chỉ lọc gói từ router đi vào LAN trụ sở. PC-Admin ↔ máy chủ nằm cùng switch nên <b>không đi qua router</b>, không bị ảnh hưởng.</li>
+  <li>Vì sao <code>out</code> mà không phải <code>in</code>: gói từ cửa hàng tới máy chủ đi vào R-HQ qua 3 cổng Serial khác nhau, nhưng đều <b>ra</b> qua G0/0. Một ACL out trên G0/0 bao được cả 3 hướng (và cả đường dự phòng).</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="vty">7. Giới hạn Telnet (cả 8 thiết bị)</h2>
+<pre>access-list 10 permit host 192.168.0.20     ! ACL chuẩn: chỉ PC-Admin
+line vty 0 4
+ access-class 10 in
+line vty 5 15                               ! chỉ có trên switch
+ access-class 10 in</pre>
+<p>Bổ sung cho phần TV1 đã làm (mật khẩu console/VTY <code>cisco</code>, enable secret <code>class</code>, <code>service password-encryption</code>, banner). Không có <code>access-class</code> thì ai biết mật khẩu cũng Telnet vào được; có rồi thì phải <b>vừa đúng máy vừa đúng mật khẩu</b>.</p>
+
+<!-- ============================================================ -->
+<h2 id="luonggoi">8. Lần theo gói tin (luyện trả lời "tại sao được / tại sao bị chặn")</h2>
+<table>
+  <tr><th>Thao tác</th><th>Kết quả</th><th>Gói đi qua ACL nào, khớp dòng nào</th></tr>
+  <tr><td>POS1-1 ping 192.168.0.10</td><td><span class="tag ok">Reply</span></td><td>Đi: R-CH1 G0/0 in → dòng 30 permit; R-HQ G0/0 out → permit icmp 192.168.10.0 → Server-TT. Về: Server-TT → R-HQ (G0/0 in, không có ACL) → R-CH1 (G0/0 out, không có ACL) → POS.</td></tr>
+  <tr><td>POS1-1 mở http://192.168.0.10</td><td><span class="tag ok">Hiện trang</span></td><td>Dòng 10 (eq www) ở R-CH1; dòng permit tcp…eq www ở R-HQ.</td></tr>
+  <tr><td>POS1-1 ping 192.168.0.11</td><td><span class="tag bad">Destination host unreachable</span></td><td>R-CH1 dòng 80 deny. Router trả về ICMP unreachable.</td></tr>
+  <tr><td>POS1-1 ping 192.168.20.11</td><td><span class="tag bad">Destination host unreachable</span></td><td>R-CH1 dòng 90 deny – chặn ngay tại cửa hàng 1, kể cả khi gói định đi đường dự phòng.</td></tr>
+  <tr><td>POS1-1 ping 192.168.10.1</td><td><span class="tag ok">Reply</span></td><td>Dòng 40. Vẫn được khi mất WAN.</td></tr>
+  <tr><td>POS1-1 telnet 192.168.10.2 (SW-CH1, cùng LAN)</td><td><span class="tag bad">Bị từ chối</span></td><td>Không qua router. Bị chặn bởi <b>access-class 10</b> trên SW-CH1 (nguồn không phải 192.168.0.20). Đây là cách kiểm tra <code>access-class</code> rõ nhất.</td></tr>
+  <tr><td>POS1-1 telnet 192.168.10.1 (router)</td><td><span class="tag bad">Không vào được</span></td><td>Gói vào G0/0 đã bị <code>CH1_LAN_IN</code> dòng 110 (deny any any) chặn trước; <code>access-class</code> là lớp thứ hai.</td></tr>
+  <tr><td>PC-Admin ping 192.168.10.11</td><td><span class="tag ok">Reply</span></td><td>Đi: R-HQ G0/0 là cổng <b>vào</b> (không ACL in), R-CH1 G0/0 là cổng <b>ra</b> (không ACL out). Về: R-CH1 dòng 50 (echo-reply) và R-HQ <code>permit icmp any host .20</code>.</td></tr>
+  <tr><td>PC-Admin telnet 192.168.10.2</td><td><span class="tag ok">Vào được (mật khẩu cisco)</span></td><td>access-class cho phép .20. Gói trả lời: R-CH1 dòng 60 (established), R-HQ <code>permit tcp any host .20 established</code>.</td></tr>
+  <tr><td>PC-Admin telnet 10.0.1.2 (R-CH1)</td><td><span class="tag ok">Vào được</span></td><td>Gói vào R-CH1 qua Serial (không có ACL), access-class cho phép. Trả lời qua R-HQ dòng established.</td></tr>
+  <tr><td>POS1-1 ping PC-Admin 192.168.0.20</td><td><span class="tag bad">Bị chặn</span></td><td>Dòng 50 chỉ cho echo-<b>reply</b>; echo-request rơi xuống dòng 110 deny.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="maychu">9. Máy chủ</h2>
+<table>
+  <tr><th>Máy</th><th>Bật</th><th>Tắt</th><th>Lý do</th></tr>
+  <tr><td>Server-TT 192.168.0.10</td><td>HTTP, HTTPS</td><td>TFTP, FTP, DNS, DHCP, Email</td><td>Nhận giao dịch, trang tra cứu. Tắt dịch vụ thừa để giảm bề mặt tấn công.</td></tr>
+  <tr><td>Server-Backup 192.168.0.11</td><td>TFTP, FTP</td><td>HTTP, HTTPS</td><td>Nhận file cấu hình router/switch; không phục vụ cửa hàng.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="saoluu">10. Sao lưu – khôi phục</h2>
+<h3>Lịch sao lưu (Bảng 2.6)</h3>
+<table>
+  <tr><th>Đối tượng</th><th>Tần suất</th><th>Nơi lưu</th><th>Giữ</th><th>Phụ trách</th></tr>
+  <tr><td>CSDL giao dịch trụ sở</td><td>Hằng ngày cuối ngày + trước mỗi lần đồng bộ lớn</td><td>Server-Backup (demo: <code>DuLieu/sao_luu/hq_yyyymmdd_hhmmss.db</code>)</td><td>7 bản gần nhất</td><td>TV2</td></tr>
+  <tr><td>Kho lưu tạm cửa hàng</td><td>Cuối mỗi ca</td><td>Thư mục sao lưu tại cửa hàng (<code>chN_…db</code>)</td><td>Đến khi mọi giao dịch ACKED</td><td>TV3</td></tr>
+  <tr><td>Cấu hình router/switch</td><td>Sau mỗi lần đổi cấu hình</td><td>Server-Backup 192.168.0.11 (TFTP)</td><td>Bản mới nhất + bản trước</td><td>TV1</td></tr>
+</table>
+
+<h3>Mức mất dữ liệu chấp nhận được (RPO)</h3>
+<ul>
+  <li>Sao lưu cuối ngày → xấu nhất trụ sở mất các giao dịch ghi sau lần sao lưu gần nhất.</li>
+  <li>Nhưng các giao dịch đó <b>vẫn còn trong kho lưu tạm của cửa hàng</b> (trạng thái ACKED) → gửi bù lại được. Nên mức mất thực tế = 0 nếu kho cửa hàng còn.</li>
+  <li>Kho cửa hàng là nơi <b>duy nhất</b> giữ giao dịch chưa về trụ sở → phải sao lưu cuối ca.</li>
+</ul>
+
+<h3>Quy trình khôi phục CSDL trụ sở</h3>
+<pre>python3 sao_luu.py danh-sach                 # 1. chọn bản sao lưu
+python3 sao_luu.py khoi-phuc [--file &lt;bản&gt;]   # 2. chép đè bằng API backup của SQLite
+python3 doi_chieu.py                         # 3. đếm theo cửa hàng, tìm mã trùng (phải RỖNG)
+python3 store_agent.py --ch N gui --lap      # 4. nếu bản sao cũ và có cảnh báo thiếu → gửi bù</pre>
+<p>Vì sao dùng <b>API backup của SQLite</b> thay vì copy file: copy file đang được ghi có thể ra bản hỏng/nửa vời; API backup chụp một bản nhất quán, an toàn kể cả khi máy chủ nhận đang chạy.</p>
+
+<h3>Kết quả thật</h3>
+<table>
+  <tr><th>Ca</th><th>Thao tác</th><th>Kết quả</th></tr>
+  <tr><td>BK-1 (2026-10-17, <code>MC-BK1.log</code>)</td><td>sao-luu → xoa-thu → khoi-phuc → doi_chieu</td><td><b>45 → 0 → 45</b> bản ghi, không mã trùng. <span class="tag ok">Đạt</span></td></tr>
+  <tr><td>Khôi phục từ bản CŨ (2026-10-27, <code>MC-TV2-KhoiPhucCu.log</code>)</td><td>CH2 gửi 6 → sao lưu → gửi thêm 2 → khôi phục bản cũ</td><td>Trụ sở 8 → <b>6</b>; script cảnh báo "CH02 thiếu 2"; chạy <code>gui --lap</code> 8 bản → trụ sở ghi <b>2 mới, 6 trùng bỏ qua</b> → đủ 8, 0 mã trùng.</td></tr>
+</table>
+<div class="box">Ca "khôi phục từ bản cũ" là <b>vấn đề có thật</b> ghi trong báo cáo cá nhân: khôi phục xong tưởng đủ nhưng thiếu giao dịch ghi sau lần sao lưu. Cách xử lý: đối chiếu phát hiện thiếu → gửi lặp toàn bộ từ cửa hàng → khóa chính chặn trùng nên chỉ bản thiếu được ghi.</div>
+
+<!-- ============================================================ -->
+<h2 id="csdl">11. CSDL trụ sở và đối chiếu</h2>
+<pre>CREATE TABLE giao_dich (
+    ma_gd          TEXT PRIMARY KEY,   -- CH01-POS03-20261020-000123
+    ma_ch          TEXT NOT NULL,      -- CH01..CH03
+    ma_pos         TEXT NOT NULL,      -- POS01..POS05
+    thoi_diem_tao  TEXT NOT NULL,
+    tong_tien      INTEGER NOT NULL CHECK (tong_tien &gt;= 0),
+    so_mat_hang    INTEGER NOT NULL CHECK (so_mat_hang &gt; 0),
+    thoi_diem_nhan TEXT NOT NULL);
+CREATE TABLE nhat_ky_nhan (            -- ghi MỌI lần nhận, kể cả bản trùng
+    id INTEGER PRIMARY KEY AUTOINCREMENT, ma_gd TEXT, thoi_diem TEXT,
+    ket_qua TEXT CHECK (ket_qua IN ('MOI','TRUNG')));</pre>
+<ul>
+  <li><b>Chống trùng:</b> <code>ma_gd</code> là khóa chính + lệnh <code>INSERT OR IGNORE</code> → gửi lại giao dịch đã có thì bị bỏ qua, không báo lỗi. (Nếu dùng <code>INSERT</code> thường sẽ ném lỗi IntegrityError.)</li>
+  <li><b>Vẫn ACK bản trùng:</b> nếu không ACK, cửa hàng tưởng chưa tới và gửi lại mãi mãi.</li>
+  <li><b>Mã giao dịch:</b> <code>CHxx-POSyy-yyyymmdd-nnnnnn</code> – có mã cửa hàng và mã máy nên hai POS không bao giờ sinh trùng mã, không cần hỏi trụ sở.</li>
+</ul>
+<h3>Truy vấn đối chiếu</h3>
+<pre>-- Q1 Số bản ghi theo cửa hàng
+SELECT ma_ch, COUNT(*) FROM giao_dich GROUP BY ma_ch;
+-- Q2 Mã trùng – PHẢI RỖNG
+SELECT ma_gd, COUNT(*) FROM giao_dich GROUP BY ma_gd HAVING COUNT(*) &gt; 1;
+-- Q3 Số lần nhận bản trùng (bỏ qua nhưng vẫn ACK)
+SELECT ket_qua, COUNT(*) FROM nhat_ky_nhan GROUP BY ket_qua;
+-- Q4 Giao dịch CH1 đã ACKED mà trụ sở thiếu – PHẢI = 0
+ATTACH DATABASE 'DuLieu/ch1.db' AS ch1;
+SELECT COUNT(*) FROM ch1.hang_doi
+ WHERE trang_thai='ACKED' AND ma_gd NOT IN (SELECT ma_gd FROM giao_dich);
+-- Q5 Doanh thu theo cửa hàng
+SELECT ma_ch, COUNT(*), SUM(tong_tien) FROM giao_dich GROUP BY ma_ch;</pre>
+<p class="sub">Câu hỏi hay gặp: "Khóa chính rồi thì Q2 lúc nào chả rỗng, chạy làm gì?" → Q2 là <b>bằng chứng</b> cho người chấm, và bắt được lỗi nếu ai đó lỡ tạo bảng không có khóa chính (ví dụ khi khôi phục sai file).</p>
+
+<h3>Đối chiếu sau sự cố WAN (Bảng 3.4, cửa hàng 1, chạy 2026-10-17)</h3>
+<table>
+  <tr><th>Thời điểm</th><th>Phía cửa hàng</th><th>Phía trụ sở</th><th>Kết luận</th></tr>
+  <tr><td>Trước khi mất WAN</td><td>12 (10 ACKED, 2 SENT do mất ACK)</td><td>12</td><td>Khớp: 2 bản mất ACK đã có ở trụ sở</td></tr>
+  <tr><td>Trong lúc mất WAN</td><td>Tạo thêm 8; chưa ACKED 10 (PENDING 8, SENT 2)</td><td>12 (không đổi)</td><td>Giao dịch còn nguyên ở cửa hàng</td></tr>
+  <tr><td>Sau khi gửi lại</td><td>20/20 ACKED</td><td>20 (+8 mới, 2 trùng bỏ qua)</td><td>Khớp</td></tr>
+  <tr><td>Cố ý gửi lặp (KT3-b)</td><td>Gửi lặp 20 bản</td><td>20 (không đổi)</td><td>Khớp</td></tr>
+  <tr><td>Mã trùng</td><td>—</td><td>0</td><td><span class="tag ok">Đạt</span></td></tr>
+</table>
+<p>Hiểu cho được dòng 1: "mất ACK" = trụ sở <b>đã ghi</b> nhưng câu xác nhận không về tới cửa hàng → cửa hàng vẫn để SENT → khi gửi lại, trụ sở thấy mã đã có nên bỏ qua (2 trùng) nhưng vẫn ACK → cửa hàng chuyển ACKED. Vì thế 12 + 8 = <b>20</b>, không phải 22.</p>
+
+<!-- ============================================================ -->
+<h2 id="kiemthu">12. Kiểm thử SEC-1, SEC-2 <span class="tag warn">chưa chạy – phải làm trước buổi tối</span></h2>
+<p>Lệnh đầy đủ ở <code>Script_TV2/KiemThu_TV2.txt</code>. Trước mỗi ảnh chạy <code>show clock</code> trên router (đặt giờ: <code>clock set 14:00:00 20 Oct 2026</code>).</p>
+<table>
+  <tr><th>Ca</th><th>Thao tác</th><th>Mong đợi</th><th>Ảnh</th></tr>
+  <tr><td>SEC-1 (được phép)</td><td>POS1-1, POS2-1, POS3-1: <code>ping 192.168.0.10</code>; Web Browser <code>http://192.168.0.10</code></td><td>Reply (TTL=126); hiện trang máy chủ</td><td>MC-TV2-SEC1</td></tr>
+  <tr><td>SEC-2 (bị chặn)</td><td>POS1-1: <code>ping 192.168.0.11</code>, <code>ping 192.168.20.11</code>, <code>telnet 192.168.10.1</code> (theo script); nên thử thêm <code>telnet 192.168.10.2</code></td><td>Destination host unreachable ×2; Telnet không vào được. Lưu ý: với 10.1 gói bị <code>CH1_LAN_IN</code> chặn trước (thường báo timeout); với 10.2 mới thấy đúng tác dụng của <code>access-class</code> (bị từ chối). Ghi đúng thông báo PT hiện ra.</td><td>MC-TV2-SEC2</td></tr>
+  <tr><td>Bộ đếm ACL</td><td>R-CH1: <code>show access-lists CH1_LAN_IN</code>; R-HQ: <code>show access-lists HQ_SERVERS_OUT</code></td><td>Cột <code>(n match(es))</code> tăng ở dòng deny tương ứng</td><td>MC-TV2-ACL</td></tr>
+  <tr><td>Quyền PC-Admin</td><td><code>ping 192.168.10.11</code>, <code>telnet 192.168.10.2</code>, <code>telnet 10.0.1.2</code></td><td>Reply; vào được (mật khẩu cisco)</td><td>MC-TV2-TELNET</td></tr>
+  <tr><td>Kiểm tra áp ACL</td><td><code>show ip interface g0/0</code></td><td>"Inbound access list is CH1_LAN_IN" / R-HQ: "Outgoing access list is HQ_SERVERS_OUT"</td><td>–</td></tr>
+</table>
+<div class="box">TTL=126 nghĩa là gói đi qua <b>2 router</b> (128 − 2). Nếu thấy TTL=125 → đang đi đường vòng 3 router (ví dụ qua đường dự phòng).</div>
+
+<!-- ============================================================ -->
+<h2 id="lenh">13. Lệnh hay dùng và gỡ lỗi ACL</h2>
+<pre>show access-lists                       ! xem ACL + số gói khớp từng dòng
+show ip interface g0/0                  ! ACL nào đang áp, chiều nào
+show running-config | section access    ! (PT có thể không hỗ trợ | section)
+clear access-list counters              ! đặt lại bộ đếm trước khi chụp ảnh
+
+! Chèn một dòng vào giữa (named ACL):
+ip access-list extended CH1_LAN_IN
+ 35 permit icmp 192.168.10.0 0.0.0.255 host 192.168.0.11
+! Xóa một dòng theo số thứ tự:
+ no 35
+
+! Gỡ ACL khỏi cổng (khi chặn nhầm, cần cứu nhanh):
+interface g0/0
+ no ip access-group CH1_LAN_IN in</pre>
+<p><b>Quy trình gỡ lỗi khi "mất mạng" sau khi áp ACL:</b> (1) <code>show ip interface</code> xem có áp nhầm chiều không; (2) <code>show access-lists</code> xem dòng nào đang tăng match – thường là dòng deny cuối; (3) thêm dòng permit đúng chỗ bằng số thứ tự, không cần xóa cả ACL.</p>
+
+<!-- ============================================================ -->
+<h2 id="hanche">14. Hạn chế – nói thật khi bị hỏi</h2>
+<ul>
+  <li><b>Telnet không mã hóa</b> – mật khẩu đi dạng rõ. Thực tế nên dùng SSH (<code>ip domain-name</code>, <code>crypto key generate rsa</code>, <code>transport input ssh</code>). Nhóm dùng Telnet vì đề bài và PT dễ minh họa.</li>
+  <li><b>ACL không phải tường lửa có trạng thái.</b> <code>established</code> chỉ xem cờ TCP, có thể bị giả mạo; thực tế dùng firewall/zone-based firewall.</li>
+  <li><b>Một VLAN mỗi địa điểm</b> (VLAN 1): POS, máy chủ, PC-Admin cùng một mạng ở trụ sở. Tách VLAN máy chủ / quản trị sẽ tốt hơn.</li>
+  <li><b>Cửa hàng 3 không có đường dự phòng</b> (R-CH2 đã dùng hết 2 cổng của module HWIC-2T).</li>
+  <li><b>Sao lưu trong bản demo nằm cùng máy</b> (thư mục <code>DuLieu/sao_luu</code>), chưa tách sang máy/địa điểm khác; chưa có lịch tự động (cron), chạy bằng lệnh tay.</li>
+  <li>Kho cửa hàng phải giữ giao dịch ACKED ít nhất tới sau lần sao lưu trụ sở kế tiếp, nếu không thì cách "gửi bù" ở mục 10 không còn dữ liệu để gửi.</li>
+  <li>Packet Tracer chỉ chứng minh cấu hình và kết nối, <b>không</b> chứng minh thông lượng hay khả năng chịu tải thật (README repo của nhóm cũng ghi rõ điều này).</li>
+  <li><b>Vấn đề nội bộ cần thống nhất với nhóm:</b> số liệu BK-1 và đối chiếu được chạy bằng bộ script thử nghiệm trong <code>demo-cisco/Script/</code>, còn TV3 có bộ script riêng ở nhánh <code>tv3</code>. Cần chạy lại trên script của TV3 (hoặc thống nhất dùng một bộ) để báo cáo khớp.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="hoidap">15. Câu hỏi kiểm tra chéo (tự trả lời trước, rồi mới mở)</h2>
+
+<h3>ACL</h3>
+<details><summary>1. ACL chuẩn và ACL mở rộng khác nhau thế nào? Nhóm dùng loại nào, ở đâu?</summary>
+Chuẩn chỉ lọc theo IP nguồn; mở rộng lọc theo nguồn, đích, giao thức, cổng. Nhóm dùng mở rộng có tên (<code>CHx_LAN_IN</code>, <code>HQ_SERVERS_OUT</code>) cho lưu lượng qua router, và ACL chuẩn số 10 cho <code>access-class</code> trên VTY.</details>
+<details><summary>2. Tại sao CHx_LAN_IN đặt chiều in trên G0/0 mà không phải out trên cổng Serial?</summary>
+ACL mở rộng đặt gần nguồn: chặn ngay khi gói vào router, không tốn băng thông WAN. Cửa hàng 1 có 2 cổng Serial (chính + dự phòng); đặt in trên G0/0 thì một ACL bao được mọi hướng đi ra.</details>
+<details><summary>3. Sao không chỉ đặt ACL ở R-HQ?</summary>
+Vì đường dự phòng CH1–CH2: gói CH1 → CH2 đi thẳng 10.0.12.0/30, không qua R-HQ → hai cửa hàng vẫn thấy nhau. Ngoài ra chặn ở nguồn tiết kiệm WAN.</details>
+<details><summary>4. Vậy đặt ở cửa hàng rồi, ACL ở R-HQ để làm gì?</summary>
+Lớp bảo vệ thứ hai cho vùng máy chủ: nếu ACL ở một cửa hàng bị cấu hình sai hoặc bị gỡ, máy chủ vẫn chỉ nhận HTTP/HTTPS/ICMP từ cửa hàng.</details>
+<details><summary>5. Wildcard 0.0.0.255 nghĩa là gì? "host" nghĩa là gì?</summary>
+0 = phải khớp, 1 = bỏ qua → 0.0.0.255 khớp 3 octet đầu, bỏ qua octet cuối = cả dải /24. <code>host x</code> = <code>x 0.0.0.0</code> = đúng một địa chỉ.</details>
+<details><summary>6. Nếu đổi chỗ dòng "permit udp host 192.168.10.2 host 192.168.0.11" xuống dưới dòng "deny ip 192.168.10.0 0.0.0.255 host 192.168.0.11" thì sao?</summary>
+Switch SW-CH1 (192.168.10.2) thuộc dải 192.168.10.0/24 nên khớp dòng deny trước và dừng → không gửi được file sao lưu cấu hình lên Server-Backup.</details>
+<details><summary>7. Tại sao viết "deny ip any any" khi ACL đã có deny ngầm?</summary>
+Để <code>show access-lists</code> đếm được số gói bị chặn – làm bằng chứng cho SEC-2. Deny ngầm không hiện bộ đếm.</details>
+<details><summary>8. Tại sao không dùng "eq tftp"?</summary>
+TFTP chỉ dùng cổng 69 cho yêu cầu đầu; dữ liệu đi trên cổng tạm. Ghi eq tftp thì phần dữ liệu bị chặn, sao lưu thất bại.</details>
+<details><summary>9. "established" là gì, tại sao cần?</summary>
+Khớp gói TCP có cờ ACK/RST (gói trả lời trong phiên đã mở). Cho phiên Telnet do PC-Admin mở được trả lời về, nhưng cửa hàng không tự mở kết nối TCP mới tới PC-Admin được.</details>
+<details><summary>10. Nếu lỡ áp CH1_LAN_IN chiều out trên G0/0 thì chuyện gì xảy ra?</summary>
+ACL sẽ lọc gói từ router đi vào LAN cửa hàng 1. Các gói này có nguồn là trụ sở/cửa hàng khác, không khớp dòng permit nào (nguồn phải là 192.168.10.0) → rơi vào deny any any → POS không nhận được trả lời nào, coi như mất kết nối ra ngoài. Kiểm tra bằng <code>show ip interface g0/0</code>.</details>
+<details><summary>11. Server-TT trả lời POS thì có bị ACL chặn không?</summary>
+Không. Gói trả lời vào R-HQ qua G0/0 (chiều in, không có ACL) và ra R-CH1 qua G0/0 (chiều out, không có ACL). ACL cửa hàng chỉ lọc chiều in, ACL trụ sở chỉ lọc chiều out.</details>
+<details><summary>12. Mở thêm cửa hàng 4 (192.168.40.0/24) thì phải sửa những gì?</summary>
+(1) Tạo <code>CH4_LAN_IN</code> trên R-CH4 theo mẫu, chặn 3 dải cửa hàng khác; (2) thêm dòng <code>deny … 192.168.40.0 0.0.0.255</code> vào ACL của 3 cửa hàng cũ (trước deny any any, dùng số thứ tự); (3) thêm 3 dòng permit HTTP/HTTPS/ICMP cho 192.168.40.0 và permit udp host 192.168.40.2 vào <code>HQ_SERVERS_OUT</code> (trước dòng deny); (4) access-class trên thiết bị mới.</details>
+<details><summary>13. Sửa một dòng ACL mà không xóa cả ACL làm thế nào?</summary>
+<code>ip access-list extended CH1_LAN_IN</code> → <code>no 30</code> (xóa dòng số 30) → <code>30 permit …</code> (ghi lại). Số thứ tự xem bằng <code>show access-lists</code>.</details>
+<details><summary>14. access-group và access-class khác nhau?</summary>
+access-group gắn ACL vào interface, lọc gói đi qua router. access-class gắn ACL vào line vty, lọc ai được đăng nhập vào chính thiết bị.</details>
+<details><summary>15. POS1-1 Telnet vào SW-CH1 cùng LAN – gói không qua router – vậy cái gì chặn?</summary>
+<code>access-class 10 in</code> trên VTY của SW-CH1: nguồn 192.168.10.11 không phải 192.168.0.20 → bị từ chối. Đây là lý do phải áp access-class trên cả switch chứ không chỉ router.</details>
+
+<h3>Sao lưu, CSDL, đối chiếu</h3>
+<details><summary>16. RPO của CSDL trụ sở là bao nhiêu? Có chấp nhận được không?</summary>
+Theo lịch: tối đa 1 ngày (sao lưu cuối ngày). Nhưng giao dịch sau lần sao lưu vẫn còn ở kho cửa hàng nên gửi bù được → mất thực tế bằng 0 nếu kho cửa hàng còn. Có thể giảm thêm bằng sao lưu trước mỗi lần đồng bộ lớn (đã ghi trong lịch).</details>
+<details><summary>17. Khôi phục từ bản sao lưu cũ thì bị gì, xử lý sao?</summary>
+Trụ sở thiếu các giao dịch ghi sau bản đó (thử thật: 8 → 6). Script đối chiếu so với kho cửa hàng, cảnh báo cửa hàng nào thiếu. Chạy <code>store_agent.py --ch N gui --lap</code>: trụ sở ghi 2 bản thiếu, bỏ qua 6 bản đã có nhờ khóa chính → đủ 8, 0 trùng.</details>
+<details><summary>18. Vì sao dùng API backup của SQLite thay vì copy file .db?</summary>
+Copy khi đang có ghi có thể ra file không nhất quán. API backup tạo bản chụp nhất quán, an toàn khi máy chủ nhận đang chạy.</details>
+<details><summary>19. Khóa chính ma_gd chống trùng như thế nào? INSERT OR IGNORE khác INSERT?</summary>
+Mỗi mã chỉ tồn tại một lần. INSERT thường gặp mã đã có thì báo lỗi; INSERT OR IGNORE thì bỏ qua lặng lẽ, máy chủ ghi nhật ký "TRUNG" và vẫn trả ACK.</details>
+<details><summary>20. Tại sao trụ sở vẫn ACK bản trùng?</summary>
+Bản trùng nghĩa là trụ sở đã có giao dịch – thường do ACK lần trước bị mất. Nếu không ACK, cửa hàng cứ để SENT và gửi lại mãi.</details>
+<details><summary>21. Trong Bảng 3.4, tại sao 12 + 8 = 20 mà không phải 22 khi có 2 bản gửi lại?</summary>
+2 bản đó là bản bị mất ACK: trụ sở đã ghi từ trước. Gửi lại chỉ bị đánh dấu trùng và bỏ qua → trụ sở 12 + 8 mới = 20.</details>
+<details><summary>22. Q4 kiểm tra điều gì, tại sao quan trọng nhất?</summary>
+Đếm giao dịch cửa hàng coi là xong (ACKED) mà trụ sở không có. Phải = 0. Nếu &gt; 0 nghĩa là mất dữ liệu thật – cửa hàng sẽ không gửi lại nữa. Đây chính là cảnh báo sau khi khôi phục từ bản cũ.</details>
+<details><summary>23. Ai sao lưu cấu hình thiết bị, ACL có ảnh hưởng không?</summary>
+TV1 chạy <code>copy running-config tftp:</code> lên Server-Backup 192.168.0.11. ACL của TV2 có dòng permit udp riêng cho switch (192.168.x0.2) và router (10.0.x.2) để việc này không bị chặn.</details>
+
+<h3>Tổng quát</h3>
+<details><summary>24. Phần nào của bạn ảnh hưởng tới TV1 và TV3?</summary>
+TV1: phải chạy lại KT1 trên bản có ACL (ACL không được chặn nhầm POS → Server-TT), sao lưu cấu hình phải qua được ACL. TV3: script đồng bộ đi bằng HTTP – ACL phải cho TCP 80 tới Server-TT; CSDL trụ sở của TV3 phải dùng mã giao dịch làm khóa chính.</details>
+<details><summary>25. Bạn dùng AI thế nào?</summary>
+Trả lời thật: dùng Claude Code để sinh cấu hình ACL, file .pkt, script sao lưu/đối chiếu và viết nháp báo cáo; tự kiểm chứng bằng cách chạy lại script (log trong MinhChung) và thao tác trong Packet Tracer; chịu trách nhiệm giải thích từng dòng. (Đúng quy tắc trong README repo: nêu cách dùng AI, sinh viên chịu trách nhiệm giải thích và chạy lại.)</details>
+
+<!-- ============================================================ -->
+<h2 id="quiz">16. Trắc nghiệm tự chấm</h2>
+<div class="quiz" id="quizbox"></div>
+<p><button onclick="grade()">Chấm điểm</button> <button class="ghost" onclick="resetQuiz()">Làm lại</button><span id="score"></span></p>
+
+<!-- ============================================================ -->
+<h2 id="checklist">17. Checklist trước buổi kiểm tra chéo</h2>
+<ul class="check">
+  <li><label><input type="checkbox"> Mở <code>Nhom02_TV1.pkt</code>, tự dán script <code>Script_TV2/</code> vào 4 router + 4 switch (hiểu từng lệnh)</label></li>
+  <li><label><input type="checkbox"> Chạy SEC-1, SEC-2, chụp MC-TV2-SEC1, SEC2, ACL, TELNET (có <code>show clock</code>)</label></li>
+  <li><label><input type="checkbox"> Nói được ACL CH1_LAN_IN từng dòng mà không nhìn</label></li>
+  <li><label><input type="checkbox"> Giải thích được "vì sao 2 lớp ACL" (đường dự phòng CH1–CH2)</label></li>
+  <li><label><input type="checkbox"> Lần theo được gói POS1-1 → Server-TT và PC-Admin → SW-CH1 (mục 8)</label></li>
+  <li><label><input type="checkbox"> Nói được lịch sao lưu + RPO + 4 bước khôi phục</label></li>
+  <li><label><input type="checkbox"> Giải thích được 12 + 8 = 20 (không phải 22) trong Bảng 3.4</label></li>
+  <li><label><input type="checkbox"> Thống nhất với TV3: dùng bộ script nào để số liệu BK-1, đối chiếu khớp</label></li>
+  <li><label><input type="checkbox"> Nhắc TV1 sửa tên trong báo cáo cá nhân (đang ghi Lê Minh Đạo)</label></li>
+  <li><label><input type="checkbox"> Điền MSSV, lớp, ngày trong báo cáo cá nhân</label></li>
+</ul>
+<p class="sub">Trạng thái checklist được lưu trong trình duyệt (localStorage) của máy này.</p>
+
+</main>
+
+<script>
+const QUIZ = [
+  { q: "CH1_LAN_IN được áp ở đâu?", a: ["R-CH1 G0/0, chiều in", "R-CH1 S0/0/0, chiều out", "R-HQ G0/0, chiều out", "SW-CH1 VLAN1"], c: 0,
+    why: "ACL mở rộng đặt gần nguồn: gói từ LAN cửa hàng đi vào router qua G0/0." },
+  { q: "Wildcard 0.0.0.255 trong '192.168.10.0 0.0.0.255' khớp gì?", a: ["Chỉ 192.168.10.0", "Cả dải 192.168.10.0 – 192.168.10.255", "Mọi địa chỉ 192.168.x.x", "Chỉ 192.168.10.255"], c: 1,
+    why: "Bit 0 phải khớp, bit 1 bỏ qua → bỏ qua octet cuối." },
+  { q: "POS1-1 ping 192.168.20.11 (POS cửa hàng 2). Gói bị chặn ở đâu?", a: ["R-HQ, HQ_SERVERS_OUT", "R-CH2, ACL CH2_LAN_IN", "R-CH1, dòng deny tới 192.168.20.0", "Không bị chặn"], c: 2,
+    why: "Chặn ngay tại nguồn – kể cả khi đi đường dự phòng CH1–CH2 không qua R-HQ." },
+  { q: "Lý do chính KHÔNG chỉ đặt ACL ở R-HQ?", a: ["R-HQ không đủ bộ nhớ", "Đường dự phòng CH1–CH2 cho phép đi thẳng, không qua R-HQ", "Packet Tracer không cho đặt ACL ở R-HQ", "OSPF bị ảnh hưởng"], c: 1,
+    why: "CH1 ↔ CH2 có thể đi qua 10.0.12.0/30 mà không chạm R-HQ." },
+  { q: "Vì sao dòng 'permit udp host 192.168.10.2 host 192.168.0.11' phải đứng trước 'deny ip 192.168.10.0 0.0.0.255 host 192.168.0.11'?", a: ["Vì UDP luôn xét trước", "Vì 192.168.10.2 thuộc dải 192.168.10.0/24, đặt sau sẽ khớp deny trước", "Không quan trọng thứ tự", "Vì Packet Tracer yêu cầu"], c: 1,
+    why: "ACL xét từ trên xuống, khớp dòng đầu tiên thì dừng." },
+  { q: "Tại sao không ghi 'eq tftp' trong dòng cho sao lưu?", a: ["TFTP dùng TCP", "TFTP chỉ dùng cổng 69 cho gói đầu, dữ liệu đi cổng tạm", "Packet Tracer không có TFTP", "Để tiết kiệm dòng"], c: 1,
+    why: "Ghi eq tftp sẽ chặn phần dữ liệu → sao lưu thất bại." },
+  { q: "'established' khớp gói nào?", a: ["Mọi gói TCP", "Gói TCP có cờ ACK hoặc RST (trả lời trong phiên đã mở)", "Gói ICMP echo-reply", "Gói UDP đã gửi trước đó"], c: 1,
+    why: "Cho trả lời Telnet về PC-Admin, không cho cửa hàng tự mở kết nối." },
+  { q: "POS1-1 Telnet SW-CH1 (cùng LAN). Cái gì chặn?", a: ["CH1_LAN_IN", "HQ_SERVERS_OUT", "access-class 10 trên VTY của SW-CH1", "Không bị chặn"], c: 2,
+    why: "Gói không qua router nên ACL interface không có tác dụng; access-class trên switch chặn." },
+  { q: "BK-1 cho kết quả số bản ghi trụ sở:", a: ["45 → 0 → 45", "20 → 0 → 20", "12 → 20 → 20", "8 → 6 → 8"], c: 0,
+    why: "Sao lưu 45, xóa thử còn 0, khôi phục đủ 45." },
+  { q: "Đối chiếu sau WAN: trước sự cố 12 (2 bản mất ACK), tạo thêm 8. Sau gửi lại trụ sở có:", a: ["22", "20", "18", "12"], c: 1,
+    why: "2 bản mất ACK trụ sở đã có → bị bỏ qua khi gửi lại: 12 + 8 = 20." },
+  { q: "Khôi phục từ bản sao lưu cũ thấy trụ sở thiếu 2 giao dịch. Làm gì?", a: ["Nhập tay 2 giao dịch", "store_agent.py --ch N gui --lap; khóa chính bỏ qua bản đã có", "Xóa CSDL cửa hàng", "Không làm gì, chấp nhận mất"], c: 1,
+    why: "Gửi lặp toàn bộ: chỉ bản thiếu được ghi (thử thật: 2 mới, 6 trùng)." },
+  { q: "Truy vấn Q4 (ACKED mà trụ sở thiếu) phải ra:", a: ["Rỗng hoặc 0", "Bằng tổng số giao dịch", "Lớn hơn 0", "Bằng số bản trùng"], c: 0,
+    why: "> 0 nghĩa là mất dữ liệu thật vì cửa hàng không gửi lại bản ACKED nữa." },
+  { q: "Vì sao ghi 'deny ip any any' khi đã có deny ngầm?", a: ["Bắt buộc theo cú pháp", "Để show access-lists đếm được gói bị chặn", "Để OSPF chạy", "Để chặn IPv6"], c: 1,
+    why: "Bộ đếm match là bằng chứng cho SEC-2." },
+  { q: "HQ_SERVERS_OUT áp chiều out trên G0/0 của R-HQ. Lưu lượng PC-Admin ↔ Server-TT có bị lọc không?", a: ["Có, bị chặn hết", "Không, vì đi qua switch, không qua router", "Chỉ bị chặn ICMP", "Chỉ bị chặn HTTP"], c: 1,
+    why: "Cùng LAN trụ sở → không đi qua R-HQ." },
+];
+
+function renderQuiz() {
+  const box = document.getElementById('quizbox');
+  box.innerHTML = '';
+  QUIZ.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'q';
+    div.innerHTML = '<b>' + (i + 1) + '. ' + item.q + '</b>' +
+      item.a.map((t, j) => '<label><input type="radio" name="q' + i + '" value="' + j + '"> ' + t + '</label>').join('') +
+      '<div class="why">' + item.why + '</div>';
+    box.appendChild(div);
+  });
+  document.getElementById('score').textContent = '';
+}
+function grade() {
+  let ok = 0;
+  document.querySelectorAll('#quizbox .q').forEach((div, i) => {
+    div.classList.add('done');
+    div.querySelectorAll('label').forEach((lb, j) => {
+      lb.classList.remove('right', 'wrong');
+      const inp = lb.querySelector('input');
+      if (j === QUIZ[i].c) lb.classList.add('right');
+      else if (inp.checked) lb.classList.add('wrong');
+    });
+    const sel = div.querySelector('input:checked');
+    if (sel && +sel.value === QUIZ[i].c) ok++;
+  });
+  document.getElementById('score').textContent = 'Đúng ' + ok + '/' + QUIZ.length;
+}
+function resetQuiz() { renderQuiz(); window.scrollTo(0, document.getElementById('quiz').offsetTop); }
+renderQuiz();
+
+// Lưu trạng thái checklist
+document.querySelectorAll('.check input').forEach((cb, i) => {
+  const key = 'tv2-check-' + i;
+  cb.checked = localStorage.getItem(key) === '1';
+  cb.addEventListener('change', () => localStorage.setItem(key, cb.checked ? '1' : '0'));
+});
+</script>
+</body>
+</html>

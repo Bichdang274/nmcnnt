@@ -1,6 +1,6 @@
 !
 version 15.1
-no service timestamps log datetime msec
+service timestamps log datetime msec
 no service timestamps debug datetime msec
 service password-encryption
 !
@@ -8,7 +8,10 @@ hostname R-HQ
 !
 enable secret class
 !
+username admin privilege 15 secret cisco
+!
 no ip domain-lookup
+ip domain-name nhom02.local
 !
 ip cef
 no ipv6 cef
@@ -95,6 +98,8 @@ ip access-list extended HQ_SERVERS_OUT
  permit tcp any host 192.168.0.20 established
  deny ip any any
 !
+logging 192.168.0.11
+!
 access-list 10 permit host 192.168.0.20
 !
 banner motd #R-HQ - Chi danh cho quan tri vien duoc phep truy cap#
@@ -108,7 +113,9 @@ line aux 0
 line vty 0 4
  access-class 10 in
  password cisco
- login
- transport input telnet
+ login local
+ transport input ssh
+!
+ntp server 192.168.0.11
 !
 end

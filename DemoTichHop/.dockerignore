@@ -1,0 +1,5 @@
+PhienDemo/
+__pycache__/
+*.py[cod]
+.anh_kiem_tra/
+*.zip

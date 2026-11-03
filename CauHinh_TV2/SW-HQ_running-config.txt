@@ -1,6 +1,6 @@
 !
 version 12.2
-no service timestamps log datetime msec
+service timestamps log datetime msec
 no service timestamps debug datetime msec
 service password-encryption
 !
@@ -8,7 +8,10 @@ hostname SW-HQ
 !
 enable secret class
 !
+username admin privilege 15 secret cisco
+!
 no ip domain-lookup
+ip domain-name nhom02.local
 !
 spanning-tree mode pvst
 spanning-tree extend system-id
@@ -16,61 +19,104 @@ spanning-tree extend system-id
 interface FastEthernet0/1
  description Server-TT
  switchport mode access
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 00D0.BA00.0087
+ switchport port-security violation shutdown
+ spanning-tree portfast
+ spanning-tree bpduguard enable
 !
 interface FastEthernet0/2
  description Server-Backup
  switchport mode access
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 00D0.BA00.0088
+ switchport port-security violation shutdown
+ spanning-tree portfast
+ spanning-tree bpduguard enable
 !
 interface FastEthernet0/3
  description PC-Admin
  switchport mode access
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 00D0.BA00.0089
+ switchport port-security violation shutdown
+ spanning-tree portfast
+ spanning-tree bpduguard enable
 !
 interface FastEthernet0/4
+ shutdown
 !
 interface FastEthernet0/5
+ shutdown
 !
 interface FastEthernet0/6
+ shutdown
 !
 interface FastEthernet0/7
+ shutdown
 !
 interface FastEthernet0/8
+ shutdown
 !
 interface FastEthernet0/9
+ shutdown
 !
 interface FastEthernet0/10
+ shutdown
 !
 interface FastEthernet0/11
+ shutdown
 !
 interface FastEthernet0/12
+ shutdown
 !
 interface FastEthernet0/13
+ shutdown
 !
 interface FastEthernet0/14
+ shutdown
 !
 interface FastEthernet0/15
+ shutdown
 !
 interface FastEthernet0/16
+ shutdown
 !
 interface FastEthernet0/17
+ shutdown
 !
 interface FastEthernet0/18
+ shutdown
 !
 interface FastEthernet0/19
+ shutdown
 !
 interface FastEthernet0/20
+ shutdown
 !
 interface FastEthernet0/21
+ shutdown
 !
 interface FastEthernet0/22
+ shutdown
 !
 interface FastEthernet0/23
+ shutdown
 !
 interface FastEthernet0/24
+ shutdown
 !
 interface GigabitEthernet0/1
  description Uplink den R-HQ G0/0
 !
 interface GigabitEthernet0/2
+ shutdown
 !
 interface Vlan1
  description Quan ly switch
@@ -78,6 +124,8 @@ interface Vlan1
  no shutdown
 !
 ip default-gateway 192.168.0.1
+!
+logging 192.168.0.11
 !
 access-list 10 permit host 192.168.0.20
 !
@@ -90,12 +138,14 @@ line con 0
 line vty 0 4
  access-class 10 in
  password cisco
- login
- transport input telnet
+ login local
+ transport input ssh
 line vty 5 15
  access-class 10 in
  password cisco
- login
- transport input telnet
+ login local
+ transport input ssh
+!
+ntp server 192.168.0.11
 !
 end

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo tích hợp – Nhóm 02 – Hạ tầng CNTT chuỗi cửa hàng bán lẻ</title>
+<style>
+  :root {
+    --bg: #f6f5f1; --card: #fff; --fg: #1f2328; --muted: #5d6470; --line: #e2dfd7;
+    --tv1: #2f5d8a; --tv2: #7a4fa0; --tv3: #2e7d4f; --nhom: #6b6b6b;
+    --ok: #2e7d4f; --bad: #b3412e; --warn: #a06a00;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--fg); background: var(--bg); }
+  header { display: flex; align-items: center; gap: 14px; padding: 10px 20px; background: #fff; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+  header h1 { font-size: 17px; margin: 0; flex: 1; }
+  .pill { padding: 3px 10px; border-radius: 12px; font-size: 13px; font-weight: 600; color: #fff; background: var(--nhom); }
+  .pill.ok { background: var(--ok); } .pill.bad { background: var(--bad); } .pill.warn { background: var(--warn); }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border-radius: 6px; border: 1px solid #c9c5bb; background: #fff; cursor: pointer; }
+  button:hover { background: #f1eee7; }
+  button.chinh { background: var(--tv1); color: #fff; border-color: var(--tv1); }
+  button:disabled { opacity: .5; cursor: wait; }
+  .luoi { display: grid; grid-template-columns: minmax(360px, 0.78fr) minmax(620px, 1.5fr); gap: 16px; padding: 16px 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .card h2 { font-size: 15px; margin: 0 0 8px; }
+  /* dòng thời gian */
+  .thanh-buoc { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+  .thanh-buoc span { width: 30px; height: 26px; display: grid; place-items: center; font-size: 12px; border-radius: 5px; cursor: pointer; color: #fff; opacity: .45; }
+  .thanh-buoc span.hien { opacity: 1; outline: 2px solid #1f2328; }
+  .thanh-buoc span.qua { opacity: .8; }
+  .ai { display: inline-block; font-size: 12px; font-weight: 700; color: #fff; padding: 2px 8px; border-radius: 10px; margin-right: 6px; }
+  .buoc h3 { font-size: 19px; margin: 6px 0 10px; }
+  .khoi { border-left: 4px solid var(--line); padding: 6px 10px; margin: 10px 0; background: #fbfaf7; border-radius: 0 6px 6px 0; }
+  .khoi b.nhan { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 4px; }
+  .khoi.pt { border-color: var(--tv1); } .khoi.web { border-color: var(--tv3); } .khoi.noi { border-color: var(--tv2); font-style: italic; } .khoi.kv { border-color: var(--warn); }
+  .khoi.gt { border-color: #888; background: #fff; }
+  .khoi.gt summary { cursor: pointer; }
+  .khoi pre { background: #f0ede6; padding: 8px 10px; border-radius: 6px; overflow-x: auto; font: 12px/1.45 "SF Mono", Menlo, Consolas, monospace; margin: 6px 0; }
+  .gt-bang { margin: 6px 0; font-size: 13px; } .gt-bang th { background: #f0ede6; }
+  .khoi ol, .khoi ul { margin: 0; padding-left: 20px; }
+  .nut-buoc { display: flex; flex-wrap: wrap; gap: 6px; }
+  code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 13px; background: #f0ede6; padding: 1px 4px; border-radius: 3px; }
+  .dieu-huong { display: flex; justify-content: space-between; margin-top: 12px; }
+  /* bên phải */
+  .phai { display: grid; gap: 14px; align-content: start; }
+  svg text { font-family: -apple-system, "Segoe UI", Arial, sans-serif; }
+  .bang2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 3px 5px; text-align: left; }
+  td.ma { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 11.5px; }
+  .tt { font-weight: 700; font-size: 11px; padding: 1px 6px; border-radius: 8px; color: #fff; }
+  .tt.PENDING { background: var(--warn); } .tt.SENT { background: var(--bad); } .tt.ACKED { background: var(--ok); }
+  .cuon { max-height: 210px; overflow-y: auto; }
+  .chip { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12.5px; margin: 2px 4px 2px 0; background: #eee; }
+  .chip.ok { background: #dcefe3; color: #1d5e39; } .chip.bad { background: #f6dcd6; color: #8a2e1f; }
+  .nhat-ky { background: #1e1f22; color: #d7d7d7; font: 12px/1.45 "SF Mono", Menlo, Consolas, monospace; border-radius: 8px; padding: 8px 10px; height: 230px; overflow-y: auto; white-space: pre-wrap; }
+  .nhat-ky .g { color: #888; } .nhat-ky .LENH { color: #8ab4f8; } .nhat-ky .TRU { color: #81c995; } .nhat-ky .CUA { color: #fdd663; }
+  .nhat-ky .TV2 { color: #d7aefb; } .nhat-ky .TV3 { color: #81c995; } .nhat-ky .MANG { color: #f28b82; } .nhat-ky .LOI { color: #ff6b6b; font-weight: 700; } .nhat-ky .DEMO { color: #aaa; }
+  .acl-form { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  select { font: inherit; font-size: 14px; padding: 5px; border-radius: 6px; border: 1px solid #c9c5bb; }
+  .acl-kq { margin-top: 10px; font-size: 14px; }
+  .acl-kq .ket { font-weight: 700; padding: 6px 10px; border-radius: 6px; }
+  .acl-kq .ket.ok { background: #dcefe3; } .acl-kq .ket.bad { background: #f6dcd6; }
+  .acl-kq li { margin: 3px 0; }
+  .loi-noi { color: var(--bad); font-weight: 600; min-height: 1em; }
+  #so-do { background: #fff; border-radius: 8px; }
+  #so-do .moi { animation: hienRa 1.2s ease-out 2; }
+  @keyframes hienRa { 0% { opacity: 0; } 40% { opacity: 1; filter: drop-shadow(0 0 6px #f2a900); } 100% { opacity: 1; } }
+  #so-do .hello { animation: chayHello 1.1s linear infinite; }
+  @keyframes chayHello { to { stroke-dashoffset: -38; } }
+  @media (max-width: 1100px) { .luoi { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Demo tích hợp Nhóm 02 · Mạng (Packet Tracer) + Dữ liệu (Python/SQLite) · TV1 · TV2 · TV3</h1>
+  <span id="pill-wan" class="pill">WAN: ?</span>
+  <span id="pill-ts" class="pill">Trụ sở: ?</span>
+  <button onclick="viec('lam-moi')" title="Xóa dữ liệu phiên, chạy lại hq_receiver">Làm mới phiên</button>
+</header>
+
+<div class="luoi">
+  <!-- ======================= KỊCH BẢN ======================= -->
+  <section class="card buoc">
+    <div class="thanh-buoc" id="thanh-buoc"></div>
+    <div id="noi-dung-buoc"></div>
+    <div class="loi-noi" id="loi"></div>
+    <div class="dieu-huong">
+      <button onclick="sang(-1)">← Bước trước</button>
+      <span style="color:var(--muted);font-size:13px;align-self:center">Phím ← → để chuyển bước</span>
+      <button class="chinh" onclick="sang(1)">Bước tiếp →</button>
+    </div>
+  </section>
+
+  <!-- ======================= TRẠNG THÁI ======================= -->
+  <section class="phai">
+    <div class="card">
+      <h2>Sơ đồ mạng – bấm bước nào, phần đó hiện ra</h2>
+      <svg id="so-do" viewBox="0 0 1200 770" width="100%"></svg>
+    </div>
+
+    <div class="card">
+      <h2>Tra quyền truy cập theo ACL thật (đọc từ running-config 8 thiết bị)</h2>
+      <div class="acl-form">
+        <select id="acl-nguon"></select>
+        <select id="acl-dv"><option value="ping">ping</option><option value="web">mở web</option><option value="ssh">SSH</option><option value="telnet">Telnet</option><option value="tftp">gửi TFTP</option><option value="ntp">lấy giờ NTP</option><option value="syslog">gửi Syslog</option></select>
+        <span>tới</span>
+        <select id="acl-dich"></select>
+        <button onclick="traAcl()">Tra</button>
+      </div>
+      <div class="acl-kq" id="acl-kq"><span style="color:var(--muted)">Chọn nguồn, dịch vụ, đích rồi bấm Tra – hoặc bấm nút ACL trong từng bước. Kết quả thật phải xem trong Packet Tracer; ô này giải thích gói khớp dòng ACL nào.</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Dữ liệu hai bên <span id="chip-dc"></span></h2>
+      <div class="bang2">
+        <div><b>Kho lưu tạm cửa hàng 1</b> <span id="dem-ch" style="color:var(--muted);font-size:13px"></span>
+          <div class="cuon"><table><thead><tr><th>Mã giao dịch</th><th>Tiền</th><th>TT</th></tr></thead><tbody id="b-ch"></tbody></table></div></div>
+        <div><b>CSDL trụ sở</b> <span id="dem-ts" style="color:var(--muted);font-size:13px"></span>
+          <div class="cuon"><table><thead><tr><th>Mã giao dịch</th><th>Tiền</th></tr></thead><tbody id="b-ts"></tbody></table></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Server-Backup · SYSLOG <span style="font-weight:400;color:var(--muted);font-size:13px">(mô phỏng theo cấu hình logging 192.168.0.11 – trong PT xem Services → SYSLOG)</span></h2>
+      <div class="nhat-ky" id="syslog" style="height:170px"></div>
+    </div>
+
+    <div class="card">
+      <h2>Nhật ký script (chạy thật)</h2>
+      <div class="nhat-ky" id="nhat-ky"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const MAU = { TV1: 'var(--tv1)', TV2: 'var(--tv2)', TV3: 'var(--tv3)', 'TV1 + TV3': 'var(--tv1)', 'Cả nhóm': 'var(--nhom)' };
+
+// Kịch bản xuyên suốt: mỗi bước gồm thao tác trong Packet Tracer + nút chạy script thật + lời nói
+const BUOC = [
+  { ai: 'Cả nhóm', ten: 'Chuẩn bị',
+    pt: ['Mở <code>Nhom02_v2.pkt</code> bằng Packet Tracer, bấm <b>Fast Forward Time</b> 2–3 lần cho OSPF hội tụ.',
+         'Đặt cửa sổ PT bên trái, trang này bên phải màn hình.'],
+    nut: [{ nhan: 'Làm mới phiên (xóa dữ liệu, bật trụ sở)', viec: 'lam-moi' }],
+    gt: `Thứ tự demo đi đúng theo cách dựng hệ thống: <b>nối dây → đặt IP → OSPF → ACL → Telnet → chuyển dữ liệu → sự cố WAN → sao lưu</b>.
+         Mỗi bước có phần <i>Trong Packet Tracer</i> (làm trên mô hình mạng) và <i>Trên trang này</i> (chạy script thật hoặc tra ACL).`,
+    noi: 'Đề 02: chuỗi 3 cửa hàng, 1 trụ sở, mỗi cửa hàng 5 máy bán hàng. Bên trái là mô hình mạng trong Packet Tracer, bên phải là hệ thống dữ liệu chạy thật – hai phần đi cùng một kịch bản.',
+    kv: 'Thanh trên cùng: WAN bình thường, Trụ sở đang nhận. Kho cửa hàng và CSDL trụ sở đều trống.' },
+
+  { ai: 'TV1', ten: '1. Thiết bị và nối dây',
+    pt: ['Chỉ trên sơ đồ: 4 router <b>2911</b> (gắn thêm module <b>HWIC-2T</b> để có cổng Serial), 4 switch <b>2960</b>, 15 POS, 2 máy chủ, 1 PC quản trị.',
+         'Rê chuột lên 4 sợi cáp Serial (màu đỏ – đó là màu của loại cáp, không phải lỗi) và các cáp đồng thẳng.',
+         'R-HQ: <code>show controllers serial 0/0/0</code> → thấy <b>DCE</b>, clock rate 128000.'],
+    gt: `<b>Cáp WAN – Serial DCE/DTE</b> (mô phỏng đường thuê riêng):
+      <table class="gt-bang"><tr><th>Liên kết</th><th>Đầu DCE (clock rate)</th><th>Đầu DTE</th><th>Mạng</th></tr>
+      <tr><td>Trụ sở – CH1</td><td>R-HQ S0/0/0</td><td>R-CH1 S0/0/0</td><td>10.0.1.0/30</td></tr>
+      <tr><td>Trụ sở – CH2</td><td>R-HQ S0/0/1</td><td>R-CH2 S0/0/0</td><td>10.0.2.0/30</td></tr>
+      <tr><td>Trụ sở – CH3</td><td>R-HQ S0/1/0</td><td>R-CH3 S0/0/0</td><td>10.0.3.0/30</td></tr>
+      <tr><td>Dự phòng CH1 – CH2</td><td>R-CH1 S0/0/1</td><td>R-CH2 S0/0/1</td><td>10.0.12.0/30</td></tr></table>
+      <b>Cáp LAN – đồng thẳng</b>: router G0/0 ↔ switch G0/1; mỗi POS/máy chủ FastEthernet0 ↔ switch Fa0/1…0/5. Tổng 26 sợi: 4 Serial, 4 uplink, 18 máy trạm.<br>
+      Đầu <b>DCE</b> phát xung nhịp nên phải có <code>clock rate 128000</code>; đầu DTE không cần.
+      Phương án PA2: hình sao về trụ sở + một đường dự phòng CH1–CH2 (R-CH2 đã dùng hết 2 cổng HWIC-2T nên CH3 chưa có dự phòng).`,
+    noi: 'Mỗi cửa hàng một router và một switch. Router nối về trụ sở bằng đường thuê Serial; cửa hàng 1 và 2 có thêm một đường dự phòng nối thẳng với nhau.',
+    kv: 'Mọi đèn trên cáp xanh; R-HQ S0/0/0 là DCE.' },
+
+  { ai: 'TV1', ten: '2. Đặt địa chỉ IP',
+    pt: ['R-CH1: <code>show ip interface brief</code> → G0/0 192.168.10.1, S0/0/0 10.0.1.2, S0/0/1 10.0.12.1, đều <b>up/up</b>.',
+         'POS1-1 → Desktop → IP Configuration: 192.168.10.11 / 255.255.255.0 / gateway 192.168.10.1.'],
+    gt: `<table class="gt-bang"><tr><th>Thành phần</th><th>Quy ước</th></tr>
+      <tr><td>LAN</td><td>Trụ sở 192.168.0.0/24; cửa hàng N: 192.168.<b>N0</b>.0/24 – nhìn octet thứ 3 là biết cửa hàng</td></tr>
+      <tr><td>.1 / .2</td><td>Gateway (router G0/0) / switch (VLAN1, để Telnet quản trị)</td></tr>
+      <tr><td>POS</td><td>POSn-k = 192.168.n0.(10+k), ví dụ POS1-3 = 192.168.10.13</td></tr>
+      <tr><td>Trụ sở</td><td>Server-TT .10 · Server-Backup .11 · PC-Admin .20</td></tr>
+      <tr><td>WAN</td><td>/30 (chỉ 2 địa chỉ dùng được, không lãng phí); R-HQ là .1</td></tr></table>
+<pre>interface Serial0/0/0
+ ip address 10.0.1.2 255.255.255.252
+ no shutdown
+interface GigabitEthernet0/0
+ ip address 192.168.10.1 255.255.255.0</pre>
+      IP tĩnh (không DHCP) vì mỗi POS cần địa chỉ cố định để đối chiếu với bộ đếm ACL và log giao dịch.`,
+    noi: 'Mỗi địa điểm một dải /24, đường WAN dùng /30. Quy ước .1 là gateway, .2 là switch, POS từ .11 đến .15.',
+    kv: 'Các cổng đã dùng đều up/up.' },
+
+  { ai: 'TV1', ten: '3. Định tuyến OSPF',
+    pt: ['R-HQ: <code>show ip ospf neighbor</code> → 3 hàng xóm 2.2.2.2, 3.3.3.3, 4.4.4.4 trạng thái <b>FULL</b>.',
+         'R-HQ: <code>show ip route</code> → 3 dòng <b>O</b> 192.168.10/20/30.0 <code>[110/65]</code>.',
+         'POS1-1: <code>ping 192.168.0.10</code> → Reply, TTL=126; Web Browser <code>http://192.168.0.10</code> → hiện trang (KT1). Lặp lại với POS2-1, POS3-1.'],
+    acl: [['POS1-1', 'Server-TT', 'web'], ['POS2-1', 'Server-TT', 'ping'], ['POS3-1', 'Server-TT', 'ping']],
+    gt: `<pre>router ospf 1
+ router-id 2.2.2.2
+ passive-interface GigabitEthernet0/0     ! không gửi hello vào LAN cửa hàng
+ network 192.168.10.0 0.0.0.255 area 0    ! quảng bá LAN cửa hàng 1
+ network 10.0.1.0 0.0.0.3 area 0          ! đường chính về trụ sở
+ network 10.0.12.0 0.0.0.3 area 0         ! đường dự phòng
+interface Serial0/0/1
+ ip ospf cost 100                         ! dự phòng đắt hơn → chỉ dùng khi đứt đường chính</pre>
+      <b>Cost 65</b> = 64 (Serial) + 1 (LAN). Đường dự phòng cost 100 nên CH1 → trụ sở bình thường đi thẳng (65), khi đứt đi vòng qua CH2 (165).
+      Chọn OSPF thay vì định tuyến tĩnh vì có đường dự phòng: OSPF tự tính lại đường khi đứt, định tuyến tĩnh phải sửa tay.
+      <b>TTL 126</b> = 128 − 2 router.`,
+    noi: 'Bốn router chạy OSPF cùng area 0, tự học đường tới LAN của nhau. Cả 3 cửa hàng tới được máy chủ trung tâm.',
+    kv: '3 neighbor FULL, 3 dòng O; ping và web thành công từ cả 3 cửa hàng.' },
+
+  { ai: 'TV2', ten: '4. ACL – phân quyền truy cập',
+    pt: ['R-CH1: <code>enable</code> (mật khẩu <code>class</code>) → <code>clear access-list counters</code>.',
+         'POS1-1: <code>ping 192.168.0.11</code> (máy sao lưu) và <code>ping 192.168.20.11</code> (POS cửa hàng 2) → <b>Destination host unreachable</b>.',
+         'R-CH1: <code>show access-lists CH1_LAN_IN</code> → dòng 80 và 90 có <code>match</code> tăng.',
+         '(Dễ nhìn hơn) Chuyển sang <b>Simulation</b>, lọc ICMP, ping lại: gói tới R-CH1 thì hiện dấu ✗ đỏ.'],
+    acl: [['POS1-1', 'Server-Backup', 'ping'], ['POS1-1', 'POS2-1', 'ping'], ['PC-Admin', 'POS1-1', 'ping'], ['SW-CH1', 'Server-Backup', 'tftp']],
+    gt: `<pre>ip access-list extended CH1_LAN_IN
+ permit tcp  192.168.10.0 0.0.0.255 host 192.168.0.10 eq www    ! 10 web máy chủ trung tâm
+ permit tcp  192.168.10.0 0.0.0.255 host 192.168.0.10 eq 443    ! 20 HTTPS
+ permit icmp 192.168.10.0 0.0.0.255 host 192.168.0.10           ! 30 ping máy chủ
+ permit icmp 192.168.10.0 0.0.0.255 host 192.168.10.1           ! 40 ping gateway
+ permit icmp 192.168.10.0 0.0.0.255 host 192.168.0.20 echo-reply ! 50 trả lời ping về PC-Admin
+ permit tcp  host 192.168.10.2 host 192.168.0.20 established     ! 60 trả lời Telnet về PC-Admin
+ permit udp  host 192.168.10.2 host 192.168.0.11                 ! 70 switch sao lưu cấu hình (TFTP)
+ deny ip 192.168.10.0 0.0.0.255 host 192.168.0.11                ! 80 chặn máy sao lưu
+ deny ip 192.168.10.0 0.0.0.255 192.168.20.0 0.0.0.255           ! 90 chặn cửa hàng 2
+ deny ip 192.168.10.0 0.0.0.255 192.168.30.0 0.0.0.255           ! 100 chặn cửa hàng 3
+ deny ip any any                                                 ! 110 chặn phần còn lại (để đếm được)
+interface GigabitEthernet0/0
+ ip access-group CH1_LAN_IN in</pre>
+      <ul><li><b>Đọc từ trên xuống</b>, khớp dòng nào dừng ở đó. Dòng 70 phải đứng trước 80 vì switch .2 cũng thuộc dải 192.168.10.x.</li>
+      <li><code>0.0.0.255</code> = cả dải /24; <code>host</code> = đúng một máy.</li>
+      <li><b>Hai lớp:</b> ACL <i>in</i> ở cổng LAN mỗi cửa hàng (chặn gần nguồn, chặn được cả khi CH1 → CH2 đi đường dự phòng không qua trụ sở) + <code>HQ_SERVERS_OUT</code> <i>out</i> ở R-HQ bảo vệ vùng máy chủ.</li>
+      <li>TFTP không ghi <code>eq tftp</code> vì chỉ gói đầu dùng cổng 69, dữ liệu đi cổng tạm.</li></ul>`,
+    noi: 'ACL như bảo vệ ở cửa mỗi cửa hàng, đọc danh sách từ trên xuống. Máy bán hàng chỉ được vào máy chủ trung tâm, không vào máy sao lưu, không sang cửa hàng khác.',
+    kv: 'POS → máy chủ trung tâm: được. POS → máy sao lưu / cửa hàng khác: bị chặn tại R-CH1, bộ đếm tăng.' },
+
+  { ai: 'TV2', ten: '5. SSH – chỉ máy quản trị, chỉ SSH',
+    pt: ['Mở file lần đầu: trên 8 thiết bị chạy <code>conf t</code> → <code>crypto key generate rsa general-keys modulus 1024</code> → <code>ip ssh version 2</code> → <code>end</code> → <code>write memory</code> (Packet Tracer không lưu khóa RSA trong file).',
+         'PC-Admin → Command Prompt: <code>ssh -l admin 192.168.10.2</code> → mật khẩu <code>cisco</code> → vào SW-CH1; <code>ssh -l admin 10.0.1.2</code> → vào R-CH1.',
+         'PC-Admin: <code>telnet 192.168.10.2</code> → <b>% Connection refused by remote host</b> (chỉ nhận SSH).',
+         'POS1-1: <code>ssh -l admin 192.168.10.2</code> → bị từ chối; R-CH1: <code>show ip ssh</code> → SSH Enabled - version 2.0.'],
+    acl: [['PC-Admin', 'SW-CH1', 'ssh'], ['PC-Admin', 'SW-CH1', 'telnet'], ['POS1-1', 'SW-CH1', 'ssh'], ['PC-Admin', 'R-CH1 (WAN)', 'ssh']],
+    gt: `<pre>! TV1 – bảo mật cơ bản (cả 8 thiết bị)
+enable secret class
+service password-encryption
+banner motd #Chi danh cho quan tri vien duoc phep truy cap#
+line con 0
+ password cisco
+ login
+! TV2 – chỉ PC-Admin, chỉ SSH
+username admin privilege 15 secret cisco    ! tài khoản riêng
+ip domain-name nhom02.local                 ! cần để tạo khóa RSA
+crypto key generate rsa general-keys modulus 1024
+ip ssh version 2
+access-list 10 permit host 192.168.0.20     ! ACL chuẩn: chỉ PC-Admin
+line vty 0 4                                ! switch: 0 15
+ access-class 10 in                         ! chỉ nguồn khớp ACL 10
+ login local                                ! đăng nhập bằng username
+ transport input ssh                        ! Telnet bị từ chối</pre>
+      <b>Vì sao SSH:</b> Telnet gửi mật khẩu dạng chữ thường trên dây – ai bắt gói là đọc được. SSH mã hóa cả phiên. Đây là hạn chế báo cáo tự nêu ở mục 3.1.5, nay đã khắc phục.<br>
+      Hai lớp: <code>access-class</code> lọc <b>ai</b> được vào (chỉ .20), <code>transport input ssh</code> lọc vào <b>bằng gì</b> (chỉ SSH).`,
+    noi: 'Muốn cấu hình thiết bị phải vừa đúng máy quản trị vừa dùng SSH có mã hóa. Telnet – vốn gửi mật khẩu dạng rõ – bị từ chối hẳn.',
+    kv: 'PC-Admin SSH vào được; PC-Admin Telnet bị từ chối; POS SSH bị từ chối.' },
+
+  { ai: 'TV2', ten: '6. Port security – cắm máy lạ thì cổng tự tắt',
+    pt: ['SW-CH1: <code>show port-security</code> → Fa0/1–5: MaxSecureAddr 1, CurrentAddr 1, Action Shutdown; <code>show port-security address</code> → MAC của 5 POS (SecureSticky).',
+         'End Devices → <b>Laptop</b>, đặt tên Laptop-La, IP 192.168.10.50 / 255.255.255.0 / gateway 192.168.10.1.',
+         'Xóa cáp POS1-5 ↔ SW-CH1 Fa0/5, nối Laptop-La FastEthernet0 → SW-CH1 Fa0/5; Laptop-La <code>ping 192.168.10.1</code> → thất bại, đèn Fa0/5 đỏ.',
+         'SW-CH1: <code>show port-security interface fa0/5</code> → <b>Secure-shutdown</b>, Violation Count 1. Khôi phục: gỡ laptop, cắm lại POS1-5, <code>int fa0/5</code> → <code>shutdown</code> → <code>no shutdown</code>.'],
+    nut: [{ nhan: 'Cắm laptop lạ vào Fa0/5', viec: 'may-la' }, { nhan: 'Gỡ laptop, mở lại cổng', viec: 'mo-cong' }],
+    gt: `<pre>interface range fa0/1 - 5                  ! SW-HQ: fa0/1 - 3
+ switchport mode access
+ switchport port-security                   ! bật port security
+ switchport port-security maximum 1         ! mỗi cổng 1 máy
+ switchport port-security mac-address sticky ! tự nhớ MAC máy POS vào cấu hình
+ switchport port-security violation shutdown ! máy lạ -> tắt cổng (err-disabled)
+ spanning-tree portfast                     ! máy trạm cắm vào là dùng ngay
+ spanning-tree bpduguard enable             ! cắm switch lạ -> cũng tắt cổng
+interface range fa0/6 - 24
+ shutdown                                   ! cổng không dùng: tắt hẳn</pre>
+      Mỗi card mạng có một <b>địa chỉ MAC</b> riêng (như số CCCD của máy). Switch ghi nhớ MAC của máy POS ở mỗi cổng; máy khác cắm vào thì switch tự tắt cổng. File <code>Nhom02_v2.pkt</code> đã ghi sẵn MAC sticky của 18 máy trạm.<br>
+      Đúng rủi ro cửa hàng bán lẻ: máy POS đặt ngoài quầy, ai cũng có thể rút dây cắm laptop. ACL lọc theo IP không chặn được việc này (laptop tự đặt IP của POS).`,
+    noi: 'Ở cửa hàng, ai cũng có thể rút dây máy bán hàng và cắm laptop vào. Switch nhớ đúng máy của từng cổng, máy lạ cắm vào là cổng tự tắt và báo về trụ sở.',
+    kv: 'Fa0/5 chuyển đỏ (err-disabled), Syslog có dòng PSECURE_VIOLATION; các POS khác không ảnh hưởng.' },
+
+  { ai: 'TV2', ten: '7. NTP + Syslog – đồng hồ chung, sổ nhật ký chung',
+    pt: ['Server-Backup → Services → <b>NTP</b>: On (đã bật sẵn); <b>SYSLOG</b>: On.',
+         'R-CH1, R-HQ: <code>show ntp status</code> → Clock is synchronized, reference is 192.168.0.11; <code>show clock</code> các thiết bị cùng giờ.',
+         'Ở các bước 9–11 (đứt WAN, cô lập, khôi phục): mở Server-Backup → Services → SYSLOG để xem sự kiện kèm giờ.'],
+    acl: [['R-CH1 (WAN)', 'Server-Backup', 'ntp'], ['SW-CH1', 'Server-Backup', 'syslog'], ['POS1-1', 'Server-Backup', 'syslog']],
+    gt: `<pre>service timestamps log datetime msec   ! ghi giờ vào từng dòng nhật ký
+ntp server 192.168.0.11                ! lấy giờ từ Server-Backup
+logging 192.168.0.11                   ! gửi nhật ký về Server-Backup</pre>
+      <b>NTP</b> = đồng hồ chung: 8 thiết bị cùng một giờ. <b>Syslog</b> = sổ nhật ký chung: cổng đứt/nối lại, neighbor OSPF thay đổi, port security khóa cổng… đều tự gửi về trụ sở kèm giờ – không cần ghi tay <code>show clock</code>.<br>
+      <b>Không phải sửa ACL:</b> NTP (UDP 123) và Syslog (UDP 514) tới .11 khớp dòng <code>permit udp</code> đã có cho TFTP. POS gửi tới .11 vẫn bị chặn (dòng 80).<br>
+      <b>Nói đúng giới hạn:</b> khi cửa hàng 1 bị cô lập, R-CH1 không gửi được Syslog (mất đường) – nhưng R-HQ và R-CH2 ở đầu bên kia vẫn ghi lại. NTP đồng bộ các thiết bị trong Packet Tracer với nhau; script Python dùng giờ máy tính.`,
+    noi: 'Mọi thiết bị dùng chung một đồng hồ và tự gửi nhật ký sự cố về trụ sở. Lúc đứt WAN, trụ sở biết chính xác giờ nào, router nào báo – bảng Syslog bên phải sẽ tự hiện.',
+    kv: 'NTP, Syslog từ router/switch tới Server-Backup: được; POS gửi tới Server-Backup: bị chặn.' },
+
+  { ai: 'TV3', ten: '8. Chuyển dữ liệu từ cửa hàng về trụ sở',
+    pt: ['POS1-1 → Web Browser <code>http://192.168.0.10</code>: kênh HTTP này là đường script đồng bộ dùng – ACL dòng 10 cho qua.',
+         '(Tùy chọn) Simulation, lọc HTTP: thấy gói đi POS1-1 → SW-CH1 → R-CH1 → Serial → R-HQ → SW-HQ → Server-TT.'],
+    nut: [{ nhan: 'Bán 5 giao dịch', viec: 'ban', ts: { so: 5 } }, { nhan: 'Gửi về trụ sở', viec: 'gui' },
+          { nhan: 'Đối chiếu (TV2)', viec: 'doi-chieu' }],
+    gt: `<ol><li>POS tạo giao dịch, mã duy nhất <code>CH01-POS01-yyyymmdd-nnnnnn</code> (số thứ tự lưu trong SQLite, khóa <code>BEGIN IMMEDIATE</code> để không trùng số).</li>
+      <li>Ghi ngay vào <b>kho lưu tạm</b> <code>cuahang01.db</code> trạng thái <b>PENDING</b> – không cần WAN.</li>
+      <li>Tác tử gửi: chuyển <b>SENT</b>, POST JSON tới <code>/giao-dich</code> của trụ sở (HTTP – đi qua R-CH1, ACL dòng 10, Serial, R-HQ, ACL <code>HQ_SERVERS_OUT</code>).</li>
+      <li>Trụ sở (<code>hq_receiver.py</code>) ghi vào <code>truso.db</code> – <code>ma_gd</code> là khóa chính – <b>ghi xong mới trả ACK</b> kèm mã giao dịch.</li>
+      <li>Cửa hàng nhận ACK đúng mã → <b>ACKED</b>, không gửi nữa. Không có ACK → giữ SENT, lần sau gửi lại.</li></ol>
+      Trong demo, cửa hàng và trụ sở chạy trên cùng máy (127.0.0.1:8000); Packet Tracer chứng minh đường mạng, script chứng minh lưu – gửi – xác nhận.`,
+    noi: 'Giao dịch luôn được ghi ở cửa hàng trước rồi mới gửi. Trụ sở lưu xong mới xác nhận; cửa hàng chỉ coi là xong khi nhận xác nhận đúng mã.',
+    kv: 'Kho: 5 ACKED. Trụ sở: 5 giao dịch. Đối chiếu: khớp.' },
+
+  { ai: 'TV1', ten: '9. Đứt đường chính – đi đường dự phòng',
+    pt: ['POS1-1: <code>tracert 192.168.0.10</code> → đi qua 10.0.1.1.',
+         'R-CH1: <code>conf t</code> → <code>int s0/0/0</code> → <code>shutdown</code>.',
+         'POS1-1: <code>tracert 192.168.0.10</code> lại → đi qua <b>10.0.12.2</b> (R-CH2); R-CH1 <code>show ip route</code>: 192.168.0.0/24 <code>[110/165]</code>.'],
+    nut: [{ nhan: 'Đặt trạng thái: đứt đường chính', viec: 'wan', ts: { muc: 'dut-chinh' } },
+          { nhan: 'Bán 2 giao dịch', viec: 'ban', ts: { so: 2 } }, { nhan: 'Gửi về trụ sở', viec: 'gui' }],
+    acl: [['POS1-1', 'Server-TT', 'web']],
+    noi: 'Đứt đường chính, OSPF tự chuyển sang đường dự phòng qua cửa hàng 2. Bán hàng và gửi dữ liệu vẫn bình thường. Syslog trên Server-Backup ghi ngay giờ R-CH1 và R-HQ báo cổng đứt.',
+    kv: 'Sơ đồ: đường CH1–HQ đỏ, dự phòng xanh. 2 giao dịch mới vẫn ACKED, trụ sở 7.' },
+
+  { ai: 'TV1 + TV3', ten: '10. Cửa hàng 1 bị cô lập (KT2)',
+    pt: ['R-CH1: <code>int s0/0/1</code> → <code>shutdown</code> (mất luôn đường dự phòng).',
+         'POS1-1: <code>ping 192.168.0.10</code> → thất bại; <code>ping 192.168.10.12</code> → thành công (LAN vẫn chạy).'],
+    nut: [{ nhan: 'Đặt trạng thái: cô lập CH1', viec: 'wan', ts: { muc: 'co-lap' } },
+          { nhan: 'Bán 5 giao dịch', viec: 'ban', ts: { so: 5 } }, { nhan: 'Thử gửi', viec: 'gui' },
+          { nhan: 'Đối chiếu (TV2)', viec: 'doi-chieu' }],
+    acl: [['POS1-1', 'Server-TT', 'web']],
+    gt: 'Trên trang, mất WAN được giả lập giống cách TV3 kiểm thử: dừng <code>hq_receiver.py</code> nên cửa hàng không kết nối được tới trụ sở (lỗi từ chối kết nối).',
+    noi: 'Mất cả hai đường: cửa hàng không tới được trụ sở nhưng vẫn bán hàng. Gửi thất bại, giao dịch không mất – vẫn nằm trong kho chờ gửi lại. Syslog: R-CH1 không báo về được nữa, nhưng R-CH2 báo mất neighbor 2.2.2.2 – trụ sở vẫn biết giờ sự cố.',
+    kv: 'Kho: 5 giao dịch SENT (chưa ACK). Trụ sở vẫn 7. Đối chiếu: 5 chưa về, 0 mất.' },
+
+  { ai: 'TV3', ten: '11. Khôi phục WAN và gửi lại (KT3)',
+    pt: ['R-CH1: <code>int s0/0/1</code> → <code>no shutdown</code>; <code>int s0/0/0</code> → <code>no shutdown</code>.',
+         'Fast Forward Time, POS1-1: <code>ping 192.168.0.10</code> → Reply lại; R-HQ <code>show ip ospf neighbor</code> đủ 3.'],
+    nut: [{ nhan: 'Đặt trạng thái: WAN bình thường', viec: 'wan', ts: { muc: 'binh-thuong' } },
+          { nhan: 'Gửi lại', viec: 'gui' }, { nhan: 'Đối chiếu (TV2)', viec: 'doi-chieu' }],
+    noi: 'Có mạng lại, tác tử gửi các giao dịch chưa xác nhận. Trụ sở tăng đúng 5 bản, cửa hàng toàn bộ ACKED.',
+    kv: 'Kho: 12 ACKED. Trụ sở: 12. Đối chiếu: khớp, 0 trùng.' },
+
+  { ai: 'TV3', ten: '12. Cố ý gửi lặp (KT3-b)',
+    nut: [{ nhan: 'Gửi lặp toàn bộ', viec: 'gui-lap' }, { nhan: 'Đối chiếu (TV2)', viec: 'doi-chieu' }],
+    gt: 'Trụ sở kiểm tra mã: chưa có → ghi (<code>DA_LUU</code>); đã có và giống hệt → không ghi (<code>DA_TON_TAI</code>) nhưng <b>vẫn ACK</b> (nếu không, cửa hàng gửi lại mãi); cùng mã khác nội dung → báo lỗi 409.',
+    noi: 'Gửi lại toàn bộ 12 giao dịch đã có. Trụ sở trả DA_TON_TAI cho từng mã nhưng vẫn xác nhận, không ghi thêm bản nào.',
+    kv: 'Nhật ký: 12 lần DA_TON_TAI, ACK hợp lệ. Trụ sở vẫn 12, mã trùng 0.' },
+
+  { ai: 'TV2', ten: '13. Sao lưu – xóa thử – khôi phục (BK-1)',
+    pt: ['(Tùy chọn) R-CH2: <code>copy running-config tftp:</code> → <code>192.168.0.11</code> → Server-Backup → Services → TFTP thấy file: sao lưu cấu hình đi qua được ACL.'],
+    nut: [{ nhan: '1. Sao lưu CSDL trụ sở', viec: 'sao-luu' }, { nhan: '2. Xóa thử', viec: 'xoa-thu' },
+          { nhan: '3. Đối chiếu', viec: 'doi-chieu' }, { nhan: '4. Khôi phục', viec: 'khoi-phuc' },
+          { nhan: '5. Đối chiếu', viec: 'doi-chieu' }, { nhan: 'Sao lưu kho cửa hàng (TV3)', viec: 'sao-luu-ch' }],
+    gt: `<table class="gt-bang"><tr><th>Đối tượng</th><th>Tần suất</th><th>Giữ</th><th>Ai</th></tr>
+      <tr><td>CSDL trụ sở</td><td>Cuối ngày + trước đồng bộ lớn</td><td>7 bản</td><td>TV2</td></tr>
+      <tr><td>Kho cửa hàng</td><td>Cuối ca</td><td>Đến khi mọi GD ACKED</td><td>TV3</td></tr>
+      <tr><td>Cấu hình router/switch</td><td>Sau mỗi thay đổi (TFTP)</td><td>Bản mới + bản trước</td><td>TV1</td></tr></table>
+      Sao lưu bằng <b>API backup của SQLite</b> (bản chụp nhất quán, an toàn khi trụ sở đang nhận) và kiểm tra <code>PRAGMA integrity_check</code>.`,
+    noi: 'Sao lưu CSDL trụ sở có kiểm tra toàn vẹn, giữ 7 bản. Giả lập sự cố xóa sạch, trụ sở còn 0. Khôi phục: số giao dịch trở về như lúc sao lưu.',
+    kv: 'Trụ sở 12 → 0 → 12. Đối chiếu sau khôi phục: khớp.' },
+
+  { ai: 'TV2', ten: '14. Khôi phục từ bản cũ và gửi bù',
+    nut: [{ nhan: '1. Bán 3', viec: 'ban', ts: { so: 3 } }, { nhan: '2. Gửi', viec: 'gui' },
+          { nhan: '3. Khôi phục bản sao (cũ)', viec: 'khoi-phuc' }, { nhan: '4. Đối chiếu', viec: 'doi-chieu' },
+          { nhan: '5. Gửi bù', viec: 'gui-bu' }, { nhan: '6. Đối chiếu', viec: 'doi-chieu' }],
+    gt: 'Sao lưu cuối ngày nên xấu nhất trụ sở mất các giao dịch sau lần sao lưu. Nhưng kho cửa hàng vẫn còn chúng (ACKED) → đối chiếu tìm ra và gửi bù; khóa chính chặn ghi trùng. Mức mất thực tế = 0 nếu kho cửa hàng còn.',
+    noi: 'Bản sao lưu cũ không có 3 giao dịch mới. Đối chiếu phát hiện 3 giao dịch cửa hàng đã ACKED mà trụ sở thiếu. Gửi bù: trụ sở chỉ ghi bản thiếu – không mất, không trùng.',
+    kv: 'Sau khôi phục: trụ sở 12, cảnh báo thiếu 3. Sau gửi bù: 15 = 15, khớp.' },
+
+  { ai: 'Cả nhóm', ten: 'Tổng kết',
+    tong_ket: true,
+    noi: 'Mạng: 4 địa điểm, OSPF có đường dự phòng, phân quyền bằng ACL hai lớp, chỉ máy quản trị được vào bằng SSH, port security chặn máy lạ ở quầy, NTP + Syslog ghi giờ sự cố về trụ sở. Dữ liệu: lưu tạm khi mất WAN, gửi lại khi có mạng, chống trùng bằng mã giao dịch, sao lưu và khôi phục có đối chiếu. Packet Tracer chứng minh cấu hình và kết nối; script chứng minh lưu, gửi, xác nhận và chống trùng.' },
+];
+
+let hien = 0, st = null, dangChay = false;
+
+function veThanh() {
+  const el = document.getElementById('thanh-buoc');
+  el.innerHTML = '';
+  BUOC.forEach((b, i) => {
+    const s = document.createElement('span');
+    s.textContent = i;
+    s.title = b.ai + ': ' + b.ten;
+    s.style.background = MAU[b.ai];
+    s.className = i === hien ? 'hien' : (i < hien ? 'qua' : '');
+    s.onclick = () => { hien = i; veBuoc(); };
+    el.appendChild(s);
+  });
+}
+
+function veBuoc() {
+  const b = BUOC[hien];
+  let h = `<span class="ai" style="background:${MAU[b.ai]}">${b.ai}</span><span style="color:var(--muted);font-size:13px">Bước ${hien}/${BUOC.length - 1}</span>`;
+  h += `<h3>${b.ten}</h3>`;
+  if (b.pt) h += `<div class="khoi pt"><b class="nhan">Trong Packet Tracer</b><ol>${b.pt.map(x => `<li>${x}</li>`).join('')}</ol></div>`;
+  if (b.gt) h += `<details class="khoi gt" open><summary><b class="nhan" style="display:inline">Giải thích – cấu hình như thế nào</b></summary>${b.gt}</details>`;
+  if (b.nut || b.acl) {
+    h += `<div class="khoi web"><b class="nhan">Trên trang này</b><div class="nut-buoc">`;
+    (b.nut || []).forEach((n, i) => h += `<button data-i="${i}" class="nut-viec">${n.nhan}</button>`);
+    (b.acl || []).forEach((a, i) => h += `<button data-a="${i}" class="nut-acl" title="Tra ACL">ACL: ${a[0]} → ${a[1]} (${a[2]})</button>`);
+    h += `</div></div>`;
+  }
+  if (b.tong_ket) h += `<div class="khoi kv" id="tong-ket"></div>`;
+  h += `<div class="khoi noi"><b class="nhan">Lời nói</b>${b.noi}</div>`;
+  if (b.kv) h += `<div class="khoi kv"><b class="nhan">Kết quả mong đợi</b>${b.kv}</div>`;
+  document.getElementById('noi-dung-buoc').innerHTML = h;
+  document.querySelectorAll('.nut-viec').forEach(n => n.onclick = () => { const x = b.nut[+n.dataset.i]; viec(x.viec, x.ts || {}); });
+  document.querySelectorAll('.nut-acl').forEach(n => n.onclick = () => { const a = b.acl[+n.dataset.a]; datAcl(a); traAcl(); });
+  veThanh();
+  veTongKet();
+  if (document.querySelector('#so-do [data-lop]')) capNhatLop(false);
+}
+
+function sang(d) { hien = Math.max(0, Math.min(BUOC.length - 1, hien + d)); veBuoc(); }
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'SELECT') return;
+  if (e.key === 'ArrowRight') sang(1);
+  if (e.key === 'ArrowLeft') sang(-1);
+});
+
+async function viec(ten, ts = {}) {
+  if (dangChay) return;
+  dangChay = true;
+  document.querySelectorAll('button').forEach(b => b.disabled = true);
+  document.getElementById('loi').textContent = '';
+  try {
+    var truoc = st;
+    const r = await fetch('/api/viec/' + ten, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(ts) });
+    const j = await r.json();
+    if (!r.ok) document.getElementById('loi').textContent = j.loi;
+  } catch (e) {
+    document.getElementById('loi').textContent = 'Không kết nối được demo_tich_hop.py – kiểm tra cửa sổ Terminal.';
+  }
+  dangChay = false;
+  document.querySelectorAll('button').forEach(b => b.disabled = false);
+  await capNhat();
+  if (typeof truoc !== 'undefined') hoatAnhViec(ten, truoc, st);
+}
+
+function datAcl(a) {
+  document.getElementById('acl-nguon').value = a[0];
+  document.getElementById('acl-dich').value = a[1];
+  document.getElementById('acl-dv').value = a[2];
+}
+
+let aclCuoi = null;
+async function traAcl() {
+  const ts = { nguon: document.getElementById('acl-nguon').value, dich: document.getElementById('acl-dich').value, dich_vu: document.getElementById('acl-dv').value };
+  const r = await fetch('/api/acl', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(ts) });
+  const k = await r.json();
+  if (!r.ok) { document.getElementById('acl-kq').textContent = k.loi; return; }
+  aclCuoi = k;
+  let h = `<div><b>${k.mo_ta}</b></div><ul>`;
+  k.buoc.forEach(b => {
+    const noi = b.chieu === 'vty' ? `${b.router} – ${b.acl} trên line vty` : `${b.router} G0/0 chiều ${b.chieu}`;
+    const acl = b.acl ? (b.chieu === 'vty' ? '' : ` · ACL <code>${b.acl}</code> dòng <code>${b.dong}</code>`) : ' · không có ACL';
+    h += `<li>Gói ${b.huong}: ${noi}${acl} → <b style="color:${b.cho_qua ? 'var(--ok)' : 'var(--bad)'}">${b.cho_qua ? 'cho qua' : 'CHẶN'}</b></li>`;
+  });
+  if (!k.buoc.length) h += `<li>Cùng mạng LAN, không đi qua router nào – không có ACL trên đường đi.</li>`;
+  h += `</ul><div class="ket ${k.dat ? 'ok' : 'bad'}">${k.ket_luan}</div>`;
+  if (k.pt) h += `<div style="margin-top:6px;color:var(--muted)">Packet Tracer thường hiện: <code>${k.pt}</code></div>`;
+  document.getElementById('acl-kq').innerHTML = h;
+  hoatAnhAcl(k, ts);
+}
+
+// ======================= SƠ ĐỒ CHI TIẾT KIỂU PACKET TRACER =======================
+// Mỗi phần của sơ đồ thuộc một "lớp"; lớp hiện ra từ bước tương ứng trong kịch bản.
+const LOP_TU_BUOC = { vung: 0, 'thiet-bi': 1, cap: 1, ip: 2, ospf: 3, acl: 4, telnet: 5, portsec: 6, ntp: 7, 'du-lieu': 8 };
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const NUT = {};
+function nut(ten, loai, x, y, ip, dd) { NUT[ten] = { ten, loai, x, y, ip, dd }; }
+nut('Server-TT', 'server', 450, 64, '192.168.0.10', 'HQ');
+nut('Server-Backup', 'server', 580, 64, '192.168.0.11', 'HQ');
+nut('PC-Admin', 'pc', 790, 64, '192.168.0.20', 'HQ');
+nut('SW-HQ', 'switch', 600, 158, '192.168.0.2', 'HQ');
+nut('R-HQ', 'router', 600, 238, 'G0/0 192.168.0.1', 'HQ');
+const CX = { CH1: 200, CH2: 600, CH3: 1000 };
+for (const [k, cx] of Object.entries(CX)) {
+  const n = k[2];
+  nut('R-' + k, 'router', cx, 440, `G0/0 192.168.${n}0.1`, k);
+  nut('SW-' + k, 'switch', cx, 548, `192.168.${n}0.2`, k);
+  [-140, -70, 0, 70, 140].forEach((d, i) => nut(`POS${n}-${i + 1}`, 'pc', cx + d, 672, `192.168.${n}0.${11 + i}`, k));
+}
+// điểm neo cho CSDL (lớp dữ liệu)
+nut('KHO', 'db', 66, 548, '', 'CH1');
+nut('TRUSO', 'db', 360, 64, '', 'HQ');
+nut('SAOLUU', 'db', 680, 64, '', 'HQ');
+
+const SERIAL = [
+  { id: 'hq-ch1', a: 'R-HQ', b: 'R-CH1', ifa: 'S0/0/0', ifb: 'S0/0/0', ipa: '10.0.1.1', ipb: '10.0.1.2', mang: '10.0.1.0/30', cost: 64 },
+  { id: 'hq-ch2', a: 'R-HQ', b: 'R-CH2', ifa: 'S0/0/1', ifb: 'S0/0/0', ipa: '10.0.2.1', ipb: '10.0.2.2', mang: '10.0.2.0/30', cost: 64 },
+  { id: 'hq-ch3', a: 'R-HQ', b: 'R-CH3', ifa: 'S0/1/0', ifb: 'S0/0/0', ipa: '10.0.3.1', ipb: '10.0.3.2', mang: '10.0.3.0/30', cost: 64 },
+  { id: 'ch1-ch2', a: 'R-CH1', b: 'R-CH2', ifa: 'S0/0/1', ifb: 'S0/0/1', ipa: '10.0.12.1', ipb: '10.0.12.2', mang: '10.0.12.0/30 (dự phòng)', cost: 100 },
+];
+const DONG = [['SW-HQ', 'G0/1', 'R-HQ', 'G0/0'], ['Server-TT', 'Fa0', 'SW-HQ', 'Fa0/1'],
+  ['Server-Backup', 'Fa0', 'SW-HQ', 'Fa0/2'], ['PC-Admin', 'Fa0', 'SW-HQ', 'Fa0/3']];
+for (const k of Object.keys(CX)) {
+  DONG.push(['SW-' + k, 'G0/1', 'R-' + k, 'G0/0']);
+  for (let i = 1; i <= 5; i++) DONG.push([`POS${k[2]}-${i}`, 'Fa0', 'SW-' + k, 'Fa0/' + i]);
+}
+const RID = { 'R-HQ': '1.1.1.1', 'R-CH1': '2.2.2.2', 'R-CH2': '3.3.3.3', 'R-CH3': '4.4.4.4' };
+
+function tao(ten, thuoc_tinh = {}, cha, lop) {
+  const e = document.createElementNS(SVG_NS, ten);
+  for (const [k, v] of Object.entries(thuoc_tinh)) e.setAttribute(k, v);
+  if (lop) e.dataset.lop = lop;
+  if (cha) cha.appendChild(e);
+  return e;
+}
+function chu(cha, x, y, noi_dung, tt = {}, lop) {
+  const t = tao('text', Object.assign({ x, y, 'text-anchor': 'middle', 'font-size': 11 }, tt), cha, lop);
+  t.textContent = noi_dung;
+  return t;
+}
+function diem(a, b, t, lech = 0) {
+  const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1;
+  return { x: a.x + dx * t - dy / d * lech, y: a.y + dy * t + dx / d * lech };
+}
+const KICH = { router: 22, switch: 16, pc: 20, server: 24, db: 18 };
+function bienNut(ten, huong) { // điểm trên viền biểu tượng, để dây không đè lên icon
+  const n = NUT[ten], h = NUT[huong], d = Math.hypot(h.x - n.x, h.y - n.y) || 1, r = KICH[n.loai];
+  return { x: n.x + (h.x - n.x) / d * r, y: n.y + (h.y - n.y) / d * r };
+}
+
+function veIcon(g, n) {
+  const p = tao('g', { transform: `translate(${n.x},${n.y})`, class: 'icon' }, g);
+  if (n.loai === 'router') {
+    tao('ellipse', { cx: 0, cy: 7, rx: 26, ry: 9, fill: '#1c4c86' }, p);
+    tao('rect', { x: -26, y: -7, width: 52, height: 14, fill: '#2c67ad' }, p);
+    tao('ellipse', { cx: 0, cy: -7, rx: 26, ry: 9, fill: '#4f8fd8', stroke: '#1c4c86' }, p);
+    chu(p, 0, -3, '⇄  ⇅', { fill: '#fff', 'font-size': 11, 'font-weight': 700 });
+  } else if (n.loai === 'switch') {
+    tao('rect', { x: -32, y: -12, width: 64, height: 24, rx: 3, fill: '#2c67ad', stroke: '#1c4c86' }, p);
+    chu(p, 0, 4, '⇄ ⇄ ⇄', { fill: '#fff', 'font-size': 12, 'font-weight': 700 });
+  } else if (n.loai === 'pc') {
+    tao('rect', { x: -16, y: -17, width: 32, height: 23, rx: 2, fill: '#dfe5ec', stroke: '#4a4f57' }, p);
+    tao('rect', { x: -13, y: -14, width: 26, height: 17, fill: n.ten === 'PC-Admin' ? '#8e6cc0' : '#6fa8dc' }, p);
+    tao('rect', { x: -3, y: 6, width: 6, height: 5, fill: '#4a4f57' }, p);
+    tao('rect', { x: -11, y: 11, width: 22, height: 3, fill: '#4a4f57' }, p);
+  } else if (n.loai === 'server') {
+    tao('rect', { x: -13, y: -23, width: 26, height: 46, rx: 3, fill: '#c9ccd2', stroke: '#4a4f57' }, p);
+    [-14, -6, 2].forEach(y => tao('line', { x1: -9, y1: y, x2: 9, y2: y, stroke: '#4a4f57' }, p));
+    tao('circle', { cx: 7, cy: 15, r: 2.5, fill: '#2ecc71' }, p);
+  }
+  return p;
+}
+
+function veDb(g, n, nhan, id) {
+  const p = tao('g', { transform: `translate(${n.x},${n.y})` }, g, 'du-lieu');
+  tao('rect', { x: -17, y: -14, width: 34, height: 28, fill: '#f3c969', stroke: '#8a6a12' }, p);
+  tao('ellipse', { cx: 0, cy: 14, rx: 17, ry: 6, fill: '#f3c969', stroke: '#8a6a12' }, p);
+  tao('ellipse', { cx: 0, cy: -14, rx: 17, ry: 6, fill: '#f8dc93', stroke: '#8a6a12' }, p);
+  chu(p, 0, 36, nhan, { 'font-size': 10.5, 'font-weight': 700 });
+  chu(p, 0, 49, '', { 'font-size': 10.5, id, fill: '#5d6470' });
+  return p;
+}
+
+function dungSoDo() {
+  const svg = document.getElementById('so-do');
+  svg.innerHTML = '';
+  const nen = tao('g', {}, svg), lopDay = tao('g', {}, svg), lopNhan = tao('g', {}, svg), lopNut = tao('g', {}, svg);
+  window.LOP_GOI = tao('g', {}, svg);
+  // vùng địa điểm
+  const vung = (x, y, w, h, ten, mang, day) => {
+    tao('rect', { x, y, width: w, height: h, rx: 14, fill: '#f8f6f1', stroke: '#d8d3c6', 'stroke-dasharray': '6 5' }, nen, 'vung');
+    const ty = day ? y + h - 28 : y + 20;
+    chu(nen, x + 14, ty, ten, { 'text-anchor': 'start', 'font-size': 13, 'font-weight': 700, fill: '#5d6470' }, 'vung');
+    chu(nen, x + 14, ty + 16, mang, { 'text-anchor': 'start', 'font-size': 11.5, fill: '#2f5d8a', 'font-family': 'Menlo, Consolas, monospace' }, 'ip');
+  };
+  vung(300, 6, 600, 274, 'TRỤ SỞ', 'LAN 192.168.0.0/24');
+  for (const [k, cx] of Object.entries(CX)) vung(cx - 186, 392, 372, 372, 'CỬA HÀNG ' + k[2], `LAN 192.168.${k[2]}0.0/24`, true);
+  chu(nen, 150, 330, 'OSPF tiến trình 1 · area 0', { 'font-size': 13, 'font-weight': 700, fill: '#2e7d4f' }, 'ospf');
+
+  // cáp đồng thẳng
+  DONG.forEach(([a, ifa, b, ifb]) => {
+    const pa = bienNut(a, b), pb = bienNut(b, a);
+    tao('line', { x1: pa.x, y1: pa.y, x2: pb.x, y2: pb.y, stroke: '#222', 'stroke-width': 1.6, class: 'day', id: 'day-' + a }, lopDay, 'cap');
+    [[pa, pb], [pb, pa]].forEach(([u, v]) => { const d = diem(u, v, 0.12); tao('circle', { cx: d.x, cy: d.y, r: 3.2, fill: '#2ecc71' }, lopDay, 'cap'); });
+    if (a.startsWith('SW')) {
+      const da = diem(pa, pb, 0.25, 0), db = diem(pb, pa, 0.25, 0);
+      chu(lopNhan, da.x - 16, da.y + 4, ifa, { 'font-size': 9.5, fill: '#444' }, 'cap');
+      chu(lopNhan, db.x - 16, db.y + 4, ifb, { 'font-size': 9.5, fill: '#444' }, 'cap');
+    } else if (!a.startsWith('POS')) {
+      const db = diem(pb, pa, 0.3, -10);
+      chu(lopNhan, db.x, db.y, ifb, { 'font-size': 9.5, fill: '#444' }, 'cap');
+    } else {
+      const db = diem(pb, pa, 0.5, 0);
+      chu(lopNhan, db.x + 9, db.y, ifb.replace('Fa', ''), { 'font-size': 8.5, fill: '#777' }, 'cap');
+    }
+  });
+  // cáp Serial (đỏ, có gấp khúc như Packet Tracer)
+  SERIAL.forEach(s => {
+    const pa = bienNut(s.a, s.b), pb = bienNut(s.b, s.a);
+    const m1 = diem(pa, pb, 0.47, 7), m2 = diem(pa, pb, 0.53, -7);
+    const g = tao('g', { id: 'ser-' + s.id }, lopDay, 'cap');
+    tao('polyline', { points: `${pa.x},${pa.y} ${m1.x},${m1.y} ${m2.x},${m2.y} ${pb.x},${pb.y}`, fill: 'none', stroke: '#d0392b', 'stroke-width': 2.6, class: 'day day-ser' }, g);
+    tao('polyline', { points: `${pa.x},${pa.y} ${pb.x},${pb.y}`, fill: 'none', stroke: '#2e7d4f', 'stroke-width': 3, class: 'hello', 'stroke-dasharray': '3 16' }, g, 'ospf');
+    [[pa, pb, 'a'], [pb, pa, 'b']].forEach(([u, v, dau]) => { const d = diem(u, v, 0.1); tao('circle', { cx: d.x, cy: d.y, r: 4, fill: '#2ecc71', class: 'den den-' + dau }, g); });
+    const x = diem(pa, pb, 0.5);
+    tao('text', { x: x.x, y: x.y + 7, 'text-anchor': 'middle', 'font-size': 26, fill: '#d0392b', 'font-weight': 900, class: 'cat', style: 'display:none' }, g).textContent = '✕';
+    const la = diem(pa, pb, 0.2, s.id === 'ch1-ch2' ? -11 : 13), lb = diem(pb, pa, 0.2, s.id === 'ch1-ch2' ? 11 : -13);
+    chu(lopNhan, la.x, la.y, s.ifa + ' DCE', { 'font-size': 9.5, fill: '#a52a1e', 'font-weight': 600 }, 'cap');
+    chu(lopNhan, lb.x, lb.y + 4, s.ifb, { 'font-size': 9.5, fill: '#a52a1e', 'font-weight': 600 }, 'cap');
+    const ia = diem(pa, pb, 0.2, s.id === 'ch1-ch2' ? 13 : -12), ib = diem(pb, pa, 0.2, s.id === 'ch1-ch2' ? -13 : 12);
+    chu(lopNhan, ia.x, ia.y + 4, '.' + s.ipa.split('.').pop(), { 'font-size': 10, fill: '#2f5d8a', 'font-family': 'Menlo, Consolas, monospace' }, 'ip');
+    chu(lopNhan, ib.x, ib.y + 4, '.' + s.ipb.split('.').pop(), { 'font-size': 10, fill: '#2f5d8a', 'font-family': 'Menlo, Consolas, monospace' }, 'ip');
+    const mm = diem(pa, pb, 0.5, s.id === 'ch1-ch2' ? 17 : (s.id === 'hq-ch2' ? -42 : -14));
+    chu(lopNhan, mm.x, mm.y, s.mang, { 'font-size': 10.5, fill: '#2f5d8a', 'font-family': 'Menlo, Consolas, monospace' }, 'ip');
+    const mc = diem(pa, pb, 0.5, s.id === 'ch1-ch2' ? -12 : (s.id === 'hq-ch2' ? 34 : 16));
+    chu(lopNhan, mc.x, mc.y, 'cost ' + s.cost, { 'font-size': 11, fill: '#2e7d4f', 'font-weight': 700 }, 'ospf');
+  });
+
+  // thiết bị
+  Object.values(NUT).forEach(n => {
+    if (n.loai === 'db') return;
+    const g = tao('g', { id: 'nut-' + n.ten }, lopNut, 'thiet-bi');
+    veIcon(g, n);
+    const duoi = { router: 30, switch: 26, pc: 27, server: 36 }[n.loai];
+    chu(g, n.x, n.ten === 'SW-HQ' ? n.y - 18 : n.y + duoi, n.ten, { 'font-size': n.loai === 'pc' ? 9.5 : 11.5, 'font-weight': 700 });
+    const BEN = { 'R-HQ': [-1, 1], 'R-CH1': [-1, -1], 'R-CH2': [1, 1], 'R-CH3': [1, 1] }; // [phía IP, phía RID]: -1 trái, 1 phải
+    const kieuIp = { 'font-size': 9.5, fill: '#2f5d8a', 'font-family': 'Menlo, Consolas, monospace' };
+    if (n.loai === 'pc' && n.ten.startsWith('POS')) chu(g, n.x, n.y + duoi + 11, '.' + n.ip.split('.').pop(), { 'font-size': 9.5, fill: '#2f5d8a' }, 'ip');
+    else if (n.loai === 'router') chu(g, n.x + BEN[n.ten][0] * 32, n.y + 16, n.ip, Object.assign({ 'text-anchor': BEN[n.ten][0] < 0 ? 'end' : 'start' }, kieuIp), 'ip');
+    else if (n.loai === 'switch') chu(g, n.x + 38, n.y + 4, n.ip, Object.assign({ 'text-anchor': 'start' }, kieuIp), 'ip');
+    else chu(g, n.x, n.y + duoi + 12, n.ip, kieuIp, 'ip');
+    if (RID[n.ten]) {
+      const rx = n.x + BEN[n.ten][1] * 68, ry = n.y - 6;
+      tao('rect', { x: rx - 34, y: ry - 10, width: 68, height: 16, rx: 8, fill: '#dcefe3', stroke: '#2e7d4f' }, g, 'ospf');
+      chu(g, rx, ry + 2, 'RID ' + RID[n.ten], { 'font-size': 9.5, fill: '#1d5e39', 'font-weight': 700 }, 'ospf');
+    }
+    if (n.loai === 'router' || n.loai === 'switch') {
+      // router: khóa SSH và đồng hồ NTP đặt ở hai góc trên, tránh nhãn RID/IP hai bên
+      const lech = n.loai === 'router' ? (n.ten === 'R-CH1' ? -30 : 30) : 44, cao = n.loai === 'router' ? -20 : -9;
+      chu(g, n.x + lech, n.y + cao, '🔒SSH', { 'font-size': 10.5, 'font-weight': 700, fill: '#5a2f80' }, 'telnet');
+      chu(g, n.x - lech, n.y + cao, '🕒', { 'font-size': 12 }, 'ntp');
+    }
+    if (n.loai === 'switch') {
+      tao('rect', { x: n.x - 108, y: n.y + 30, width: 96, height: 17, rx: 8, fill: '#fdecea', stroke: '#b3412e' }, g, 'portsec');
+      chu(g, n.x - 60, n.y + 42, '🔐 port-security', { 'font-size': 10, fill: '#8a2e1f', 'font-weight': 700 }, 'portsec');
+    }
+  });
+  // khiên ACL tại cổng G0/0
+  const khien = (r, sw, ten, chieu) => {
+    const d = diem(NUT[r], NUT[sw], 0.56, 0);
+    const g = tao('g', {}, lopNut, 'acl');
+    tao('rect', { x: d.x + 8, y: d.y - 11, width: ten.length * 6.6 + 44, height: 22, rx: 5, fill: '#efe6f7', stroke: '#7a4fa0' }, g);
+    chu(g, d.x + 20, d.y + 5, '🛡', { 'font-size': 13 });
+    chu(g, d.x + 32, d.y + 4, `${ten} ${chieu}`, { 'font-size': 10.5, 'text-anchor': 'start', fill: '#5a2f80', 'font-weight': 700 });
+  };
+  khien('R-HQ', 'SW-HQ', 'HQ_SERVERS_OUT', 'out ↑');
+  for (const k of Object.keys(CX)) khien('R-' + k, 'SW-' + k, k + '_LAN_IN', 'in ↑');
+  const kh = tao('g', {}, lopNut, 'telnet');
+  tao('rect', { x: 822, y: 30, width: 74, height: 40, rx: 6, fill: '#f3ecfb', stroke: '#7a4fa0' }, kh);
+  chu(kh, 859, 46, '🔑 chỉ .20', { 'font-size': 10.5, fill: '#5a2f80', 'font-weight': 700 });
+  chu(kh, 859, 61, 'được SSH', { 'font-size': 10.5, fill: '#5a2f80', 'font-weight': 700 });
+  const nt = tao('g', {}, lopNut, 'ntp');
+  tao('rect', { x: 532, y: 2, width: 96, height: 17, rx: 8, fill: '#e6f0fa', stroke: '#2f5d8a' }, nt);
+  chu(nt, 580, 14, '🕒 NTP · SYSLOG', { 'font-size': 10, fill: '#1c4c86', 'font-weight': 700 });
+  // laptop lạ (port security) – chỉ hiện khi cổng Fa0/5 bị khóa
+  const lp = tao('g', { id: 'laptop-la', style: 'display:none' }, lopNut);
+  const pn = NUT['POS1-5'];
+  tao('rect', { x: pn.x - 17, y: pn.y - 15, width: 34, height: 21, rx: 2, fill: '#3a3a3a', stroke: '#111' }, lp);
+  tao('rect', { x: pn.x - 14, y: pn.y - 12, width: 28, height: 15, fill: '#e0a1a1' }, lp);
+  tao('rect', { x: pn.x - 21, y: pn.y + 6, width: 42, height: 5, rx: 2, fill: '#555' }, lp);
+  chu(lp, pn.x, pn.y + 40, 'LAPTOP LẠ', { 'font-size': 10, fill: '#b3412e', 'font-weight': 800 });
+  chu(lp, pn.x + 22, pn.y - 40, '✕ Fa0/5 err-disabled', { 'font-size': 11, fill: '#b3412e', 'font-weight': 800 });
+  // CSDL
+  veDb(lopNut, NUT.KHO, 'Kho lưu tạm', 'db-kho');
+  veDb(lopNut, NUT.TRUSO, 'truso.db', 'db-truso');
+  veDb(lopNut, NUT.SAOLUU, 'Bản sao lưu', 'db-saoluu');
+  chu(lopNut, 450, 130, '', { id: 'nhan-hq-recv', 'font-size': 10, 'font-weight': 700 }, 'du-lieu');
+  chu(lopNut, 600, 360, '', { id: 'nhan-wan', 'font-size': 13, 'font-weight': 700 });
+  capNhatLop(true);
+}
+
+function capNhatLop(dauTien) {
+  document.querySelectorAll('#so-do [data-lop]').forEach(e => {
+    const tu = LOP_TU_BUOC[e.dataset.lop];
+    e.style.display = tu <= hien ? '' : 'none';
+    e.classList.remove('moi');
+    if (!dauTien && tu === hien) { void e.getBBox; requestAnimationFrame(() => e.classList.add('moi')); }
+  });
+  document.querySelectorAll('#so-do .hello').forEach(e => e.style.visibility = hien === 3 ? 'visible' : 'hidden');
+}
+
+function veSoDo() {
+  if (!st) return;
+  const wan = st.wan;
+  const dut = { 'hq-ch1': wan !== 'binh-thuong', 'ch1-ch2': wan === 'co-lap' };
+  SERIAL.forEach(s => {
+    const g = document.getElementById('ser-' + s.id);
+    if (!g) return;
+    const hong = !!dut[s.id];
+    g.querySelector('.cat').style.display = hong ? '' : 'none';
+    g.querySelectorAll('.den').forEach(d => d.setAttribute('fill', hong ? '#e74c3c' : '#2ecc71'));
+    g.querySelector('.day-ser').setAttribute('stroke-dasharray', hong ? '7 6' : '');
+    g.querySelector('.hello').style.display = hong ? 'none' : '';
+  });
+  const dc = st.doi_chieu;
+  const tt = dc ? dc.trang_thai : { PENDING: 0, SENT: 0, ACKED: 0 };
+  const dat = (id, s) => { const e = document.getElementById(id); if (e) e.textContent = s; };
+  dat('db-kho', `P ${tt.PENDING} · S ${tt.SENT} · A ${tt.ACKED}`);
+  dat('db-truso', `${st.tru_so.length} giao dịch`);
+  dat('db-saoluu', `${st.sao_luu.length} bản`);
+  const hr = document.getElementById('nhan-hq-recv');
+  if (hr) { hr.textContent = st.tru_so_chay ? 'hq_receiver: đang nhận' : 'hq_receiver: DỪNG'; hr.setAttribute('fill', st.tru_so_chay ? '#2e7d4f' : '#b3412e'); }
+  const khoa = !!st.cong_khoa, lp = document.getElementById('laptop-la'), d5 = document.getElementById('day-POS1-5');
+  if (lp) lp.style.display = khoa && hien >= 1 ? '' : 'none';
+  const pos5 = document.getElementById('nut-POS1-5');
+  if (pos5) pos5.style.opacity = khoa ? 0.15 : 1;
+  if (d5) { d5.setAttribute('stroke', khoa ? '#d0392b' : '#222'); d5.setAttribute('stroke-dasharray', khoa ? '5 4' : ''); }
+  const nw = document.getElementById('nhan-wan');
+  nw.textContent = { 'binh-thuong': '', 'dut-chinh': 'R-CH1 S0/0/0 shutdown → OSPF đi dự phòng qua R-CH2', 'co-lap': 'Cửa hàng 1 bị cô lập: S0/0/0 và S0/0/1 shutdown' }[wan];
+  nw.setAttribute('fill', wan === 'co-lap' ? '#b3412e' : '#a06a00');
+}
+
+// ---------- đường đi của gói trên sơ đồ ----------
+const TEN_NUT = { 'R-CH1 (G0/0)': 'R-CH1', 'R-CH1 (WAN)': 'R-CH1', 'R-HQ (G0/0)': 'R-HQ', 'R-CH2 (WAN)': 'R-CH2' };
+function duongRouter(a, b) {
+  const wan = st ? st.wan : 'binh-thuong';
+  if (a === b) return [a];
+  const chuan = {
+    'CH1-HQ': wan === 'binh-thuong' ? ['R-CH1', 'R-HQ'] : ['R-CH1', 'R-CH2', 'R-HQ'],
+    'CH1-CH2': ['R-CH1', 'R-CH2'],
+    'CH1-CH3': wan === 'binh-thuong' ? ['R-CH1', 'R-HQ', 'R-CH3'] : ['R-CH1', 'R-CH2', 'R-HQ', 'R-CH3'],
+    'CH2-HQ': ['R-CH2', 'R-HQ'], 'CH3-HQ': ['R-CH3', 'R-HQ'], 'CH2-CH3': ['R-CH2', 'R-HQ', 'R-CH3'],
+  };
+  const ka = a.replace('R-', ''), kb = b.replace('R-', '');
+  if (chuan[ka + '-' + kb]) return chuan[ka + '-' + kb].slice();
+  return chuan[kb + '-' + ka].slice().reverse();
+}
+function duongDayDu(nguon, dich) {
+  nguon = TEN_NUT[nguon] || nguon; dich = TEN_NUT[dich] || dich;
+  const A = NUT[nguon], B = NUT[dich];
+  const len = n => n.loai === 'router' ? [n.ten] : (n.loai === 'switch' ? [n.ten, 'R-' + n.dd] : [n.ten, 'SW-' + n.dd, 'R-' + n.dd]);
+  if (A.dd === B.dd && B.loai !== 'router') {
+    const p = A.loai === 'switch' ? [A.ten] : [A.ten, 'SW-' + A.dd];
+    if (B.loai !== 'switch') p.push(B.ten);
+    return p;
+  }
+  const tren = len(A), duoi = len(B).reverse();
+  return [...tren.slice(0, -1), ...duongRouter(tren[tren.length - 1], duoi[0]), ...duoi.slice(1)];
+}
+
+const cho = ms => new Promise(r => setTimeout(r, ms));
+function bongBong(ten, noi_dung, mau = '#1f2328', ms = 2200) {
+  const n = NUT[ten], g = tao('g', { class: 'bong' }, window.LOP_GOI);
+  const t = chu(g, n.x, n.y - 30, noi_dung, { 'font-size': 12, 'font-weight': 700, fill: '#fff' });
+  const w = noi_dung.length * 7 + 16;
+  g.insertBefore(tao('rect', { x: n.x - w / 2, y: n.y - 46, width: w, height: 22, rx: 11, fill: mau }), t);
+  setTimeout(() => g.remove(), ms);
+}
+async function chayGoi(duong, { mau = '#f2a900', nhan = '', chanTai = -1, lyDo = '', toc = 330 } = {}) {
+  const g = tao('g', { class: 'goi' }, window.LOP_GOI);
+  tao('rect', { x: -13, y: -9, width: 26, height: 18, rx: 3, fill: mau, stroke: '#333' }, g);
+  tao('polyline', { points: '-13,-9 0,2 13,-9', fill: 'none', stroke: '#333' }, g);
+  if (nhan !== '') chu(g, 0, -14, String(nhan), { 'font-size': 11, 'font-weight': 800, fill: '#1f2328' });
+  const toaDo = ten => NUT[ten];
+  let p = toaDo(duong[0]);
+  g.setAttribute('transform', `translate(${p.x},${p.y})`);
+  const cuoi = chanTai >= 0 ? chanTai : duong.length - 1;
+  for (let i = 0; i < cuoi; i++) {
+    const a = toaDo(duong[i]), b = toaDo(duong[i + 1]);
+    const t0 = performance.now(), T = toc * Math.max(0.6, Math.hypot(b.x - a.x, b.y - a.y) / 160);
+    await new Promise(xong => {
+      const buoc = now => {
+        const t = Math.min(1, (now - t0) / T);
+        g.setAttribute('transform', `translate(${a.x + (b.x - a.x) * t},${a.y + (b.y - a.y) * t})`);
+        t < 1 ? requestAnimationFrame(buoc) : xong();
+      };
+      requestAnimationFrame(buoc);
+    });
+  }
+  if (chanTai >= 0) {
+    const n = toaDo(duong[chanTai]);
+    const x = chu(window.LOP_GOI, n.x, n.y + 12, '✕', { 'font-size': 40, fill: '#d0392b', 'font-weight': 900 });
+    if (lyDo) bongBong(duong[chanTai], lyDo, '#b3412e', 2600);
+    await cho(1300);
+    x.remove();
+  } else await cho(150);
+  g.remove();
+}
+
+async function hoatAnhAcl(k, ts) {
+  if (hien < 1) { hien = 1; veBuoc(); }
+  const di = duongDayDu(ts.nguon, ts.dich);
+  const chan = k.buoc.find(b => !b.cho_qua);
+  if (chan && chan.huong === 'đi' && chan.chieu !== 'vty')
+    return chayGoi(di, { chanTai: di.indexOf(chan.router), lyDo: `${chan.acl}: ${chan.dong.split(' ').slice(0, 2).join(' ')}` });
+  if (chan && chan.chieu === 'vty')
+    return chayGoi(di, { chanTai: di.length - 1, lyDo: 'access-class 10: từ chối' });
+  if (!k.dat && k.ket_luan.includes('MẤT WAN')) {
+    const vi_tri = NUT[TEN_NUT[ts.nguon] || ts.nguon].dd === 'CH1' ? di.indexOf('R-CH1') : Math.max(0, di.indexOf('R-CH1') - 1);
+    return chayGoi(di, { chanTai: vi_tri, lyDo: 'Mất WAN' });
+  }
+  if (chan && chan.huong === 'về') {
+    await chayGoi(di);
+    const ve = di.slice().reverse();
+    return chayGoi(ve, { mau: '#7fc8a9', chanTai: ve.indexOf(chan.router), lyDo: 'gói trả lời bị chặn' });
+  }
+  if (!k.dat) return chayGoi(di, { chanTai: di.length - 1, lyDo: 'không có dịch vụ' });
+  await chayGoi(di);
+  await chayGoi(di.slice().reverse(), { mau: '#7fc8a9', nhan: 'trả lời' });
+}
+
+function duongDuLieu() { return ['KHO', 'SW-CH1', ...duongRouter('R-CH1', 'R-HQ'), 'SW-HQ', 'Server-TT', 'TRUSO']; }
+async function hoatAnhViec(ten, a, b) {
+  if (!a || !b || !a.doi_chieu || !b.doi_chieu) return;
+  if (hien < 8 && ['ban', 'gui', 'gui-lap', 'gui-bu', 'sao-luu', 'xoa-thu', 'khoi-phuc', 'doi-chieu', 'sao-luu-ch'].includes(ten)) { hien = Math.max(hien, 8); veBuoc(); }
+  const da = a.doi_chieu, db = b.doi_chieu;
+  if (ten === 'ban') {
+    const n = b.cua_hang.length - a.cua_hang.length;
+    await chayGoi(['POS1-1', 'SW-CH1', 'KHO'], { nhan: '+' + n, mau: '#f3c969' });
+    bongBong('KHO', `+${n} PENDING`, '#a06a00');
+  } else if (ten === 'gui') {
+    const thu = da.trang_thai.PENDING + da.trang_thai.SENT, ack = db.trang_thai.ACKED - da.trang_thai.ACKED;
+    if (!thu) return bongBong('KHO', 'không có gì để gửi', '#5d6470');
+    const p = duongDuLieu();
+    if (!b.tru_so_chay) return chayGoi(p, { nhan: thu, chanTai: p.indexOf('R-CH1'), lyDo: 'Mất WAN – giữ trong kho (SENT)' });
+    await chayGoi(p, { nhan: thu });
+    bongBong('TRUSO', `+${b.tru_so.length - a.tru_so.length} DA_LUU`, '#2e7d4f');
+    await chayGoi(p.slice().reverse(), { mau: '#7fc8a9', nhan: 'ACK ' + ack });
+    bongBong('KHO', `${ack} → ACKED`, '#2e7d4f');
+  } else if (ten === 'gui-lap') {
+    const p = duongDuLieu();
+    await chayGoi(p, { nhan: b.cua_hang.length });
+    bongBong('TRUSO', `DA_TON_TAI ×${b.cua_hang.length} – không ghi thêm`, '#2f5d8a', 2800);
+    await chayGoi(p.slice().reverse(), { mau: '#7fc8a9', nhan: 'ACK' });
+  } else if (ten === 'gui-bu') {
+    const n = b.tru_so.length - a.tru_so.length;
+    const p = duongDuLieu();
+    await chayGoi(p, { nhan: da.acked_thieu.length, mau: '#c39bd3' });
+    bongBong('TRUSO', `gửi bù: +${n}`, '#7a4fa0');
+  } else if (ten === 'sao-luu') {
+    await chayGoi(['TRUSO', 'Server-TT', 'SW-HQ', 'Server-Backup', 'SAOLUU'], { nhan: b.tru_so.length, mau: '#f3c969' });
+    bongBong('SAOLUU', 'đã sao lưu', '#a06a00');
+  } else if (ten === 'khoi-phuc') {
+    await chayGoi(['SAOLUU', 'Server-Backup', 'SW-HQ', 'Server-TT', 'TRUSO'], { nhan: b.tru_so.length, mau: '#f3c969' });
+    bongBong('TRUSO', `khôi phục: ${a.tru_so.length} → ${b.tru_so.length}`, '#a06a00');
+  } else if (ten === 'xoa-thu') {
+    bongBong('TRUSO', `XÓA THỬ: ${a.tru_so.length} → ${b.tru_so.length}`, '#b3412e', 2800);
+  } else if (ten === 'doi-chieu') {
+    bongBong('TRUSO', db.khop ? 'đối chiếu: KHỚP ✓' : (db.acked_thieu.length ? `thiếu ${db.acked_thieu.length} giao dịch` : `${db.chua_ve.length} chưa về`), db.khop ? '#2e7d4f' : '#b3412e', 2800);
+    bongBong('KHO', `${db.cua_hang} giao dịch`, '#5d6470', 2800);
+  } else if (ten === 'may-la') {
+    bongBong('SW-CH1', 'MAC lạ ở Fa0/5 → tắt cổng', '#b3412e', 3000);
+    if (b.wan !== 'co-lap') await chayGoi(['SW-CH1', 'R-CH1', ...duongRouter('R-CH1', 'R-HQ').slice(1), 'SW-HQ', 'Server-Backup'], { nhan: 'syslog', mau: '#f5b7b1' });
+  } else if (ten === 'mo-cong') {
+    bongBong('SW-CH1', 'Fa0/5 up lại', '#2e7d4f');
+  } else if (ten === 'sao-luu-ch') {
+    bongBong('KHO', 'đã sao lưu kho (TV3)', '#a06a00');
+  }
+}
+
+function veTongKet() {
+  const el = document.getElementById('tong-ket');
+  if (!el || !st || !st.doi_chieu) return;
+  const d = st.doi_chieu;
+  el.innerHTML = `<b class="nhan">Số liệu phiên demo này</b>Cửa hàng 1: ${d.cua_hang} giao dịch (ACKED ${d.trang_thai.ACKED}) · Trụ sở: ${d.tru_so} · Mã trùng: ${d.ma_trung.length} · ACKED mà trụ sở thiếu: ${d.acked_thieu.length} · Bản sao lưu: ${st.sao_luu.length} · ${d.khop ? '<b style="color:var(--ok)">Hai bên khớp</b>' : '<b style="color:var(--bad)">Chưa khớp</b>'}`;
+}
+
+function veDuLieu() {
+  const tt = st.doi_chieu;
+  const bch = document.getElementById('b-ch'), bts = document.getElementById('b-ts');
+  const tien = n => n.toLocaleString('vi-VN');
+  bch.innerHTML = st.cua_hang.slice().reverse().map(d => `<tr><td class="ma">${d.ma_gd}</td><td>${tien(d.so_tien)}</td><td><span class="tt ${d.trang_thai}">${d.trang_thai}</span></td></tr>`).join('');
+  bts.innerHTML = st.tru_so.slice().reverse().map(d => `<tr><td class="ma">${d.ma_gd}</td><td>${tien(d.so_tien)}</td></tr>`).join('');
+  document.getElementById('dem-ch').textContent = `(${st.cua_hang.length})`;
+  document.getElementById('dem-ts').textContent = `(${st.tru_so.length})`;
+  let c = '';
+  if (tt) {
+    c += tt.khop ? '<span class="chip ok">Khớp</span>' : '<span class="chip bad">Chưa khớp</span>';
+    c += `<span class="chip ${tt.ma_trung.length ? 'bad' : 'ok'}">Mã trùng: ${tt.ma_trung.length}</span>`;
+    if (tt.chua_ve.length) c += `<span class="chip">Chưa về trụ sở: ${tt.chua_ve.length}</span>`;
+    c += `<span class="chip ${tt.acked_thieu.length ? 'bad' : 'ok'}">ACKED mà trụ sở thiếu: ${tt.acked_thieu.length}</span>`;
+  }
+  document.getElementById('chip-dc').innerHTML = c;
+}
+
+let soDongLog = -1;
+function veNhatKy() {
+  const el = document.getElementById('nhat-ky');
+  if (st.nhat_ky.length === soDongLog && el.childElementCount) return;
+  soDongLog = st.nhat_ky.length;
+  const cuoi = el.scrollTop + el.clientHeight >= el.scrollHeight - 30;
+  el.innerHTML = '';
+  st.nhat_ky.forEach(d => {
+    const dong = document.createElement('div');
+    const g = document.createElement('span'); g.className = 'g'; g.textContent = d.gio + ' ';
+    const n = document.createElement('span'); n.className = d.nguon.split(' ')[0]; n.textContent = '[' + d.nguon + '] ';
+    dong.append(g, n, document.createTextNode(d.text));
+    el.appendChild(dong);
+  });
+  if (cuoi) el.scrollTop = el.scrollHeight;
+}
+
+let soSyslog = -1;
+function veSyslog() {
+  const el = document.getElementById('syslog');
+  if (!st.syslog || st.syslog.length === soSyslog) return;
+  const moi = soSyslog >= 0 && st.syslog.length > soSyslog;
+  soSyslog = st.syslog.length;
+  el.innerHTML = '';
+  if (!st.syslog.length) { el.textContent = 'Chưa có sự kiện. Ở bước 9–11 đổi trạng thái WAN, hoặc bước 6 cắm laptop lạ.'; return; }
+  st.syslog.slice().reverse().forEach(d => {
+    const dong = document.createElement('div');
+    const g = document.createElement('span'); g.className = 'g'; g.textContent = d.gio + ' ';
+    const n = document.createElement('span'); n.className = d.toi ? 'TRU' : 'LOI'; n.textContent = `[${d.thiet_bi} ${d.ip}] `;
+    dong.append(g, n, document.createTextNode(d.text + (d.toi ? '' : '   ✕ không tới được Server-Backup (mất đường) – chỉ lưu trên R-CH1')));
+    if (!d.toi) dong.style.opacity = 0.6;
+    el.appendChild(dong);
+  });
+  if (moi && hien >= 7 && NUT['Server-Backup']) bongBong('Server-Backup', 'SYSLOG: sự kiện mới', '#2f5d8a');
+}
+
+async function capNhat() {
+  try {
+    const r = await fetch('/api/trang-thai');
+    st = await r.json();
+  } catch (e) { return; }
+  const pw = document.getElementById('pill-wan'), pt = document.getElementById('pill-ts');
+  pw.textContent = { 'binh-thuong': 'WAN CH1: bình thường', 'dut-chinh': 'WAN CH1: đi dự phòng', 'co-lap': 'WAN CH1: MẤT' }[st.wan];
+  pw.className = 'pill ' + { 'binh-thuong': 'ok', 'dut-chinh': 'warn', 'co-lap': 'bad' }[st.wan];
+  pt.textContent = st.tru_so_chay ? 'Trụ sở: đang nhận' : 'Trụ sở: không nhận';
+  pt.className = 'pill ' + (st.tru_so_chay ? 'ok' : 'bad');
+  if (!st.co_phien) document.getElementById('loi').textContent = 'Chưa có phiên demo – bấm “Làm mới phiên”.';
+  const sn = document.getElementById('acl-nguon');
+  if (!sn.options.length) {
+    const nguon = ['POS1-1', 'POS2-1', 'POS3-1', 'PC-Admin', 'SW-CH1', 'R-CH1 (WAN)', 'R-CH2 (WAN)'];
+    nguon.forEach(m => sn.add(new Option(m, m)));
+    st.may.forEach(m => document.getElementById('acl-dich').add(new Option(m, m)));
+    datAcl(['POS1-1', 'Server-TT', 'web']);
+  }
+  veSoDo(); veDuLieu(); veNhatKy(); veSyslog(); veTongKet();
+}
+
+const mBuoc = location.hash.match(/buoc=(\d+)/);
+if (mBuoc) hien = Math.min(BUOC.length - 1, +mBuoc[1]);
+dungSoDo();
+veBuoc();
+capNhat();
+setInterval(capNhat, 1500);
+</script>
+</body>
+</html>

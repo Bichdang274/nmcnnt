@@ -35,3 +35,46 @@ copy running-config tftp:
 ! show access-lists        -> dòng nào đang khớp (match)
 ! show ip interface g0/0   -> "Inbound/Outgoing access list is ..."
 ! Sửa một dòng: ip access-list extended CH1_LAN_IN / no <số thứ tự> / <số thứ tự> permit ...
+
+! ===== KIỂM THỬ PHẦN BẢO MẬT BỔ SUNG (TV2) =====
+! Mở Nhom02_v2.pkt lần đầu: trên 8 thiết bị chạy  conf t  ->  crypto key generate rsa general-keys modulus 1024
+!   ->  ip ssh version 2  ->  end  ->  write memory   (khóa RSA không ghi sẵn được trong file)
+
+! ---- SEC-3: SSH thay Telnet ----
+! PC-Admin > Command Prompt:
+ssh -l admin 192.168.10.2         ! Password: cisco -> vào SW-CH1 (enable: class)
+ssh -l admin 10.0.1.2             ! vào R-CH1
+telnet 192.168.10.2               ! -> bị từ chối: % Connection refused by remote host (chỉ nhận SSH)
+! POS1-1 > Command Prompt:
+ssh -l admin 192.168.10.2         ! -> bị từ chối (access-class 10: không phải PC-Admin)
+! R-CH1#
+show ip ssh                       ! SSH Enabled - version 2.0
+show ssh                          ! phiên SSH đang mở từ 192.168.0.20
+
+! ---- SEC-4: Port security ----
+! SW-CH1#
+show port-security                ! Fa0/1-5: MaxSecureAddr 1, CurrentAddr 1, Action Shutdown
+show port-security address        ! MAC của POS1-1 ... POS1-5, kiểu SecureSticky
+! Giả lập cắm máy lạ: End Devices > Laptop, đặt tên Laptop-La, IP 192.168.10.50/24, gateway 192.168.10.1
+! Xóa cáp POS1-5 <-> SW-CH1 Fa0/5, nối Laptop-La FastEthernet0 -> SW-CH1 Fa0/5
+! Laptop-La > Command Prompt:
+ping 192.168.10.1                 ! -> thất bại; đèn cổng Fa0/5 chuyển đỏ
+! SW-CH1#
+show port-security interface fa0/5   ! Port Status: Secure-shutdown, Security Violation Count: 1
+show interfaces status               ! Fa0/5: err-disabled
+! Khôi phục: xóa Laptop-La, nối lại POS1-5 vào Fa0/5, rồi
+!   interface fa0/5  ->  shutdown  ->  no shutdown
+
+! ---- LOG-1: NTP + Syslog ----
+! Server-Backup > Services > NTP: On (đã bật sẵn trong file), SYSLOG: On
+! R-CH1#, R-HQ#, SW-CH1#
+show ntp status                   ! Clock is synchronized ... reference is 192.168.0.11 (chờ vài chục giây)
+show clock                        ! các thiết bị cùng một giờ
+! R-CH1: conf t -> int s0/0/0 -> shutdown        (WAN-1a)
+! Server-Backup > Services > SYSLOG: có dòng từ R-CH1 (đi đường dự phòng) và R-HQ:
+!   %LINK-5-CHANGED: Interface Serial0/0/0, changed state to administratively down
+!   %OSPF-5-ADJCHG: Process 1, Nbr 2.2.2.2 on Serial0/0/0 from FULL to DOWN
+! R-CH1: int s0/0/1 -> shutdown                   (WAN-1b, cửa hàng bị cô lập)
+!   R-CH1 không gửi được Syslog (mất đường); R-HQ và R-CH2 vẫn ghi sự kiện đứt kết nối với 2.2.2.2
+! Khôi phục: no shutdown cả hai cổng -> SYSLOG có dòng "changed state to up", "from LOADING to FULL"
+! Ghi giờ trong SYSLOG vào Bảng 3.3 thay cho ghi tay show clock.
