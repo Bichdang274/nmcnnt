@@ -1,0 +1,25 @@
+! =====================================================================
+! KIEM TRA TELNET VA PHAN QUYEN QUAN TRI (y 34)
+! Can PC co IP (file v2 cua TV2)
+! =====================================================================
+!
+! ---------- Tu PC-Admin (192.168.0.20) > Desktop > Command Prompt ----------
+!   telnet 192.168.10.1
+!   -> hien banner, Password: cisco
+!   R-CH1> enable
+!   -> Password: class
+!   R-CH1#            (vao duoc che do cau hinh)
+!
+! Lap lai voi 8 dia chi:
+!   Router: 192.168.0.1  192.168.10.1  192.168.20.1  192.168.30.1
+!   Switch: 192.168.0.2  192.168.10.2  192.168.20.2  192.168.30.2
+!
+! ---------- Tu POS1-1 ----------
+!   telnet 192.168.10.1
+!   -> bi tu choi (access-class 10 chi cho phep 192.168.0.20)
+!
+! ---------- Tren router ----------
+show access-lists 10
+!   -> bo dem match tang sau moi lan PC-Admin dang nhap
+show running-config | include password
+!   -> mat khau hien dang "password 7 ...", khong con chu ro
