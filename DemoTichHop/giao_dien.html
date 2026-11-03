@@ -76,6 +76,7 @@
   <h1>Demo tích hợp Nhóm 02 · Mạng (Packet Tracer) + Dữ liệu (Python/SQLite) · TV1 · TV2 · TV3</h1>
   <span id="pill-wan" class="pill">WAN: ?</span>
   <span id="pill-ts" class="pill">Trụ sở: ?</span>
+  <span id="pill-lich" class="pill">Lịch sao lưu: tắt</span>
   <button onclick="viec('lam-moi')" title="Xóa dữ liệu phiên, chạy lại hq_receiver">Làm mới phiên</button>
 </header>
 
@@ -119,6 +120,8 @@
         <div><b>CSDL trụ sở</b> <span id="dem-ts" style="color:var(--muted);font-size:13px"></span>
           <div class="cuon"><table><thead><tr><th>Mã giao dịch</th><th>Tiền</th></tr></thead><tbody id="b-ts"></tbody></table></div></div>
       </div>
+      <div style="margin-top:10px"><b>Bản sao lưu CSDL trụ sở</b> <span style="color:var(--muted);font-size:13px">(Server-Backup, giữ 7 bản mới nhất)</span>
+        <div id="ds-sao-luu" style="font: 12px/1.6 Menlo, Consolas, monospace; color: #444"></div></div>
     </div>
 
     <div class="card">
@@ -343,13 +346,16 @@ logging 192.168.0.11                   ! gửi nhật ký về Server-Backup</pr
     pt: ['(Tùy chọn) R-CH2: <code>copy running-config tftp:</code> → <code>192.168.0.11</code> → Server-Backup → Services → TFTP thấy file: sao lưu cấu hình đi qua được ACL.'],
     nut: [{ nhan: '1. Sao lưu CSDL trụ sở', viec: 'sao-luu' }, { nhan: '2. Xóa thử', viec: 'xoa-thu' },
           { nhan: '3. Đối chiếu', viec: 'doi-chieu' }, { nhan: '4. Khôi phục', viec: 'khoi-phuc' },
-          { nhan: '5. Đối chiếu', viec: 'doi-chieu' }, { nhan: 'Sao lưu kho cửa hàng (TV3)', viec: 'sao-luu-ch' }],
+          { nhan: '5. Đối chiếu', viec: 'doi-chieu' }, { nhan: 'Sao lưu kho cửa hàng (TV3)', viec: 'sao-luu-ch' },
+          { nhan: '⏱ Bật lịch sao lưu tự động (mỗi 30 giây)', viec: 'lich', ts: { bat: true, chu_ky: 30 } },
+          { nhan: 'Tắt lịch', viec: 'lich', ts: { bat: false } }],
     gt: `<table class="gt-bang"><tr><th>Đối tượng</th><th>Tần suất</th><th>Giữ</th><th>Ai</th></tr>
       <tr><td>CSDL trụ sở</td><td>Cuối ngày + trước đồng bộ lớn</td><td>7 bản</td><td>TV2</td></tr>
       <tr><td>Kho cửa hàng</td><td>Cuối ca</td><td>Đến khi mọi GD ACKED</td><td>TV3</td></tr>
       <tr><td>Cấu hình router/switch</td><td>Sau mỗi thay đổi (TFTP)</td><td>Bản mới + bản trước</td><td>TV1</td></tr></table>
-      Sao lưu bằng <b>API backup của SQLite</b> (bản chụp nhất quán, an toàn khi trụ sở đang nhận) và kiểm tra <code>PRAGMA integrity_check</code>.`,
-    noi: 'Sao lưu CSDL trụ sở có kiểm tra toàn vẹn, giữ 7 bản. Giả lập sự cố xóa sạch, trụ sở còn 0. Khôi phục: số giao dịch trở về như lúc sao lưu.',
+      Sao lưu bằng <b>API backup của SQLite</b> (bản chụp nhất quán, an toàn khi trụ sở đang nhận) và kiểm tra <code>PRAGMA integrity_check</code>.<br>
+      <b>Chạy theo lịch:</b> nút ⏱ bật lịch tự động – cứ 30 giây (thay cho "cuối mỗi ngày") máy chủ tự chạy <code>sao_luu_tru_so.py sao-luu</code>, giữ 7 bản mới nhất, bản cũ hơn tự xóa. Thực tế cài bằng cron trên Linux: <code>0 23 * * * python3 Script/sao_luu_tru_so.py sao-luu</code> (23:00 hằng ngày) hoặc Task Scheduler trên Windows.`,
+    noi: 'Sao lưu CSDL trụ sở có kiểm tra toàn vẹn, giữ 7 bản. Giả lập sự cố xóa sạch, trụ sở còn 0. Khôi phục: số giao dịch trở về như lúc sao lưu. Bật lịch tự động: máy chủ tự sao lưu đúng chu kỳ, không cần ai bấm.',
     kv: 'Trụ sở 12 → 0 → 12. Đối chiếu sau khôi phục: khớp.' },
 
   { ai: 'TV2', ten: '14. Khôi phục từ bản cũ và gửi bù',
@@ -916,6 +922,17 @@ async function capNhat() {
   pw.className = 'pill ' + { 'binh-thuong': 'ok', 'dut-chinh': 'warn', 'co-lap': 'bad' }[st.wan];
   pt.textContent = st.tru_so_chay ? 'Trụ sở: đang nhận' : 'Trụ sở: không nhận';
   pt.className = 'pill ' + (st.tru_so_chay ? 'ok' : 'bad');
+  const pl = document.getElementById('pill-lich');
+  pl.textContent = st.lich && st.lich.bat ? `⏱ Lịch sao lưu: bật · lần tới ${st.lich.con_lai ?? '?'}s · đã chạy ${st.lich.so_lan}` : 'Lịch sao lưu: tắt';
+  pl.className = 'pill ' + (st.lich && st.lich.bat ? 'ok' : '');
+  const ds = document.getElementById('ds-sao-luu');
+  ds.innerHTML = st.sao_luu.length ? st.sao_luu.slice().reverse().map(b => `${b.ten} · ${b.so} giao dịch`).join('<br>') : 'Chưa có bản sao lưu.';
+  const banMoi = st.sao_luu.length ? st.sao_luu[st.sao_luu.length - 1].ten : '';
+  if (typeof banCuoi !== 'undefined' && banCuoi && banMoi && banMoi !== banCuoi && !dangChay && hien >= 8 && st.lich && st.lich.bat) {
+    chayGoi(['TRUSO', 'Server-TT', 'SW-HQ', 'Server-Backup', 'SAOLUU'], { nhan: '⏱', mau: '#f3c969' });
+    bongBong('SAOLUU', 'lịch tự động: đã sao lưu', '#a06a00');
+  }
+  window.banCuoi = banMoi;
   if (!st.co_phien) document.getElementById('loi').textContent = 'Chưa có phiên demo – bấm “Làm mới phiên”.';
   const sn = document.getElementById('acl-nguon');
   if (!sn.options.length) {

@@ -207,6 +207,8 @@ logging 192.168.0.11
   hàng**, nên gửi bù được. Mức mất thực tế bằng 0 nếu kho cửa hàng còn.
 - **Khôi phục:** chọn bản sao lưu → chép đè bằng API backup của SQLite (an toàn cả khi trụ sở đang nhận) → đối chiếu →
   thiếu thì gửi bù.
+- **Chạy theo lịch:** thực tế dùng cron `0 23 * * * python3 Script/sao_luu_tru_so.py sao-luu` (23:00 hằng ngày) hoặc
+  Task Scheduler. Trang demo có công tắc ⏱ bật lịch tự động (30 giây thay cho 1 ngày), script tự giữ 7 bản.
 
 ### 4.8. CSDL trụ sở, chống trùng và đối chiếu
 
@@ -292,7 +294,7 @@ Lệnh chi tiết của từng ca nằm trong `Script_TV2/KiemThu_TV2.txt`.
 | 8 | TV3 | Bán hàng, gửi về trụ sở |
 | 9–10 | TV1 + TV3 | Đứt đường chính, cửa hàng bị cô lập (KT2); Syslog tự ghi giờ |
 | 11–12 | TV3 | Gửi lại (KT3), gửi lặp (KT3-b) |
-| 13–14 | **TV2** | **Sao lưu – xóa – khôi phục (BK-1), khôi phục bản cũ và gửi bù** |
+| 13–14 | **TV2** | **Sao lưu – xóa – khôi phục (BK-1), lịch sao lưu tự động, khôi phục bản cũ và gửi bù** |
 
 Cả nhóm **dùng chung một phiên**. Lúc tập chỉ nên để một người bấm.
 

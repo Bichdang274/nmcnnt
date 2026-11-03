@@ -38,6 +38,8 @@ import doi_chieu as DC  # noqa: E402
 KHOA = threading.Lock()
 NHAT_KY = deque(maxlen=400)
 TRANG_THAI = {"wan": "binh-thuong", "cong_khoa": False}   # wan: binh-thuong | dut-chinh | co-lap
+# Lịch sao lưu tự động CSDL trụ sở (Bảng 2.6: "cuối ngày, giữ 7 bản"); trong demo rút ngắn 1 ngày thành vài chục giây
+LICH = {"bat": False, "chu_ky": 60, "tiep_theo": None, "so_lan": 0}
 SYSLOG = deque(maxlen=200)   # nhật ký Server-Backup nhận được (mô phỏng theo cấu hình logging 192.168.0.11)
 
 
@@ -130,6 +132,7 @@ def lam_moi():
     TRANG_THAI["cong_khoa"] = False
     ghi("DEMO", "Phiên demo mới: dữ liệu trống, script TV3 + TV2 đã chép vào PhienDemo/Script")
     TRANG_THAI["wan"] = "binh-thuong"
+    LICH.update(bat=False, tiep_theo=None, so_lan=0)
     TRU_SO.bat()
     chay("CUA HANG", "-c", "from Script.store_agent import khoi_tao; khoi_tao()",
          lenh_hien="-c \"from Script.store_agent import khoi_tao; khoi_tao()\"")
@@ -431,6 +434,8 @@ def trang_thai():
         "cua_hang": doc_bang(db_ch, "SELECT ma_gd, so_tien, trang_thai FROM giao_dich ORDER BY ma_gd"),
         "tru_so": doc_bang(db_ts, "SELECT ma_gd, so_tien FROM giao_dich ORDER BY ma_gd"),
         "sao_luu": sao_luu,
+        "lich": {"bat": LICH["bat"], "chu_ky": LICH["chu_ky"], "so_lan": LICH["so_lan"],
+                 "con_lai": max(0, round(LICH["tiep_theo"] - time.time())) if LICH["bat"] and LICH["tiep_theo"] else None},
         "doi_chieu": DC.tinh_doi_chieu(db_ch, db_ts) if PHIEN.exists() else None,
         "nhat_ky": list(NHAT_KY)[-160:],
         "syslog": list(SYSLOG)[-60:],
@@ -463,6 +468,15 @@ def thuc_hien(viec, tham_so):
             TRU_SO.tat()
         else:
             TRU_SO.bat()
+    elif viec == "lich":
+        if tham_so.get("bat"):
+            LICH["chu_ky"] = max(20, min(int(tham_so.get("chu_ky", 60)), 600))
+            LICH.update(bat=True, tiep_theo=time.time() + LICH["chu_ky"])
+            ghi("LICH", f"Bật lịch sao lưu tự động CSDL trụ sở: mỗi {LICH['chu_ky']} giây (mô phỏng \"cuối mỗi ngày\"), "
+                        "giữ 7 bản – thực tế dùng cron / Task Scheduler")
+        else:
+            LICH.update(bat=False, tiep_theo=None)
+            ghi("LICH", "Tắt lịch sao lưu tự động")
     elif viec == "may-la":
         cam_may_la()
     elif viec == "mo-cong":
@@ -534,7 +548,22 @@ class XuLy(BaseHTTPRequestHandler):
             self.tra(400, {"loi": str(loi)})
 
 
+def chay_lich():
+    """Luồng nền: đến giờ thì chạy đúng script sao lưu của TV2, như cron chạy hằng ngày."""
+    while True:
+        time.sleep(1)
+        if not (LICH["bat"] and LICH["tiep_theo"] and time.time() >= LICH["tiep_theo"]):
+            continue
+        with KHOA:
+            if LICH["bat"] and PHIEN.exists() and (PHIEN / "DuLieu" / "truso.db").is_file():
+                LICH["so_lan"] += 1
+                chay("LICH SAO LUU", "Script/sao_luu_tru_so.py", "sao-luu",
+                     lenh_hien=f"Script/sao_luu_tru_so.py sao-luu   (lịch tự động, lần {LICH['so_lan']})")
+            LICH["tiep_theo"] = time.time() + LICH["chu_ky"]
+
+
 def main():
+    threading.Thread(target=chay_lich, daemon=True).start()
     may_chu = ThreadingHTTPServer((DIA_CHI_NGHE, CONG_WEB), XuLy)
     dia_chi = f"http://localhost:{CONG_WEB}"
     print("DEMO TICH HOP NHOM 02 dang chay:", dia_chi)

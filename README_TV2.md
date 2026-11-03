@@ -1,6 +1,7 @@
 # Phần thực hiện của TV2 – Lê Minh Đạo
 
 > Đọc nhanh toàn bộ bài và phần TV2: [`TongQuan_Nhom02_PhanTV2.md`](TongQuan_Nhom02_PhanTV2.md).
+> Tóm tắt việc TV2 đã làm (để báo nhóm): [`TV2_DaLam_BaoNhom.md`](TV2_DaLam_BaoNhom.md).
 > Demo tích hợp cả nhóm: thư mục [`DemoTichHop/`](DemoTichHop/README.md).
 
 ## 1. Nhiệm vụ

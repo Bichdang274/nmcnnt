@@ -17,7 +17,7 @@ Một trang web dẫn cả nhóm demo **xuyên suốt** phần của TV1, TV2, T
 | 10 | TV1 + TV3 | Cửa hàng 1 bị cô lập (KT2): vẫn bán, giao dịch giữ trong kho |
 | 11 | TV3 | Khôi phục WAN, gửi lại (KT3) |
 | 12 | TV3 | Cố ý gửi lặp (KT3-b): không ghi trùng |
-| 13 | TV2 | Sao lưu – xóa thử – khôi phục CSDL trụ sở (BK-1) |
+| 13 | TV2 | Sao lưu – xóa thử – khôi phục CSDL trụ sở (BK-1), lịch sao lưu tự động (⏱, giữ 7 bản) |
 | 14 | TV2 | Khôi phục từ bản cũ, đối chiếu, gửi bù |
 | 15 | Cả nhóm | Tổng kết với số liệu của phiên |
 
