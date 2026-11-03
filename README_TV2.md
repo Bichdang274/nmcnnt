@@ -44,8 +44,8 @@ Nhận từ TV1: `Nhom02_TV1.pkt` (topology, WAN, OSPF, IP máy trạm, dịch v
 - NTP + Syslog: 8 thiết bị lấy giờ từ Server-Backup, gửi nhật ký sự cố về đó. ACL không phải sửa (UDP tới .11
   đã cho phép).
 
-**Mở `Nhom02_v2.pkt` lần đầu:** trên 8 thiết bị chạy `crypto key generate rsa general-keys modulus 1024` rồi
-`ip ssh version 2` (Packet Tracer không lưu sẵn khóa RSA trong file).
+**Khóa SSH đã có sẵn:** `Nhom02_v2.pkt` đã được tạo khóa RSA 1024 bit trên cả 8 thiết bị (lưu bằng Packet Tracer
+9.0.1), mở file là SSH dùng được ngay. Nếu dựng lại từ file TV1 thì mới cần chạy `crypto key generate rsa`.
 
 ## 5. Cách chạy kiểm thử
 1. Mở `Nhom02_v2.pkt`, chờ OSPF hội tụ (hoặc Fast Forward Time), tạo khóa RSA như trên.

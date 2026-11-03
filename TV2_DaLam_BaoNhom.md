@@ -18,9 +18,8 @@ Demo trực tuyến: https://fimbrillate-uncraven-antonietta.ngrok-free.dev (l�
 - TV3 (Đức) **đừng thêm hoặc đổi máy vào switch** trong Packet Tracer, vì port security sẽ khóa cổng đó.
 - Bản v1 của TV1 (Bích) giữ nguyên.
 
-**Mở `Nhom02_v2.pkt` lần đầu phải làm thêm 1 bước:** trên 8 thiết bị chạy
-`crypto key generate rsa general-keys modulus 1024`, rồi `ip ssh version 2`, rồi `write memory`.
-Packet Tracer không lưu khóa RSA trong file.
+**Khóa SSH đã tạo sẵn** trên cả 8 thiết bị trong `Nhom02_v2.pkt` (bản đẩy lên ngày 03/11, lưu bằng Packet Tracer
+9.0.1). Tải về mở là SSH dùng được ngay, không phải làm thêm gì.
 
 ## 2. Phần việc TV2 theo phân công (đã xong)
 
