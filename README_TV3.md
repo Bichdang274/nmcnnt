@@ -52,7 +52,7 @@ python Script/kiem_tra_trung.py
 - Trụ sở dùng mã giao dịch làm khóa chính.
 - Nhận lại cùng mã và cùng nội dung: không ghi thêm, vẫn trả ACK.
 - Cùng mã nhưng nội dung khác: trả lỗi 409.
-- Hiện tại người dùng chủ động chạy lệnh gửi lại, chưa có gửi tự động.
+- Ban đầu chương trình gửi giao dịch bằng lệnh thủ công. Ngày 08/11/2026, TV3 bổ sung chương trình auto_sync.py để tự động kiểm tra và gửi lại các giao dịch chưa được xác nhận.
 
 ## 6. Bộ kết quả chính ngày 01/11/2026
 
@@ -128,4 +128,62 @@ Kết quả ngày 26/10/2026:
 - Log: `MinhChung/kiem_tra_phuc_hoi.txt`.
 
 Chưa kiểm thử tạo giao dịch mới bằng chương trình cửa hàng trên database đã phục hồi.
+
+
+## 10. Cải tiến chức năng tự động đồng bộ (08/11/2026)
+
+### 10.1. Mục đích
+
+Trước đây, việc gửi lại giao dịch cần thực hiện bằng lệnh thủ công. Em bổ sung chức năng tự động đồng bộ để cửa hàng chủ động gửi lại giao dịch khi dịch vụ trụ sở hoạt động trở lại.
+
+### 10.2. Các file bổ sung
+
+- `Script/auto_sync.py`: kiểm tra và thử gửi lại giao dịch định kỳ.
+- `chay_auto_sync.ps1`: khởi chạy chương trình và lưu log.
+- `MinhChung/TuDong/`: lưu ảnh minh chứng kiểm thử.
+
+### 10.3. Cách chạy
+
+Mở Terminal tại thư mục gốc dự án.
+
+Chạy chương trình đồng bộ:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\chay_auto_sync.ps1
+```
+
+Chạy dịch vụ nhận tại trụ sở ở Terminal khác:
+
+```powershell
+python Script/hq_receiver.py
+```
+
+Chương trình đồng bộ sẽ thử gửi các giao dịch PENDING hoặc SENT. Sau mỗi lượt xử lý, chương trình chờ 10 giây trước khi kiểm tra tiếp.
+
+Nếu dịch vụ trụ sở không hoạt động, giao dịch vẫn được giữ trong SQLite. Khi dịch vụ phục hồi, chương trình tự động thử gửi lại.
+
+### 10.4. Kết quả kiểm thử
+
+Ngày 08/11/2026, em thực hiện kiểm thử trên bản sao dự án với 5 giao dịch mới.
+
+- Khi trụ sở chưa hoạt động: 5 giao dịch được giữ lại để gửi tiếp.
+- Khi trụ sở hoạt động lại: 5 giao dịch được gửi thành công.
+- Cửa hàng: 5 giao dịch, tất cả ACKED.
+- Trụ sở: 5 giao dịch.
+- Đối chiếu 5 trường dữ liệu: khớp hoàn toàn.
+- Chương trình tiếp tục kiểm tra và không còn giao dịch chờ gửi.
+
+### 10.5. Minh chứng
+
+- `MinhChung/TuDong/TV3_TuDong_DoiChieu_5GD.png`
+- `MinhChung/TuDong/TV3_TuDong_TruSo_Nhan5GD.png`
+
+### 10.6. Phạm vi kiểm thử
+
+Kiểm thử tự động đồng bộ được thực hiện bằng HTTP trên localhost, mô phỏng tình huống dịch vụ nhận ngừng hoạt động và phục hồi.
+
+Chưa kiểm thử chức năng tự động mới trên đường truyền WAN thực tế hoặc tích hợp trực tiếp với hệ thống của TV2.
+
+Bộ 15 giao dịch và các minh chứng KT2, KT3, KT3-b trước đó được giữ nguyên.
+
 
