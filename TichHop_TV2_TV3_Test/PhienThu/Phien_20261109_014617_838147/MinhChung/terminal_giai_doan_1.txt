@@ -1,0 +1,104 @@
+ACTUAL COMMANDS
+[
+  {
+    "time": "2026-11-09T01:46:17+07:00",
+    "command": "phien-moi"
+  },
+  {
+    "time": "2026-11-09T01:46:18+07:00",
+    "command": "tru-so-bat"
+  },
+  {
+    "time": "2026-11-09T01:46:19+07:00",
+    "command": "doi-chieu"
+  },
+  {
+    "time": "2026-11-09T01:46:19+07:00",
+    "command": "tru-so-tat"
+  },
+  {
+    "time": "2026-11-09T01:46:19+07:00",
+    "command": "tao-5"
+  },
+  {
+    "time": "2026-11-09T01:46:20+07:00",
+    "command": "dong-bo-bat"
+  },
+  {
+    "time": "2026-11-09T01:46:31+07:00",
+    "command": "tru-so-bat"
+  },
+  {
+    "time": "2026-11-09T01:46:41+07:00",
+    "command": "dong-bo-tat"
+  },
+  {
+    "time": "2026-11-09T01:46:41+07:00",
+    "command": "doi-chieu"
+  },
+  {
+    "time": "2026-11-09T01:46:41+07:00",
+    "command": "trang-thai"
+  },
+  {
+    "time": "2026-11-09T01:46:42+07:00",
+    "command": "thoat"
+  }
+]
+
+CONTROLLER OUTPUT
+MOI TRUONG THU TICH HOP TV2 + TV3 - CHUA CO KET QUA KIEM THU
+
+Lenh trong bo dieu khien (khong phai lenh PowerShell):
+  phien-moi                 Tao phien RIENG; giu nguyen moi phien cu
+  tru-so-bat | tru-so-tat    Bat/tat receiver cua phien, localhost:18000
+  tao-5                     Tao 5 GD MAU trong phien hien tai
+  dong-bo-bat | dong-bo-tat  Bat/tat auto_sync.py cua TV3
+  gui-mot-luot              Gui thu cong; auto sync phai tat
+  gui-lap                   KT3-b; auto sync phai tat
+  doi-chieu                 0/0 khong duoc coi la DAT; can auto sync tat
+  sao-luu-tru-so            Tao ban sao HQ, giu tat ca ban
+  danh-sach-ban-sao         In ten file de chon ban phuc hoi
+  phuc-hoi TEN_FILE.db      Dung ca 2 tien trinh; sao luu hien trang; phuc hoi
+  gui-bu                    Gui ACKED ma HQ thieu; doi chieu lai
+  xuat-csv | sao-luu-kho    Cong cu TV3, chi tren du lieu phien
+  phuc-hoi-kho TEN_FILE.db  Thu phuc hoi kho vao file rieng, khong ghi de kho
+  trang-thai | tro-giup | thoat
+Du lieu 15 GD goc KHONG duoc sao chep vao day. Schema TV3 la lua chon TAM THOI.
+
+tich-hop> Da khoi tao kho luu giao dich cua cua hang 01.
+Vi tri: THU_MUC_BAN_GIAO\PhienThu\Phien_20261109_014617_838147\DuLieu\cuahang01.db
+Phien moi: THU_MUC_BAN_GIAO\PhienThu\Phien_20261109_014617_838147
+Chua tao giao dich; tru so va auto sync van TAT. Phien cu duoc giu nguyen.
+tich-hop> Tru so da bat; PID 11408
+tich-hop> DOI CHIEU DU LIEU: 2026-11-09T01:46:19
+Cua hang 01: 0 giao dich (PENDING 0, SENT 0, ACKED 0)
+Tru so: 0 giao dich
+Ma giao dich trung tai tru so: 0 (phai = 0)
+Chua ve tru so (PENDING/SENT): 0
+Da ACKED nhung tru so thieu: 0 (phai = 0)
+Lech noi dung: 0
+CHUA DAT: Kho cua hang rong; 0/0 khong chung minh dong bo thanh cong.
+CHUA HOAN TAT: Lenh chua dat (ma thoat 2). Xem log; khong coi la thanh cong.
+tich-hop> Tru so da dung (chi tien trinh do demo tao).
+tich-hop> Da luu: CH01-POS01-20261109-000001 | 50000 VND | PENDING
+Da luu: CH01-POS01-20261109-000002 | 75000 VND | PENDING
+Da luu: CH01-POS01-20261109-000003 | 120000 VND | PENDING
+Da luu: CH01-POS01-20261109-000004 | 35000 VND | PENDING
+Da luu: CH01-POS01-20261109-000005 | 200000 VND | PENDING
+tich-hop> Tu dong dong bo da bat; PID 30240
+tich-hop> Tru so da bat; PID 26876
+tich-hop> Tu dong dong bo da dung (chi tien trinh do demo tao).
+tich-hop> DOI CHIEU DU LIEU: 2026-11-09T01:46:41
+Cua hang 01: 5 giao dich (PENDING 0, SENT 0, ACKED 5)
+Tru so: 5 giao dich
+Ma giao dich trung tai tru so: 0 (phai = 0)
+Chua ve tru so (PENDING/SENT): 0
+Da ACKED nhung tru so thieu: 0 (phai = 0)
+Lech noi dung: 0
+KET QUA: Hai ben khop, khong mat, khong trung
+tich-hop> Phien: THU_MUC_BAN_GIAO\PhienThu\Phien_20261109_014617_838147
+Tru so: DANG CHAY
+Auto sync: TAT
+Log: THU_MUC_BAN_GIAO\PhienThu\Phien_20261109_014617_838147\MinhChung
+tich-hop> Tru so da dung (chi tien trinh do demo tao).

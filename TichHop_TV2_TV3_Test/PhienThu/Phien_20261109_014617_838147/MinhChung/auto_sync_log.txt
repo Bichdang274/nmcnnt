@@ -1,0 +1,26 @@
+Da khoi tao kho luu giao dich cua cua hang 01.
+Vi tri: THU_MUC_BAN_GIAO\PhienThu\Phien_20261109_014617_838147\DuLieu\cuahang01.db
+=== HE THONG DONG BO TU DONG TV3 ===
+Chu ky gui lai: 10 giay
+Nhan Ctrl + C de dung chuong trinh.
+
+[01:46:20] Kiem tra giao dich...
+Co 5 giao dich dang cho gui.
+Chua xac nhan: CH01-POS01-20261109-000001 | <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+Van giu giao dich trong kho de gui lai.
+Chua xac nhan: CH01-POS01-20261109-000002 | <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+Van giu giao dich trong kho de gui lai.
+Chua xac nhan: CH01-POS01-20261109-000003 | <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+Van giu giao dich trong kho de gui lai.
+Chua xac nhan: CH01-POS01-20261109-000004 | <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+Van giu giao dich trong kho de gui lai.
+Chua xac nhan: CH01-POS01-20261109-000005 | <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+Van giu giao dich trong kho de gui lai.
+
+[01:46:41] Kiem tra giao dich...
+Co 5 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+Da xac nhan: CH01-POS01-20261109-000002 | ACKED
+Da xac nhan: CH01-POS01-20261109-000003 | ACKED
+Da xac nhan: CH01-POS01-20261109-000004 | ACKED
+Da xac nhan: CH01-POS01-20261109-000005 | ACKED

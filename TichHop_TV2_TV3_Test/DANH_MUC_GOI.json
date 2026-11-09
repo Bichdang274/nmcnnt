@@ -1,0 +1,435 @@
+{
+  "purpose": "Review-only handoff of TV2-TV3 localhost experimental integration",
+  "tv3_commit": "2159cc8987e44a53e20ce4ee3bded194e8122969",
+  "tv2_commit": "f4aeed5d29bc72e7a07e73d3c9ff1a5cb3152af8",
+  "stage1": "PASS",
+  "stage2": "PASS",
+  "schema": "TV3 temporary; requires TV2 confirmation",
+  "not_tested": [
+    "HTTP 409",
+    "Lost ACK after commit",
+    "Multiple stores/POS",
+    "Real WAN"
+  ],
+  "sources_modified": false,
+  "source_databases_modified": false,
+  "tests_rerun": false,
+  "excluded_files": [
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/DuLieu/cuahang01.db",
+      "reason": "CSDL khong dong goi",
+      "source_sha256": "dfa660e03f49db459cec7cb9312f057fbe9092d9b7fd822fbbc5c43af9d7c51a"
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/DuLieu/truso.db",
+      "reason": "CSDL khong dong goi",
+      "source_sha256": "a6752eb81cc4cfde277968ce586f5532b00711315dcf4573e4304ed66fba88e3"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/DuLieu/cuahang01.db",
+      "reason": "CSDL khong dong goi",
+      "source_sha256": "aaba81fd28c5de8c79188e750ec11cd42f2b5e2a463940d10aa2b56209de8984"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/DuLieu/SaoLuuTruSo/truso_20261109_020610_619085.db",
+      "reason": "CSDL khong dong goi",
+      "source_sha256": "645536ab69375d9aa97b34ac4d91c8ffe2cd6e760cc908f890472af58cc28550"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/DuLieu/SaoLuuTruSo/truso_20261109_020611_690229.db",
+      "reason": "CSDL khong dong goi",
+      "source_sha256": "51d0b5d42f260cad997e34c18dd6554c328a92ab175b7e77874fb80b2fa4d8c1"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/DuLieu/truso.db",
+      "reason": "CSDL khong dong goi",
+      "source_sha256": "6fce4e2cfa7824c501fe458465714d9344407808c167e7744ad524a37211d5f1"
+    }
+  ],
+  "deduplicated_session_scripts": [
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/Script/auto_sync.py",
+      "use": "Script/auto_sync.py",
+      "sha256": "0533a32071265e603f2118ad038dbc50b5630c3d75d413b939d2e41af5e48f91"
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/Script/doi_chieu.py",
+      "use": "Script/doi_chieu.py",
+      "sha256": "9e81136497054ed764d7dbbc311bd48194c88144b0150e651043af57005e9c49"
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/Script/hq_receiver.py",
+      "use": "Script/hq_receiver.py",
+      "sha256": "18ab051cb8575cab7dca076f9a782b59748e203d53f97e80d1283ddf3b3badfd"
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/Script/kiem_tra_phuc_hoi.py",
+      "use": "Script/kiem_tra_phuc_hoi.py",
+      "sha256": "573beec4887b3b095835e4d4628f0292e9a193691a043dc6c03efff63ff23bd4"
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/Script/kiem_tra_trung.py",
+      "use": "Script/kiem_tra_trung.py",
+      "sha256": "7c91701991f570e751878dd48624df2646d7a65980a22760a924ec03be6a6840"
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/Script/sao_luu.py",
+      "use": "Script/sao_luu.py",
+      "sha256": "8f4046f52c642536b94f61e10511c6ba343834ac173d6f1f3fbc351be904f3f0"
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/Script/sao_luu_tru_so.py",
+      "use": "Script/sao_luu_tru_so.py",
+      "sha256": "6629c394718cad58cf7c59e6d3ba23d734d99698f56485f823f192a6f6d30db5"
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/Script/store_agent.py",
+      "use": "Script/store_agent.py",
+      "sha256": "0e18f0c3be3f0ff520a60bf71cafcc1b9b6a38e4a459e6cfa2579a8ae634edd4"
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/Script/xuat_giao_dich.py",
+      "use": "Script/xuat_giao_dich.py",
+      "sha256": "805a289de662236e4287b27fc3ebf0388b204dafd5a712a3d67fd33998356b79"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/Script/auto_sync.py",
+      "use": "Script/auto_sync.py",
+      "sha256": "0533a32071265e603f2118ad038dbc50b5630c3d75d413b939d2e41af5e48f91"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/Script/doi_chieu.py",
+      "use": "Script/doi_chieu.py",
+      "sha256": "9e81136497054ed764d7dbbc311bd48194c88144b0150e651043af57005e9c49"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/Script/hq_receiver.py",
+      "use": "Script/hq_receiver.py",
+      "sha256": "18ab051cb8575cab7dca076f9a782b59748e203d53f97e80d1283ddf3b3badfd"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/Script/kiem_tra_phuc_hoi.py",
+      "use": "Script/kiem_tra_phuc_hoi.py",
+      "sha256": "573beec4887b3b095835e4d4628f0292e9a193691a043dc6c03efff63ff23bd4"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/Script/kiem_tra_trung.py",
+      "use": "Script/kiem_tra_trung.py",
+      "sha256": "7c91701991f570e751878dd48624df2646d7a65980a22760a924ec03be6a6840"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/Script/sao_luu.py",
+      "use": "Script/sao_luu.py",
+      "sha256": "8f4046f52c642536b94f61e10511c6ba343834ac173d6f1f3fbc351be904f3f0"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/Script/sao_luu_tru_so.py",
+      "use": "Script/sao_luu_tru_so.py",
+      "sha256": "6629c394718cad58cf7c59e6d3ba23d734d99698f56485f823f192a6f6d30db5"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/Script/store_agent.py",
+      "use": "Script/store_agent.py",
+      "sha256": "0e18f0c3be3f0ff520a60bf71cafcc1b9b6a38e4a459e6cfa2579a8ae634edd4"
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/Script/xuat_giao_dich.py",
+      "use": "Script/xuat_giao_dich.py",
+      "sha256": "805a289de662236e4287b27fc3ebf0388b204dafd5a712a3d67fd33998356b79"
+    }
+  ],
+  "package_copy_changes": [
+    {
+      "path": "BAN_GIAO_CHO_TV2.md",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "HUONG_DAN_DEMO_NHOM.md",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/MinhChung/auto_sync_log.txt",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/MinhChung/dieu_khien_log.txt",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/MinhChung/GD1_BAN_DAU_0_0.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/MinhChung/GD1_MAT_DICH_VU_5_SENT.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/MinhChung/GD1_SAU_DONG_BO_5_ACKED.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/MinhChung/GD1_TAO_5_PENDING.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/MinhChung/KET_QUA_GIAI_DOAN_1.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/MinhChung/receiver_log.txt",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_20261109_014617_838147/MinhChung/terminal_giai_doan_1.txt",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/auto_sync_log.txt",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/BAO_TOAN_GIAI_DOAN_1.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_BAN_DAU_5_ACKED.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_BAN_SAO_AN_TOAN_TRUOC_PHUC_HOI.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_BAN_SAO_HQ_5.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_NGUON_SAO_CHEP.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_SAU_GUI_BU_10_ACKED.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_SAU_GUI_LAP_5.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_SAU_PHUC_HOI_KHO10_HQ5.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_THEM_DUNG_5_PENDING.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_TRUOC_PHUC_HOI_10_ACKED.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_XAC_NHAN_BAN_SAO_5_CON_NGUYEN.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/KET_QUA_GIAI_DOAN_2.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/KET_QUA_GIAI_DOAN_2.md",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/receiver_log.txt",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/terminal_giai_doan_2.txt",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "PhienThu/Phien_GD2_20261109_020609_227458/phien.json",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "README_TICH_HOP.md",
+      "changes": [
+        "An duong dan may cuc bo/thong tin ca nhan"
+      ]
+    },
+    {
+      "path": "BAO_CAO_KIEM_THU_TICH_HOP.md",
+      "changes": [
+        "Chuyen lien ket CSDL/ban ma luoc bo sang muc giai thich/ma chung"
+      ]
+    }
+  ],
+  "redirected_markdown_links": [
+    {
+      "document": "BAO_CAO_KIEM_THU_TICH_HOP.md",
+      "original_target": "PhienThu/Phien_20261109_014617_838147/DuLieu/cuahang01.db",
+      "package_target": "DU_LIEU_KHONG_DONG_GOI.md"
+    },
+    {
+      "document": "BAO_CAO_KIEM_THU_TICH_HOP.md",
+      "original_target": "PhienThu/Phien_20261109_014617_838147/DuLieu/truso.db",
+      "package_target": "DU_LIEU_KHONG_DONG_GOI.md"
+    },
+    {
+      "document": "BAO_CAO_KIEM_THU_TICH_HOP.md",
+      "original_target": "PhienThu/Phien_GD2_20261109_020609_227458/DuLieu/cuahang01.db",
+      "package_target": "DU_LIEU_KHONG_DONG_GOI.md"
+    },
+    {
+      "document": "BAO_CAO_KIEM_THU_TICH_HOP.md",
+      "original_target": "PhienThu/Phien_GD2_20261109_020609_227458/DuLieu/truso.db",
+      "package_target": "DU_LIEU_KHONG_DONG_GOI.md"
+    },
+    {
+      "document": "BAO_CAO_KIEM_THU_TICH_HOP.md",
+      "original_target": "PhienThu/Phien_GD2_20261109_020609_227458/DuLieu/SaoLuuTruSo/truso_20261109_020610_619085.db",
+      "package_target": "DU_LIEU_KHONG_DONG_GOI.md"
+    },
+    {
+      "document": "BAO_CAO_KIEM_THU_TICH_HOP.md",
+      "original_target": "PhienThu/Phien_GD2_20261109_020609_227458/DuLieu/SaoLuuTruSo/truso_20261109_020611_690229.db",
+      "package_target": "DU_LIEU_KHONG_DONG_GOI.md"
+    }
+  ],
+  "file_sha256": {
+    ".gitignore": "c3de0b35e652586f84758432e70a48de7a5928329708381c809422a02de15b19",
+    "BAN_GIAO_CHO_TV2.md": "abc109d7c58bfd2cd9445a7ed822eb9bf7736f860cf3f565ae87e686a89fb2ce",
+    "BAO_CAO_KIEM_THU_TICH_HOP.md": "3eae74759d250699eafa5aeb65736bd8fc1c7d21099858a1ddecf0733b75be53",
+    "DU_LIEU_KHONG_DONG_GOI.md": "e88dc0e265d77108eabb9b1dd7a113d2c4ab43d545f002d7623469d4446e5966",
+    "HUONG_DAN_DEMO_NHOM.md": "f6b37489b4beedeb1b6b65506089a1ab0c8b0d69a20bc54fad1ac3f6081a1a10",
+    "KE_HOACH_KIEM_THU.md": "2644367cf773cb11735b8f8bcec6096336e5b0814925042647b296eaf60c2443",
+    "MANIFEST.json": "b525b759d1b811f5b898c99997186d1e420b6e25a18e01b6dab92d57a8a5f6aa",
+    "NGUON_GIT.json": "d2987669d57934140f60a6197923834fed6439184cd08c7bc0da9ef588d6d21b",
+    "NGUON_VA_DIEU_CHINH.md": "06cfb042d699cad8a0eda9a7d60d131b8e8e89e8ef5ef5145e285d14f4f26b09",
+    "Nguon/TV2/CSDL/schema_tru_so.sql": "c844f0f6db2d19ff2e4fe43cd304b6251b777a273bb1a1c2be34636e200037c9",
+    "Nguon/TV2/CSDL/truy_van_doi_chieu.sql": "811465817c7bcf48e3b6faf85df1523bc0c4db60636ecea4603f1b7d8d4df2e4",
+    "Nguon/TV2/Script/doi_chieu.py": "13b06445174217383ef780db8b743a7f7e30c7336a8f1c9b074178621dcce3bd",
+    "Nguon/TV2/Script/sao_luu_tru_so.py": "2006dc03c893293070b6abf1a4607103dcf62781998cd3c183e55b7374147abf",
+    "Nguon/TV3/Script/auto_sync.py": "0533a32071265e603f2118ad038dbc50b5630c3d75d413b939d2e41af5e48f91",
+    "Nguon/TV3/Script/hq_receiver.py": "5a4751cb9728569a1e17ca834d6b59f733845addae3f830fb9fabaa1741c0bfe",
+    "Nguon/TV3/Script/kiem_tra_phuc_hoi.py": "ea1c93d92036df9f703f83f342d7415b64067616b565b4089875dbe6519025ae",
+    "Nguon/TV3/Script/kiem_tra_trung.py": "4c074432c66468d8aa388102bbc89afc49498743163b987b1315c8b2fdf98f80",
+    "Nguon/TV3/Script/sao_luu.py": "8f4046f52c642536b94f61e10511c6ba343834ac173d6f1f3fbc351be904f3f0",
+    "Nguon/TV3/Script/store_agent.py": "f97ff4a547ff9e381750578d3c9b4480dc3c9230f9877370f03263c19299026d",
+    "Nguon/TV3/Script/xuat_giao_dich.py": "805a289de662236e4287b27fc3ebf0388b204dafd5a712a3d67fd33998356b79",
+    "Nguon/TV3/chay_auto_sync.ps1": "ff1beb77fa733abd6cf8c9f60a0634f50f289480d1c1ead65ea420ae2d9d0db4",
+    "PhienThu/Phien_20261109_014617_838147/MinhChung/GD1_BAN_DAU_0_0.json": "34eee99a1369e8c5915be5daa3945d4516583878dcfb10be46829190e61d385f",
+    "PhienThu/Phien_20261109_014617_838147/MinhChung/GD1_MAT_DICH_VU_5_SENT.json": "21be58e8a223fe7123242f32882bbe405de20f0d4953187dd698540c44e5d667",
+    "PhienThu/Phien_20261109_014617_838147/MinhChung/GD1_SAU_DONG_BO_5_ACKED.json": "2728817b6ff6fef32391f285a53f6d41fe8c15e0fd392676056c870939eb501a",
+    "PhienThu/Phien_20261109_014617_838147/MinhChung/GD1_TAO_5_PENDING.json": "deefe374151f15f57635bf82c3707b54e5fdce62f3e96240aa1b9d466eb6682f",
+    "PhienThu/Phien_20261109_014617_838147/MinhChung/KET_QUA_GIAI_DOAN_1.json": "6e0cb4cb6d701cf8d5ea363af49a8c4383d1b5746133683fcecacd146cdfec77",
+    "PhienThu/Phien_20261109_014617_838147/MinhChung/KET_QUA_GIAI_DOAN_1.md": "785c6cf71dd8de3f05ae1e0a394c66575e3b62d914df46323b1d6a3931934c6e",
+    "PhienThu/Phien_20261109_014617_838147/MinhChung/auto_sync_log.txt": "75f76d3e2ab5596572961e612b0362d41489862a119a04597d0bd26a5f39fef7",
+    "PhienThu/Phien_20261109_014617_838147/MinhChung/dieu_khien_log.txt": "164936c904988bf46d7deb01d42a6064aff71d009b4ceb5b95a68be8e219c35a",
+    "PhienThu/Phien_20261109_014617_838147/MinhChung/receiver_log.txt": "466aab7df8dc804d1105079439a02c8e467f1ca6cc4da3f0d1993d740fdfda43",
+    "PhienThu/Phien_20261109_014617_838147/MinhChung/terminal_giai_doan_1.txt": "d81ce95cdc12a1f0606d0747bc43b1665a4b9b13db2e0ce971337383df8cb9e1",
+    "PhienThu/Phien_20261109_014617_838147/phien.json": "1b7d35611b07d92397d26bf7e033da9a400d053a7ef2411b400e94c531446d2b",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/BAO_TOAN_GIAI_DOAN_1.json": "7a429c4ce5291a143249b1286b197e4764ca361e7d32d5d3baba8f92bb9fe3ac",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_BAN_DAU_5_ACKED.json": "8fdab16aecb405e20590c8f99938a158bfd739a4117b71618d9d99e339fa9659",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_BAN_SAO_AN_TOAN_TRUOC_PHUC_HOI.json": "890cf052768e27e17aa26bce7e0d687fdb025f54817f8a8145f0ed02a0fa2585",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_BAN_SAO_HQ_5.json": "e807b8c4c38e58531dbe9d896b1f88a1d40860ebcd5728d60fffd37fb95f09f2",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_NGUON_SAO_CHEP.json": "0efd51921a2ad9ed90c60ee7059639a3caa01c3a362ffa0a3cc1e49fb098bdb0",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_PHAT_HIEN_5_MA_THIEU.json": "1ce31e68ecd6f0f26c4eac578885499bccbe1777dcd850c9cf24782e03523dad",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_SAU_GUI_BU_10_ACKED.json": "28e53110f9694c0b6d4e1629d05aa6b7c1a60e12558853588463413b688a3766",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_SAU_GUI_LAP_5.json": "7ff6df156581f26e3defb2ce922d25374ba36ac3191b58405491a27c9cc51e5f",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_SAU_PHUC_HOI_KHO10_HQ5.json": "c64fda4c598af90a94db6dafd40696e51da051c91006b6e1e7e7a1de009681ef",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_THEM_DUNG_5_PENDING.json": "a08273593fab2066e1cbca2d62308cb384899dacdc5fba3364adf7c1aaba6f1c",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_TRUOC_PHUC_HOI_10_ACKED.json": "5612664e4ba32958cdcbcf1ab1c93415cd5028e8996411419e81569ea6e59541",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/GD2_XAC_NHAN_BAN_SAO_5_CON_NGUYEN.json": "9a7b3ffd2d69ae61c3d155a191b8422dba8d68c186d27923cb90a35ac62048b7",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/KET_QUA_GIAI_DOAN_2.json": "265aa5ab067e6bf3250fe115e78cf1d18a064d781f486ae6f95860264a6a8ff2",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/KET_QUA_GIAI_DOAN_2.md": "daebf5e9c182797351934c49b667f937d61048d2460b9471ebf4a2d15d66a64d",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/auto_sync_log.txt": "3829655ff80132ba8289e51a76067491032918467d227668a8213b772da78f4d",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/dieu_khien_log.txt": "9953552724d948c31c45635fbdb58e6621445bddb892e48e6c88532ae5af0632",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/receiver_log.txt": "8ed984e82076d8127f1d131fe17c1f2ea036e1d65b746997daea7540f08adf8b",
+    "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/terminal_giai_doan_2.txt": "1860229b860ede3ce002eead413bf859f90ff4a8d18320b16feb536101d66d45",
+    "PhienThu/Phien_GD2_20261109_020609_227458/phien.json": "bb9f562ad160c84a62424f561a1ef59a612bcb9703ae0884c9474d37a5234428",
+    "README.md": "0cb53f9542c1c8699679d3a36801dbc0cdc09b449170bd44db4b6bcd98d27f34",
+    "README_TICH_HOP.md": "f717ba91186d2b03f7dce513445ea584cae5c700c326633bc6440dd54d96964a",
+    "SCHEMA_TAM_THOI.sql": "7bbfd40d00aaacb50457aacda29e0ded51c6e95de05958b5be64d90857fd495c",
+    "SO_SANH_MA_NGUON.patch": "94af0c048e37d48122309f04b4abc3634245688a1fbe9af9b25bd47011da3d64",
+    "Script/auto_sync.py": "0533a32071265e603f2118ad038dbc50b5630c3d75d413b939d2e41af5e48f91",
+    "Script/doi_chieu.py": "9e81136497054ed764d7dbbc311bd48194c88144b0150e651043af57005e9c49",
+    "Script/hq_receiver.py": "18ab051cb8575cab7dca076f9a782b59748e203d53f97e80d1283ddf3b3badfd",
+    "Script/kiem_tra_phuc_hoi.py": "573beec4887b3b095835e4d4628f0292e9a193691a043dc6c03efff63ff23bd4",
+    "Script/kiem_tra_trung.py": "7c91701991f570e751878dd48624df2646d7a65980a22760a924ec03be6a6840",
+    "Script/sao_luu.py": "8f4046f52c642536b94f61e10511c6ba343834ac173d6f1f3fbc351be904f3f0",
+    "Script/sao_luu_tru_so.py": "6629c394718cad58cf7c59e6d3ba23d734d99698f56485f823f192a6f6d30db5",
+    "Script/store_agent.py": "0e18f0c3be3f0ff520a60bf71cafcc1b9b6a38e4a459e6cfa2579a8ae634edd4",
+    "Script/xuat_giao_dich.py": "805a289de662236e4287b27fc3ebf0388b204dafd5a712a3d67fd33998356b79",
+    "chay_demo.ps1": "a1c860f72272e4d7eeebdaddf826b86d049ad834102ce6dbcaa5d0d998613007",
+    "demo_tich_hop.py": "89f3ade7e6ab9b13e06c12cae841bd088f50a3fc3b2365912bbc6a539039471d"
+  },
+  "file_count_including_manifest": 67,
+  "relative_links_checked": 76,
+  "privacy_policy": "Local absolute root replaced by THU_MUC_BAN_GIAO; personal names removed in copies only",
+  "hash_note": "file_sha256 covers current Git subtree files except this manifest; historical hashes refer to original test evidence",
+  "distribution": "Git repository subtree TichHop_TV2_TV3_Test",
+  "git_branch": "tich-hop-tv2-tv3-test",
+  "git_base_commit": "2159cc8987e44a53e20ce4ee3bded194e8122969",
+  "git_publication_adjustments": [
+    "README.md adapted for Git",
+    "Scoped .gitignore added",
+    "DANH_MUC_GOI.json hashes refreshed"
+  ]
+}

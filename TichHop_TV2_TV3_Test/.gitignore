@@ -1,0 +1,29 @@
+# Runtime databases and journals
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.sqlite3-*
+
+# Caches, environments, archives and temporary files
+__pycache__/
+*.py[cod]
+.venv/
+*.zip
+*.tmp
+*.temp
+*.log
+.DS_Store
+Thumbs.db
+
+# Private local configuration and keys
+.env
+.env.*
+*.pem
+*.key
+
+# Keep only the two approved evidence sessions
+/PhienThu/*
+!/PhienThu/Phien_20261109_014617_838147/
+!/PhienThu/Phien_GD2_20261109_020609_227458/

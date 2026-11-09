@@ -1,0 +1,78 @@
+{
+  "tv3": "2159cc8987e44a53e20ce4ee3bded194e8122969",
+  "tv2": "f4aeed5d29bc72e7a07e73d3c9ff1a5cb3152af8",
+  "sources": [
+    {
+      "commit": "2159cc8987e44a53e20ce4ee3bded194e8122969",
+      "source": "Script/store_agent.py",
+      "export": "Nguon/TV3/Script/store_agent.py",
+      "sha256": "f97ff4a547ff9e381750578d3c9b4480dc3c9230f9877370f03263c19299026d"
+    },
+    {
+      "commit": "2159cc8987e44a53e20ce4ee3bded194e8122969",
+      "source": "Script/hq_receiver.py",
+      "export": "Nguon/TV3/Script/hq_receiver.py",
+      "sha256": "5a4751cb9728569a1e17ca834d6b59f733845addae3f830fb9fabaa1741c0bfe"
+    },
+    {
+      "commit": "2159cc8987e44a53e20ce4ee3bded194e8122969",
+      "source": "Script/auto_sync.py",
+      "export": "Nguon/TV3/Script/auto_sync.py",
+      "sha256": "0533a32071265e603f2118ad038dbc50b5630c3d75d413b939d2e41af5e48f91"
+    },
+    {
+      "commit": "2159cc8987e44a53e20ce4ee3bded194e8122969",
+      "source": "Script/kiem_tra_trung.py",
+      "export": "Nguon/TV3/Script/kiem_tra_trung.py",
+      "sha256": "4c074432c66468d8aa388102bbc89afc49498743163b987b1315c8b2fdf98f80"
+    },
+    {
+      "commit": "2159cc8987e44a53e20ce4ee3bded194e8122969",
+      "source": "Script/sao_luu.py",
+      "export": "Nguon/TV3/Script/sao_luu.py",
+      "sha256": "8f4046f52c642536b94f61e10511c6ba343834ac173d6f1f3fbc351be904f3f0"
+    },
+    {
+      "commit": "2159cc8987e44a53e20ce4ee3bded194e8122969",
+      "source": "Script/kiem_tra_phuc_hoi.py",
+      "export": "Nguon/TV3/Script/kiem_tra_phuc_hoi.py",
+      "sha256": "ea1c93d92036df9f703f83f342d7415b64067616b565b4089875dbe6519025ae"
+    },
+    {
+      "commit": "2159cc8987e44a53e20ce4ee3bded194e8122969",
+      "source": "Script/xuat_giao_dich.py",
+      "export": "Nguon/TV3/Script/xuat_giao_dich.py",
+      "sha256": "805a289de662236e4287b27fc3ebf0388b204dafd5a712a3d67fd33998356b79"
+    },
+    {
+      "commit": "2159cc8987e44a53e20ce4ee3bded194e8122969",
+      "source": "chay_auto_sync.ps1",
+      "export": "Nguon/TV3/chay_auto_sync.ps1",
+      "sha256": "ff1beb77fa733abd6cf8c9f60a0634f50f289480d1c1ead65ea420ae2d9d0db4"
+    },
+    {
+      "commit": "f4aeed5d29bc72e7a07e73d3c9ff1a5cb3152af8",
+      "source": "Script/doi_chieu.py",
+      "export": "Nguon/TV2/Script/doi_chieu.py",
+      "sha256": "13b06445174217383ef780db8b743a7f7e30c7336a8f1c9b074178621dcce3bd"
+    },
+    {
+      "commit": "f4aeed5d29bc72e7a07e73d3c9ff1a5cb3152af8",
+      "source": "Script/sao_luu_tru_so.py",
+      "export": "Nguon/TV2/Script/sao_luu_tru_so.py",
+      "sha256": "2006dc03c893293070b6abf1a4607103dcf62781998cd3c183e55b7374147abf"
+    },
+    {
+      "commit": "f4aeed5d29bc72e7a07e73d3c9ff1a5cb3152af8",
+      "source": "CSDL/schema_tru_so.sql",
+      "export": "Nguon/TV2/CSDL/schema_tru_so.sql",
+      "sha256": "c844f0f6db2d19ff2e4fe43cd304b6251b777a273bb1a1c2be34636e200037c9"
+    },
+    {
+      "commit": "f4aeed5d29bc72e7a07e73d3c9ff1a5cb3152af8",
+      "source": "CSDL/truy_van_doi_chieu.sql",
+      "export": "Nguon/TV2/CSDL/truy_van_doi_chieu.sql",
+      "sha256": "811465817c7bcf48e3b6faf85df1523bc0c4db60636ecea4603f1b7d8d4df2e4"
+    }
+  ]
+}

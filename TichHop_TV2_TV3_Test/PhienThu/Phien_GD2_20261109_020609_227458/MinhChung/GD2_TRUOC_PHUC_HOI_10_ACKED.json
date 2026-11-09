@@ -1,0 +1,191 @@
+{
+  "time": "2026-11-09T02:06:11+07:00",
+  "store": {
+    "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_GD2_20261109_020609_227458\\DuLieu\\cuahang01.db",
+    "count": 10,
+    "states": {
+      "ACKED": 10
+    },
+    "rows": [
+      {
+        "ma_gd": "CH01-POS01-20261109-000001",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 50000,
+        "trang_thai": "ACKED"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000002",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 75000,
+        "trang_thai": "ACKED"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000003",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 120000,
+        "trang_thai": "ACKED"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000004",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 35000,
+        "trang_thai": "ACKED"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000005",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 200000,
+        "trang_thai": "ACKED"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000006",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T02:06:10",
+        "so_tien": 50000,
+        "trang_thai": "ACKED"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000007",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T02:06:10",
+        "so_tien": 75000,
+        "trang_thai": "ACKED"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000008",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T02:06:10",
+        "so_tien": 120000,
+        "trang_thai": "ACKED"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000009",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T02:06:10",
+        "so_tien": 35000,
+        "trang_thai": "ACKED"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000010",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T02:06:10",
+        "so_tien": 200000,
+        "trang_thai": "ACKED"
+      }
+    ],
+    "duplicate_ids": 0,
+    "counter": [
+      {
+        "ngay": "20261109",
+        "so_cuoi": 10
+      }
+    ],
+    "integrity_check": [
+      [
+        "ok"
+      ]
+    ]
+  },
+  "hq": {
+    "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_GD2_20261109_020609_227458\\DuLieu\\truso.db",
+    "count": 10,
+    "states": {},
+    "rows": [
+      {
+        "ma_gd": "CH01-POS01-20261109-000001",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 50000
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000002",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 75000
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000003",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 120000
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000004",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 35000
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000005",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 200000
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000006",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T02:06:10",
+        "so_tien": 50000
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000007",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T02:06:10",
+        "so_tien": 75000
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000008",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T02:06:10",
+        "so_tien": 120000
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000009",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T02:06:10",
+        "so_tien": 35000
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000010",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T02:06:10",
+        "so_tien": 200000
+      }
+    ],
+    "duplicate_ids": 0,
+    "integrity_check": [
+      [
+        "ok"
+      ]
+    ]
+  },
+  "five_fields_equal": true,
+  "acked_missing_at_hq": [],
+  "hq_only": [],
+  "content_mismatches": []
+}

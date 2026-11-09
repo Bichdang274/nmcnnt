@@ -1,0 +1,61 @@
+{
+  "time": "2026-11-09T01:46:20+07:00",
+  "store": {
+    "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\cuahang01.db",
+    "count": 5,
+    "states": {
+      "PENDING": 5
+    },
+    "duplicate_ids": 0,
+    "rows": [
+      {
+        "ma_gd": "CH01-POS01-20261109-000001",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 50000,
+        "trang_thai": "PENDING"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000002",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 75000,
+        "trang_thai": "PENDING"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000003",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 120000,
+        "trang_thai": "PENDING"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000004",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 35000,
+        "trang_thai": "PENDING"
+      },
+      {
+        "ma_gd": "CH01-POS01-20261109-000005",
+        "ma_cua_hang": "CH01",
+        "ma_may": "POS01",
+        "thoi_gian": "2026-11-09T01:46:20",
+        "so_tien": 200000,
+        "trang_thai": "PENDING"
+      }
+    ]
+  },
+  "hq": {
+    "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\truso.db",
+    "count": 0,
+    "states": {},
+    "duplicate_ids": 0,
+    "rows": []
+  },
+  "five_fields_equal": false
+}

@@ -1,0 +1,320 @@
+--- Nguon/TV2/Script/doi_chieu.py
++++ Script/doi_chieu.py
+@@ -4,6 +4,7 @@
+     python Script/doi_chieu.py           # đối chiếu hai bên
+     python Script/doi_chieu.py gui-bu    # gửi lại giao dịch đã ACKED mà trụ sở thiếu (sau khi khôi phục bản cũ)
+ """
++import os
+ import json
+ import sys
+ import sqlite3
+@@ -15,21 +16,19 @@
+ THU_MUC_GOC = Path(__file__).resolve().parent.parent
+ DB_CUA_HANG = THU_MUC_GOC / "DuLieu" / "cuahang01.db"
+ DB_TRU_SO = THU_MUC_GOC / "DuLieu" / "truso.db"
+-DIA_CHI = "http://127.0.0.1:8000/giao-dich"
++DIA_CHI = os.environ.get("TV23_HQ_URL", "http://127.0.0.1:18000/giao-dich")
+ 
+ CAC_COT = ("ma_gd", "ma_cua_hang", "ma_may", "thoi_gian", "so_tien")
+ 
+ 
+ def doc(duong_dan, cau_lenh):
+-    # Chỉ đọc, không tự tạo file mới; chưa có bảng thì coi như rỗng
++    # Chỉ đọc; thiếu file/lỗi schema phải báo lỗi, không coi như dữ liệu rỗng
+     if not duong_dan.is_file():
+-        return []
++        raise FileNotFoundError(f"Khong tim thay CSDL: {duong_dan}")
+     ket_noi = sqlite3.connect(duong_dan.resolve().as_uri() + "?mode=ro", uri=True)
+     ket_noi.row_factory = sqlite3.Row
+     try:
+         return [dict(dong) for dong in ket_noi.execute(cau_lenh).fetchall()]
+-    except sqlite3.OperationalError:
+-        return []
+     finally:
+         ket_noi.close()
+ 
+@@ -71,7 +70,8 @@
+         "acked_thieu": acked_thieu,
+         "chua_ve": chua_ve,
+         "lech_noi_dung": lech_noi_dung,
+-        "khop": len(cua_hang) == len(tru_so) and not acked_thieu and not chua_ve
++        "co_du_lieu": bool(cua_hang),
++        "khop": bool(cua_hang) and len(cua_hang) == len(tru_so) and not acked_thieu and not chua_ve
+                 and not lech_noi_dung and not ma_trung,
+     }
+ 
+@@ -90,7 +90,9 @@
+         print("  thieu:", ma_gd)
+     print("Lech noi dung:", len(kq["lech_noi_dung"]))
+ 
+-    if kq["khop"]:
++    if not kq["co_du_lieu"]:
++        print("CHUA DAT: Kho cua hang rong; 0/0 khong chung minh dong bo thanh cong.")
++    elif kq["khop"]:
+         print("KET QUA: Hai ben khop, khong mat, khong trung")
+     elif kq["acked_thieu"]:
+         print("CANH BAO: Tru so thieu giao dich da ACKED -> chay: python Script/doi_chieu.py gui-bu")
+@@ -99,11 +101,16 @@
+     else:
+         print("CHUA KHOP: Can kiem tra lai")
+ 
++    return kq["khop"]
++
+ 
+ def gui_bu():
+     # Sau khi khôi phục từ bản sao cũ: gửi lại giao dịch ACKED mà trụ sở thiếu.
+     # Trụ sở kiểm tra mã giao dịch nên bản đã có chỉ trả DA_TON_TAI, không ghi trùng.
+-    thieu = set(tinh_doi_chieu()["acked_thieu"])
++    kq = tinh_doi_chieu()
++    if not kq["co_du_lieu"]:
++        raise ValueError("Khong gui bu khi kho cua hang rong.")
++    thieu = set(kq["acked_thieu"])
+     cua_hang = doc(DB_CUA_HANG, "SELECT ma_gd, ma_cua_hang, ma_may, thoi_gian, so_tien "
+                                 "FROM giao_dich ORDER BY ma_gd")
+     can_gui = [dong for dong in cua_hang if dong["ma_gd"] in thieu]
+@@ -121,22 +128,31 @@
+             print(f"Chua gui duoc: {giao_dich['ma_gd']} | {loi}")
+             continue
+ 
+-        if xac_nhan.get("ack") is True and xac_nhan.get("ma_gd") == giao_dich["ma_gd"]:
++        if (isinstance(xac_nhan, dict) and xac_nhan.get("ack") is True
++                and xac_nhan.get("ma_gd") == giao_dich["ma_gd"]):
+             so_ack += 1
+             print(f"{giao_dich['ma_gd']} | {xac_nhan.get('ket_qua')} | ACK hop le")
+         else:
+             print(f"Phan hoi khong hop le: {xac_nhan}")
+ 
+     print(f"Gui bu xong: {so_ack}/{len(can_gui)} duoc xac nhan")
++    return so_ack == len(can_gui)
++
+ 
+ 
+ if __name__ == "__main__":
+-    if sys.argv[1:] == ["gui-bu"]:
+-        gui_bu()
+-    elif sys.argv[1:] in ([], ["--json"]):
+-        if sys.argv[1:] == ["--json"]:
+-            print(json.dumps(tinh_doi_chieu(), ensure_ascii=False, indent=2))
++    try:
++        if sys.argv[1:] == ["gui-bu"]:
++            dat = gui_bu()
++        elif sys.argv[1:] == ["--json"]:
++            kq = tinh_doi_chieu()
++            print(json.dumps(kq, ensure_ascii=False, indent=2))
++            dat = kq["khop"]
++        elif not sys.argv[1:]:
++            dat = in_doi_chieu()
+         else:
+-            in_doi_chieu()
+-    else:
+-        raise SystemExit(__doc__)
++            raise ValueError("Tham so khong hop le; dung --json hoac gui-bu.")
++    except (OSError, sqlite3.Error, ValueError, KeyError) as loi:
++        print("DOI CHIEU/GUI BU CHUA HOAN TAT:", loi)
++        raise SystemExit(2)
++    raise SystemExit(0 if dat else 2)
+--- Nguon/TV2/Script/sao_luu_tru_so.py
++++ Script/sao_luu_tru_so.py
+@@ -1,9 +1,8 @@
+-"""TV2 – Sao lưu, xóa thử và khôi phục CSDL trụ sở (DuLieu/truso.db do hq_receiver.py của TV3 tạo).
++"""TV2 – Sao lưu và khôi phục CSDL trụ sở (DuLieu/truso.db do hq_receiver.py của TV3 tạo).
+ 
+ Chạy tại thư mục gốc dự án (thư mục chứa Script/ và DuLieu/):
+     python Script/sao_luu_tru_so.py sao-luu
+     python Script/sao_luu_tru_so.py danh-sach
+-    python Script/sao_luu_tru_so.py xoa-thu --chac-chan
+     python Script/sao_luu_tru_so.py khoi-phuc [--file truso_....db]
+ """
+ import argparse
+@@ -15,7 +14,7 @@
+ FILE_DB = THU_MUC_GOC / "DuLieu" / "truso.db"
+ THU_MUC_SAO_LUU = THU_MUC_GOC / "DuLieu" / "SaoLuuTruSo"
+ 
+-# Lịch sao lưu (Bảng 2.6): giữ 7 bản gần nhất
++# Nguon TV2 giu 7 ban; ban thu nay khong ap dung tu xoa
+ SO_BAN_GIU = 7
+ 
+ 
+@@ -69,14 +68,13 @@
+     file_sao_luu.touch(exist_ok=False)
+     chep_bang_api_backup(FILE_DB, file_sao_luu)
+ 
+-    for ban_cu in danh_sach_ban_sao()[:-SO_BAN_GIU]:
+-        ban_cu.unlink()
++    # Ban thu giu tat ca ban sao, khong tu xoa minh chung.
+ 
+     print("Thoi gian:", datetime.now().isoformat(timespec="seconds"))
+     print("Sao luu CSDL tru so thanh cong:", file_sao_luu.name)
+     print("Kiem tra toan ven: ok")
+     print("So giao dich trong ban sao:", dem_giao_dich(file_sao_luu))
+-    print(f"Dang giu {len(danh_sach_ban_sao())}/{SO_BAN_GIU} ban sao")
++    print(f"Dang giu {len(danh_sach_ban_sao())} ban sao (ban thu khong tu xoa)")
+ 
+ 
+ def in_danh_sach():
+@@ -84,15 +82,6 @@
+     print(f"--- BAN SAO LUU CSDL TRU SO ({len(cac_ban)}) ---")
+     for ban in cac_ban:
+         print(f"{ban.name} | {dem_giao_dich(ban)} giao dich")
+-
+-
+-def xoa_thu():
+-    # Giả lập sự cố mất dữ liệu ở trụ sở để kiểm thử khôi phục (BK-1)
+-    truoc = dem_giao_dich(FILE_DB)
+-    with sqlite3.connect(FILE_DB) as ket_noi:
+-        ket_noi.execute("DELETE FROM giao_dich")
+-    print("Thoi gian:", datetime.now().isoformat(timespec="seconds"))
+-    print(f"XOA THU du lieu tru so: {truoc} -> {dem_giao_dich(FILE_DB)} giao dich")
+ 
+ 
+ def khoi_phuc(ten_file=None):
+@@ -122,8 +111,6 @@
+     lenh = bo_doc.add_subparsers(dest="lenh", required=True)
+     lenh.add_parser("sao-luu")
+     lenh.add_parser("danh-sach")
+-    lenh_xoa = lenh.add_parser("xoa-thu")
+-    lenh_xoa.add_argument("--chac-chan", action="store_true")
+     lenh_kp = lenh.add_parser("khoi-phuc")
+     lenh_kp.add_argument("--file")
+     tham_so = bo_doc.parse_args()
+@@ -132,9 +119,5 @@
+         sao_luu()
+     elif tham_so.lenh == "danh-sach":
+         in_danh_sach()
+-    elif tham_so.lenh == "xoa-thu":
+-        if not tham_so.chac_chan:
+-            raise SystemExit("Them --chac-chan de xac nhan xoa thu du lieu tru so")
+-        xoa_thu()
+     else:
+         khoi_phuc(tham_so.file)
+--- Nguon/TV3/Script/hq_receiver.py
++++ Script/hq_receiver.py
+@@ -1,3 +1,4 @@
++import os
+ import json
+ import sqlite3
+ from datetime import datetime
+@@ -117,9 +118,9 @@
+ if __name__ == "__main__":
+     khoi_tao()
+ 
+-    may_chu = HTTPServer(("127.0.0.1", 8000), BoNhan)
++    may_chu = HTTPServer(("127.0.0.1", int(os.environ.get("TV23_HQ_PORT", "18000"))), BoNhan)
+     print("TRU SO DANG CHO NHAN GIAO DICH")
+-    print("Dia chi: http://127.0.0.1:8000/giao-dich")
++    print("Dia chi: http://127.0.0.1:" + os.environ.get("TV23_HQ_PORT", "18000") + "/giao-dich")
+     print("Du lieu:", FILE_DB)
+     print("Nhan Ctrl + C de dung.")
+ 
+--- Nguon/TV3/Script/kiem_tra_phuc_hoi.py
++++ Script/kiem_tra_phuc_hoi.py
+@@ -1,17 +1,14 @@
++import argparse
+ import sqlite3
+ from pathlib import Path
+ from datetime import datetime
+ 
+ GOC = Path(__file__).resolve().parent.parent
+-BAN_SAO = (
+-    GOC / "DuLieu" / "SaoLuu"
+-    / "cuahang01_20261026_081101_081521.db"
+-)
+ 
+ 
+-def kiem_tra_phuc_hoi():
+-    if not BAN_SAO.is_file():
+-        raise FileNotFoundError(f"Khong tim thay ban sao: {BAN_SAO}")
++def kiem_tra_phuc_hoi(ban_sao):
++    if not ban_sao.is_file():
++        raise FileNotFoundError(f"Khong tim thay ban sao: {ban_sao}")
+ 
+     thu_muc = GOC / "DuLieu" / "PhucHoiThu"
+     thu_muc.mkdir(parents=True, exist_ok=True)
+@@ -19,7 +16,7 @@
+     moc = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+     file_thu = thu_muc / f"cuahang01_phuchoi_{moc}.db"
+ 
+-    nguon = sqlite3.connect(BAN_SAO.as_uri() + "?mode=ro", uri=True)
++    nguon = sqlite3.connect(ban_sao.as_uri() + "?mode=ro", uri=True)
+     try:
+         file_thu.touch(exist_ok=False)
+         dich = sqlite3.connect(file_thu)
+@@ -54,5 +51,13 @@
+     print("KET QUA: Phuc hoi va doi chieu du lieu thanh cong")
+ 
+ 
++
+ if __name__ == "__main__":
+-    kiem_tra_phuc_hoi()+    parser = argparse.ArgumentParser(description="Thu phuc hoi kho tu ban sao duoc chon")
++    parser.add_argument("--file", required=True, help="Ten file trong DuLieu/SaoLuu")
++    args = parser.parse_args()
++    directory = (GOC / "DuLieu" / "SaoLuu").resolve()
++    candidate = (directory / args.file).resolve()
++    if Path(args.file).name != args.file or candidate.parent != directory or candidate.suffix != ".db":
++        raise SystemExit("Chi chap nhan ten ban sao .db trong DuLieu/SaoLuu")
++    kiem_tra_phuc_hoi(candidate)
+--- Nguon/TV3/Script/kiem_tra_trung.py
++++ Script/kiem_tra_trung.py
+@@ -1,3 +1,4 @@
++import os
+ import json
+ import sqlite3
+ from datetime import datetime
+@@ -43,13 +44,13 @@
+ 
+     if not cua_hang or cua_hang != truoc_gui:
+         print("CHUA DAT: Du lieu hai ben chua khop truoc khi thu.")
+-        return
++        return False
+ 
+     so_xac_nhan = 0
+ 
+     for giao_dich in cua_hang:
+         yeu_cau = Request(
+-            "http://127.0.0.1:8000/giao-dich",
++            os.environ.get("TV23_HQ_URL", "http://127.0.0.1:18000/giao-dich"),
+             data=json.dumps(giao_dich).encode("utf-8"),
+             headers={"Content-Type": "application/json"},
+             method="POST"
+@@ -67,7 +68,7 @@
+ 
+         if not hop_le:
+             print("CHUA DAT: Phan hoi khong dung:", xac_nhan)
+-            return
++            return False
+ 
+         so_xac_nhan += 1
+         print(giao_dich["ma_gd"], "| DA_TON_TAI | ACK hop le")
+@@ -85,13 +86,16 @@
+ 
+     if sau_gui == truoc_gui and so_ma_trung == 0:
+         print("DAT: Gui lap khong lam thay doi du lieu tru so.")
++        return True
+     else:
+         print("CHUA DAT: Can kiem tra lai du lieu.")
++        return False
+ 
+ 
+ if __name__ == "__main__":
+     try:
+-        kiem_tra()
++        if not kiem_tra():
++            raise SystemExit(2)
+     except Exception as loi:
+         print("KIEM THU CHUA HOAN TAT:", loi)
+         raise--- Nguon/TV3/Script/store_agent.py
++++ Script/store_agent.py
+@@ -1,3 +1,4 @@
++import os
+ import json
+ from urllib.request import Request, urlopen
+ from urllib.error import URLError
+@@ -115,7 +116,7 @@
+     print(f"Tong cong: {len(danh_sach)} giao dich")
+ 
+ def gui_giao_dich():
+-    dia_chi = "http://127.0.0.1:8000/giao-dich"
++    dia_chi = os.environ.get("TV23_HQ_URL", "http://127.0.0.1:18000/giao-dich")
+     ket_noi = sqlite3.connect(FILE_DB)
+     ket_noi.row_factory = sqlite3.Row
+ 

@@ -1,0 +1,120 @@
+
+[2026-11-09T02:06:09] doi_chieu.py 
+DOI CHIEU DU LIEU: 2026-11-09T02:06:09
+Cua hang 01: 5 giao dich (PENDING 0, SENT 0, ACKED 5)
+Tru so: 5 giao dich
+Ma giao dich trung tai tru so: 0 (phai = 0)
+Chua ve tru so (PENDING/SENT): 0
+Da ACKED nhung tru so thieu: 0 (phai = 0)
+Lech noi dung: 0
+KET QUA: Hai ben khop, khong mat, khong trung
+
+Ma thoat: 0
+
+[2026-11-09T02:06:10] kiem_tra_trung.py 
+KIEM THU GUI LAP: 2026-11-09T02:06:10.393560
+So giao dich cua hang: 5
+So giao dich tru so truoc gui: 5
+CH01-POS01-20261109-000001 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000002 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000003 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000004 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000005 | DA_TON_TAI | ACK hop le
+
+--- KET QUA ---
+So phan hoi xac nhan hop le: 5
+So giao dich tru so sau gui: 5
+So ban ghi du ma: 0
+Du lieu hai ben khop: True
+DAT: Gui lap khong lam thay doi du lieu tru so.
+
+Ma thoat: 0
+
+[2026-11-09T02:06:10] sao_luu_tru_so.py sao-luu
+Thoi gian: 2026-11-09T02:06:10
+Sao luu CSDL tru so thanh cong: truso_20261109_020610_619085.db
+Kiem tra toan ven: ok
+So giao dich trong ban sao: 5
+Dang giu 1 ban sao (ban thu khong tu xoa)
+
+Ma thoat: 0
+
+[2026-11-09T02:06:10] khoi-tao-kho 
+Da luu: CH01-POS01-20261109-000006 | 50000 VND | PENDING
+Da luu: CH01-POS01-20261109-000007 | 75000 VND | PENDING
+Da luu: CH01-POS01-20261109-000008 | 120000 VND | PENDING
+Da luu: CH01-POS01-20261109-000009 | 35000 VND | PENDING
+Da luu: CH01-POS01-20261109-000010 | 200000 VND | PENDING
+
+Ma thoat: 0
+
+[2026-11-09T02:06:11] doi_chieu.py 
+DOI CHIEU DU LIEU: 2026-11-09T02:06:11
+Cua hang 01: 10 giao dich (PENDING 0, SENT 0, ACKED 10)
+Tru so: 10 giao dich
+Ma giao dich trung tai tru so: 0 (phai = 0)
+Chua ve tru so (PENDING/SENT): 0
+Da ACKED nhung tru so thieu: 0 (phai = 0)
+Lech noi dung: 0
+KET QUA: Hai ben khop, khong mat, khong trung
+
+Ma thoat: 0
+
+[2026-11-09T02:06:11] sao_luu_tru_so.py sao-luu
+Thoi gian: 2026-11-09T02:06:11
+Sao luu CSDL tru so thanh cong: truso_20261109_020611_690229.db
+Kiem tra toan ven: ok
+So giao dich trong ban sao: 10
+Dang giu 2 ban sao (ban thu khong tu xoa)
+
+Ma thoat: 0
+
+[2026-11-09T02:06:11] sao_luu_tru_so.py khoi-phuc --file truso_20261109_020610_619085.db
+Thoi gian: 2026-11-09T02:06:11
+Khoi phuc tu ban sao: truso_20261109_020610_619085.db
+So giao dich tru so: 10 -> 5
+Kiem tra toan ven: ok
+Tiep theo: python Script/doi_chieu.py (kiem tra giao dich con thieu)
+
+Ma thoat: 0
+
+[2026-11-09T02:06:12] doi_chieu.py 
+DOI CHIEU DU LIEU: 2026-11-09T02:06:12
+Cua hang 01: 10 giao dich (PENDING 0, SENT 0, ACKED 10)
+Tru so: 5 giao dich
+Ma giao dich trung tai tru so: 0 (phai = 0)
+Chua ve tru so (PENDING/SENT): 0
+Da ACKED nhung tru so thieu: 5 (phai = 0)
+  thieu: CH01-POS01-20261109-000006
+  thieu: CH01-POS01-20261109-000007
+  thieu: CH01-POS01-20261109-000008
+  thieu: CH01-POS01-20261109-000009
+  thieu: CH01-POS01-20261109-000010
+Lech noi dung: 0
+CANH BAO: Tru so thieu giao dich da ACKED -> chay: python Script/doi_chieu.py gui-bu
+
+Ma thoat: 2
+
+[2026-11-09T02:06:13] doi_chieu.py gui-bu
+GUI BU: 2026-11-09T02:06:12
+Co 5 giao dich da ACKED ma tru so thieu.
+CH01-POS01-20261109-000006 | DA_LUU | ACK hop le
+CH01-POS01-20261109-000007 | DA_LUU | ACK hop le
+CH01-POS01-20261109-000008 | DA_LUU | ACK hop le
+CH01-POS01-20261109-000009 | DA_LUU | ACK hop le
+CH01-POS01-20261109-000010 | DA_LUU | ACK hop le
+Gui bu xong: 5/5 duoc xac nhan
+
+Ma thoat: 0
+
+[2026-11-09T02:06:13] doi_chieu.py 
+DOI CHIEU DU LIEU: 2026-11-09T02:06:13
+Cua hang 01: 10 giao dich (PENDING 0, SENT 0, ACKED 10)
+Tru so: 10 giao dich
+Ma giao dich trung tai tru so: 0 (phai = 0)
+Chua ve tru so (PENDING/SENT): 0
+Da ACKED nhung tru so thieu: 0 (phai = 0)
+Lech noi dung: 0
+KET QUA: Hai ben khop, khong mat, khong trung
+
+Ma thoat: 0

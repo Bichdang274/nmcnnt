@@ -1,0 +1,14 @@
+[
+  {
+    "source": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\cuahang01.db",
+    "source_sha256": "dfa660e03f49db459cec7cb9312f057fbe9092d9b7fd822fbbc5c43af9d7c51a",
+    "destination": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_GD2_20261109_020609_227458\\DuLieu\\cuahang01.db",
+    "destination_sha256": "cfdc225ac904e0e09187e165d9deb110d11323d4990cd416438b100c1fb0e276"
+  },
+  {
+    "source": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\truso.db",
+    "source_sha256": "a6752eb81cc4cfde277968ce586f5532b00711315dcf4573e4304ed66fba88e3",
+    "destination": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_GD2_20261109_020609_227458\\DuLieu\\truso.db",
+    "destination_sha256": "645536ab69375d9aa97b34ac4d91c8ffe2cd6e760cc908f890472af58cc28550"
+  }
+]

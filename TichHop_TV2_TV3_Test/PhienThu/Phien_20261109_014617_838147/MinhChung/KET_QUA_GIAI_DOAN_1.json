@@ -1,0 +1,361 @@
+{
+  "status": "PASS",
+  "started": "2026-11-09T01:46:17+07:00",
+  "finished": "2026-11-09T01:46:42+07:00",
+  "scope": "stage 1 only, exactly 5 transactions, no backup/restore/resend-all",
+  "session": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147",
+  "error": null,
+  "cases": [
+    {
+      "case": "GD1-BOOT",
+      "result": "PASS",
+      "time": "2026-11-09T01:46:17+07:00",
+      "detail": "Controller started; no data/service created automatically."
+    },
+    {
+      "case": "GD1-SESSION",
+      "result": "PASS",
+      "time": "2026-11-09T01:46:18+07:00",
+      "detail": "New isolated session and empty store."
+    },
+    {
+      "case": "GD1-EMPTY",
+      "result": "PASS",
+      "time": "2026-11-09T01:46:19+07:00",
+      "detail": "Empty 0/0 rejected with exit code 2 as expected."
+    },
+    {
+      "case": "GD1-STOP",
+      "result": "PASS",
+      "time": "2026-11-09T01:46:19+07:00",
+      "detail": "Owned receiver stopped; port 18000 released."
+    },
+    {
+      "case": "GD1-CREATE",
+      "result": "PASS",
+      "time": "2026-11-09T01:46:20+07:00",
+      "detail": "Created exactly 5 PENDING; HQ remains 0."
+    },
+    {
+      "case": "GD1-OFFLINE",
+      "result": "PASS",
+      "time": "2026-11-09T01:46:31+07:00",
+      "detail": "5 SENT retained; HQ 0; all 5 automatic failures logged."
+    },
+    {
+      "case": "GD1-RECOVER",
+      "result": "PASS",
+      "time": "2026-11-09T01:46:41+07:00",
+      "detail": "Same auto-sync process recovered 5 transactions without manual sending."
+    },
+    {
+      "case": "GD1-COMPARE",
+      "result": "PASS",
+      "time": "2026-11-09T01:46:41+07:00",
+      "detail": "Store=5, ACKED=5, HQ=5; all five fields match; no duplicate IDs."
+    },
+    {
+      "case": "GD1-CLEANUP",
+      "result": "PASS",
+      "time": "2026-11-09T01:46:42+07:00",
+      "detail": "Controller exited 0; owned children stopped; port 18000 free."
+    }
+  ],
+  "commands": [
+    {
+      "time": "2026-11-09T01:46:17+07:00",
+      "command": "phien-moi"
+    },
+    {
+      "time": "2026-11-09T01:46:18+07:00",
+      "command": "tru-so-bat"
+    },
+    {
+      "time": "2026-11-09T01:46:19+07:00",
+      "command": "doi-chieu"
+    },
+    {
+      "time": "2026-11-09T01:46:19+07:00",
+      "command": "tru-so-tat"
+    },
+    {
+      "time": "2026-11-09T01:46:19+07:00",
+      "command": "tao-5"
+    },
+    {
+      "time": "2026-11-09T01:46:20+07:00",
+      "command": "dong-bo-bat"
+    },
+    {
+      "time": "2026-11-09T01:46:31+07:00",
+      "command": "tru-so-bat"
+    },
+    {
+      "time": "2026-11-09T01:46:41+07:00",
+      "command": "dong-bo-tat"
+    },
+    {
+      "time": "2026-11-09T01:46:41+07:00",
+      "command": "doi-chieu"
+    },
+    {
+      "time": "2026-11-09T01:46:41+07:00",
+      "command": "trang-thai"
+    },
+    {
+      "time": "2026-11-09T01:46:42+07:00",
+      "command": "thoat"
+    }
+  ],
+  "processes": {
+    "controller": 19504,
+    "receiver_initial": 11408,
+    "auto_sync": 30240,
+    "receiver_restarted": 26876
+  },
+  "controller_exit": 0,
+  "snapshots": {
+    "initial": {
+      "time": "2026-11-09T01:46:19+07:00",
+      "store": {
+        "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\cuahang01.db",
+        "count": 0,
+        "states": {},
+        "duplicate_ids": 0,
+        "rows": []
+      },
+      "hq": {
+        "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\truso.db",
+        "count": 0,
+        "states": {},
+        "duplicate_ids": 0,
+        "rows": []
+      },
+      "five_fields_equal": true
+    },
+    "pending": {
+      "time": "2026-11-09T01:46:20+07:00",
+      "store": {
+        "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\cuahang01.db",
+        "count": 5,
+        "states": {
+          "PENDING": 5
+        },
+        "duplicate_ids": 0,
+        "rows": [
+          {
+            "ma_gd": "CH01-POS01-20261109-000001",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 50000,
+            "trang_thai": "PENDING"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000002",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 75000,
+            "trang_thai": "PENDING"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000003",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 120000,
+            "trang_thai": "PENDING"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000004",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 35000,
+            "trang_thai": "PENDING"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000005",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 200000,
+            "trang_thai": "PENDING"
+          }
+        ]
+      },
+      "hq": {
+        "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\truso.db",
+        "count": 0,
+        "states": {},
+        "duplicate_ids": 0,
+        "rows": []
+      },
+      "five_fields_equal": false
+    },
+    "offline": {
+      "time": "2026-11-09T01:46:31+07:00",
+      "store": {
+        "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\cuahang01.db",
+        "count": 5,
+        "states": {
+          "SENT": 5
+        },
+        "duplicate_ids": 0,
+        "rows": [
+          {
+            "ma_gd": "CH01-POS01-20261109-000001",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 50000,
+            "trang_thai": "SENT"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000002",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 75000,
+            "trang_thai": "SENT"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000003",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 120000,
+            "trang_thai": "SENT"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000004",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 35000,
+            "trang_thai": "SENT"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000005",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 200000,
+            "trang_thai": "SENT"
+          }
+        ]
+      },
+      "hq": {
+        "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\truso.db",
+        "count": 0,
+        "states": {},
+        "duplicate_ids": 0,
+        "rows": []
+      },
+      "five_fields_equal": false
+    },
+    "final": {
+      "time": "2026-11-09T01:46:41+07:00",
+      "store": {
+        "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\cuahang01.db",
+        "count": 5,
+        "states": {
+          "ACKED": 5
+        },
+        "duplicate_ids": 0,
+        "rows": [
+          {
+            "ma_gd": "CH01-POS01-20261109-000001",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 50000,
+            "trang_thai": "ACKED"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000002",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 75000,
+            "trang_thai": "ACKED"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000003",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 120000,
+            "trang_thai": "ACKED"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000004",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 35000,
+            "trang_thai": "ACKED"
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000005",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 200000,
+            "trang_thai": "ACKED"
+          }
+        ]
+      },
+      "hq": {
+        "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\truso.db",
+        "count": 5,
+        "states": {},
+        "duplicate_ids": 0,
+        "rows": [
+          {
+            "ma_gd": "CH01-POS01-20261109-000001",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 50000
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000002",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 75000
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000003",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 120000
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000004",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 35000
+          },
+          {
+            "ma_gd": "CH01-POS01-20261109-000005",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T01:46:20",
+            "so_tien": 200000
+          }
+        ]
+      },
+      "five_fields_equal": true
+    }
+  },
+  "existing_test_files_checked": 29,
+  "existing_test_files_changed": [],
+  "old_sessions_preserved": true,
+  "original_repository_accessed": false,
+  "original_applications_run": false
+}

@@ -1,0 +1,48 @@
+{
+  "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_GD2_20261109_020609_227458\\DuLieu\\SaoLuuTruSo\\truso_20261109_020610_619085.db",
+  "count": 5,
+  "states": {},
+  "rows": [
+    {
+      "ma_gd": "CH01-POS01-20261109-000001",
+      "ma_cua_hang": "CH01",
+      "ma_may": "POS01",
+      "thoi_gian": "2026-11-09T01:46:20",
+      "so_tien": 50000
+    },
+    {
+      "ma_gd": "CH01-POS01-20261109-000002",
+      "ma_cua_hang": "CH01",
+      "ma_may": "POS01",
+      "thoi_gian": "2026-11-09T01:46:20",
+      "so_tien": 75000
+    },
+    {
+      "ma_gd": "CH01-POS01-20261109-000003",
+      "ma_cua_hang": "CH01",
+      "ma_may": "POS01",
+      "thoi_gian": "2026-11-09T01:46:20",
+      "so_tien": 120000
+    },
+    {
+      "ma_gd": "CH01-POS01-20261109-000004",
+      "ma_cua_hang": "CH01",
+      "ma_may": "POS01",
+      "thoi_gian": "2026-11-09T01:46:20",
+      "so_tien": 35000
+    },
+    {
+      "ma_gd": "CH01-POS01-20261109-000005",
+      "ma_cua_hang": "CH01",
+      "ma_may": "POS01",
+      "thoi_gian": "2026-11-09T01:46:20",
+      "so_tien": 200000
+    }
+  ],
+  "duplicate_ids": 0,
+  "integrity_check": [
+    [
+      "ok"
+    ]
+  ]
+}

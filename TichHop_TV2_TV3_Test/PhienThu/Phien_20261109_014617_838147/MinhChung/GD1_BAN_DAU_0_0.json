@@ -1,0 +1,18 @@
+{
+  "time": "2026-11-09T01:46:19+07:00",
+  "store": {
+    "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\cuahang01.db",
+    "count": 0,
+    "states": {},
+    "duplicate_ids": 0,
+    "rows": []
+  },
+  "hq": {
+    "path": "THU_MUC_BAN_GIAO\\PhienThu\\Phien_20261109_014617_838147\\DuLieu\\truso.db",
+    "count": 0,
+    "states": {},
+    "duplicate_ids": 0,
+    "rows": []
+  },
+  "five_fields_equal": true
+}

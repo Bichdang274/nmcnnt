@@ -1,0 +1,11 @@
+{
+  "missing_ids": [
+    "CH01-POS01-20261109-000006",
+    "CH01-POS01-20261109-000007",
+    "CH01-POS01-20261109-000008",
+    "CH01-POS01-20261109-000009",
+    "CH01-POS01-20261109-000010"
+  ],
+  "tv2_output": "DOI CHIEU DU LIEU: 2026-11-09T02:06:12\nCua hang 01: 10 giao dich (PENDING 0, SENT 0, ACKED 10)\nTru so: 5 giao dich\nMa giao dich trung tai tru so: 0 (phai = 0)\nChua ve tru so (PENDING/SENT): 0\nDa ACKED nhung tru so thieu: 5 (phai = 0)\n  thieu: CH01-POS01-20261109-000006\n  thieu: CH01-POS01-20261109-000007\n  thieu: CH01-POS01-20261109-000008\n  thieu: CH01-POS01-20261109-000009\n  thieu: CH01-POS01-20261109-000010\nLech noi dung: 0\nCANH BAO: Tru so thieu giao dich da ACKED -> chay: python Script/doi_chieu.py gui-bu\n",
+  "expected_exit": 2
+}
