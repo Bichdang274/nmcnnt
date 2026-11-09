@@ -1,0 +1,821 @@
+
+[2026-11-09T17:43:08+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174308_288890\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174308_288890
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:09
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         0        0      0       0
+Tổng kho: 0 | Trụ sở: ? | Chưa ACK: 0
+Dịch vụ: KHÔNG PHẢN HỒI
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Dịch vụ nhận hiện không phản hồi HTTP
+! Không đủ dữ liệu để kết luận; xem lỗi CSDL
+LỖI: Trụ sở: CSDL chưa được tạo: truso.db
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:43:09+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 25516
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:10
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         0        0      0       0
+Tổng kho: 0 | Trụ sở: 0 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Chưa có giao dịch; 0/0 không chứng minh đồng bộ thành công
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:43:10+07:00] tich-hop> giam-sat
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:10
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         0        0      0       0
+Tổng kho: 0 | Trụ sở: 0 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Chưa có giao dịch; 0/0 không chứng minh đồng bộ thành công
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+NC01_GIAM_SAT_RONG PASS
+
+[2026-11-09T17:43:10+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174310_338655\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174310_338655
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+
+[2026-11-09T17:43:10+07:00] tich-hop> tru-so-bat
+Receiver giả wrong_id đã bật; PID 27084
+
+[2026-11-09T17:43:10+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Chua xac nhan: CH01-POS01-20261109-000001 | Xac nhan khong hop le
+Van giu giao dich trong kho de gui lai.
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:11
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      1       0
+Tổng kho: 1 | Trụ sở: 0 | Chưa ACK: 1
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 1 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Còn 1 giao dịch chưa có ACK hợp lệ
+! Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:43:11+07:00] tich-hop> tru-so-tat
+Receiver giả wrong_id đã dừng (chỉ tiến trình do demo tạo).
+
+[2026-11-09T17:43:11+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 31768
+
+[2026-11-09T17:43:11+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:11
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      0       1
+Tổng kho: 1 | Trụ sở: 1 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+NC02_ACK_wrong_id PASS
+
+[2026-11-09T17:43:11+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174311_950313\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174311_950313
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+
+[2026-11-09T17:43:12+07:00] tich-hop> tru-so-bat
+Receiver giả array đã bật; PID 32160
+
+[2026-11-09T17:43:12+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Chua xac nhan: CH01-POS01-20261109-000001 | Xac nhan khong hop le
+Van giu giao dich trong kho de gui lai.
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:12
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      1       0
+Tổng kho: 1 | Trụ sở: 0 | Chưa ACK: 1
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 1 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Còn 1 giao dịch chưa có ACK hợp lệ
+! Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:43:12+07:00] tich-hop> tru-so-tat
+Receiver giả array đã dừng (chỉ tiến trình do demo tạo).
+
+[2026-11-09T17:43:12+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 34244
+
+[2026-11-09T17:43:13+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:13
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      0       1
+Tổng kho: 1 | Trụ sở: 1 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+NC02_ACK_array PASS
+
+[2026-11-09T17:43:13+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174313_460551\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174313_460551
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+
+[2026-11-09T17:43:13+07:00] tich-hop> tru-so-bat
+Receiver giả invalid_json đã bật; PID 30284
+
+[2026-11-09T17:43:13+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Chua xac nhan: CH01-POS01-20261109-000001 | Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Van giu giao dich trong kho de gui lai.
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:14
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      1       0
+Tổng kho: 1 | Trụ sở: 0 | Chưa ACK: 1
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 1 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Còn 1 giao dịch chưa có ACK hợp lệ
+! Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:43:14+07:00] tich-hop> tru-so-tat
+Receiver giả invalid_json đã dừng (chỉ tiến trình do demo tạo).
+
+[2026-11-09T17:43:14+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 33812
+
+[2026-11-09T17:43:14+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:14
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      0       1
+Tổng kho: 1 | Trụ sở: 1 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+NC02_ACK_invalid_json PASS
+
+[2026-11-09T17:43:14+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174314_976732\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174314_976732
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+
+[2026-11-09T17:43:15+07:00] tich-hop> tru-so-bat
+Receiver giả ack_false đã bật; PID 30640
+
+[2026-11-09T17:43:15+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Chua xac nhan: CH01-POS01-20261109-000001 | Xac nhan khong hop le
+Van giu giao dich trong kho de gui lai.
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:15
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      1       0
+Tổng kho: 1 | Trụ sở: 0 | Chưa ACK: 1
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 1 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Còn 1 giao dịch chưa có ACK hợp lệ
+! Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:43:15+07:00] tich-hop> tru-so-tat
+Receiver giả ack_false đã dừng (chỉ tiến trình do demo tạo).
+
+[2026-11-09T17:43:15+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 21364
+
+[2026-11-09T17:43:16+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:16
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      0       1
+Tổng kho: 1 | Trụ sở: 1 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+NC02_ACK_ack_false PASS
+
+[2026-11-09T17:43:16+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174316_521104\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174316_521104
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+
+[2026-11-09T17:43:16+07:00] tich-hop> tru-so-bat
+Receiver giả ack_number đã bật; PID 29808
+
+[2026-11-09T17:43:17+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Chua xac nhan: CH01-POS01-20261109-000001 | Xac nhan khong hop le
+Van giu giao dich trong kho de gui lai.
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:17
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      1       0
+Tổng kho: 1 | Trụ sở: 0 | Chưa ACK: 1
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 1 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Còn 1 giao dịch chưa có ACK hợp lệ
+! Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:43:17+07:00] tich-hop> tru-so-tat
+Receiver giả ack_number đã dừng (chỉ tiến trình do demo tạo).
+
+[2026-11-09T17:43:17+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 31276
+
+[2026-11-09T17:43:17+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:18
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      0       1
+Tổng kho: 1 | Trụ sở: 1 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+NC02_ACK_ack_number PASS
+
+[2026-11-09T17:43:18+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174318_139841\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174318_139841
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+
+[2026-11-09T17:43:18+07:00] tich-hop> tru-so-bat
+Receiver giả ack_string đã bật; PID 27676
+
+[2026-11-09T17:43:18+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Chua xac nhan: CH01-POS01-20261109-000001 | Xac nhan khong hop le
+Van giu giao dich trong kho de gui lai.
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:18
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      1       0
+Tổng kho: 1 | Trụ sở: 0 | Chưa ACK: 1
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 1 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Còn 1 giao dịch chưa có ACK hợp lệ
+! Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:43:18+07:00] tich-hop> tru-so-tat
+Receiver giả ack_string đã dừng (chỉ tiến trình do demo tạo).
+
+[2026-11-09T17:43:18+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 25056
+
+[2026-11-09T17:43:19+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:19
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      0       1
+Tổng kho: 1 | Trụ sở: 1 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+NC02_ACK_ack_string PASS
+
+[2026-11-09T17:43:19+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174319_685114\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174319_685114
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+
+[2026-11-09T17:43:19+07:00] tich-hop> tru-so-bat
+Receiver giả missing_ack đã bật; PID 8116
+
+[2026-11-09T17:43:20+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Chua xac nhan: CH01-POS01-20261109-000001 | Xac nhan khong hop le
+Van giu giao dich trong kho de gui lai.
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:20
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      1       0
+Tổng kho: 1 | Trụ sở: 0 | Chưa ACK: 1
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 1 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Còn 1 giao dịch chưa có ACK hợp lệ
+! Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:43:20+07:00] tich-hop> tru-so-tat
+Receiver giả missing_ack đã dừng (chỉ tiến trình do demo tạo).
+
+[2026-11-09T17:43:20+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 29076
+
+[2026-11-09T17:43:21+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:21
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      0       1
+Tổng kho: 1 | Trụ sở: 1 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+NC02_ACK_missing_ack PASS
+
+[2026-11-09T17:43:21+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174321_254610\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174321_254610
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+Da luu: CH01-POS01-20261109-000002 | 10001 VND | PENDING
+Da luu: CH01-POS01-20261109-000003 | 10002 VND | PENDING
+Da luu: CH01-POS01-20261109-000004 | 10003 VND | PENDING
+Da luu: CH01-POS01-20261109-000005 | 10004 VND | PENDING
+Da luu: CH01-POS01-20261109-000006 | 10005 VND | PENDING
+Da luu: CH01-POS01-20261109-000007 | 10006 VND | PENDING
+Da luu: CH01-POS01-20261109-000008 | 10007 VND | PENDING
+Da luu: CH01-POS01-20261109-000009 | 10008 VND | PENDING
+Da luu: CH01-POS01-20261109-000010 | 10009 VND | PENDING
+Da luu: CH01-POS01-20261109-000011 | 10010 VND | PENDING
+Da luu: CH01-POS01-20261109-000012 | 10011 VND | PENDING
+Da luu: CH01-POS01-20261109-000013 | 10012 VND | PENDING
+Da luu: CH01-POS01-20261109-000014 | 10013 VND | PENDING
+Da luu: CH01-POS01-20261109-000015 | 10014 VND | PENDING
+Da luu: CH01-POS01-20261109-000016 | 10015 VND | PENDING
+Da luu: CH01-POS01-20261109-000017 | 10016 VND | PENDING
+Da luu: CH01-POS01-20261109-000018 | 10017 VND | PENDING
+Da luu: CH01-POS01-20261109-000019 | 10018 VND | PENDING
+Da luu: CH01-POS01-20261109-000020 | 10019 VND | PENDING
+
+[2026-11-09T17:43:21+07:00] tich-hop> dong-bo-bat
+Tự đồng bộ CH01/POS01 đã bật; PID 8856
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:44:01
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                        20        0     20       0
+Tổng kho: 20 | Trụ sở: ? | Chưa ACK: 20
+Dịch vụ: KHÔNG PHẢN HỒI
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Còn 20 giao dịch chưa có ACK hợp lệ
+! Dịch vụ nhận hiện không phản hồi HTTP
+! Không đủ dữ liệu để kết luận; xem lỗi CSDL
+LỖI: Trụ sở: CSDL chưa được tạo: truso.db
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:44:01+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 9680
+
+[2026-11-09T17:44:12+07:00] tich-hop> dong-bo-tat
+Tự đồng bộ CH01/POS01 đã dừng (chỉ tiến trình do demo tạo).
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:44:13
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                        20        0      0      20
+Tổng kho: 20 | Trụ sở: 20 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:44:13+07:00] tich-hop> gui-lap
+KIEM THU GUI LAP: 2026-11-09T17:44:13.089540
+So giao dich cua hang: 20
+So giao dich tru so truoc gui: 20
+CH01-POS01-20261109-000001 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000002 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000003 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000004 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000005 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000006 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000007 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000008 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000009 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000010 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000011 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000012 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000013 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000014 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000015 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000016 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000017 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000018 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000019 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000020 | DA_TON_TAI | ACK hop le
+
+--- KET QUA ---
+So phan hoi xac nhan hop le: 20
+So giao dich tru so sau gui: 20
+So ban ghi du ma: 0
+Du lieu cap cua hang/POS khop: True
+DAT: Gui lap khong lam thay doi du lieu tru so.
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:44:13
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                        20        0      0      20
+Tổng kho: 20 | Trụ sở: 20 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+NC03_CHO_20_VA_TU_PHUC_HOI PASS
+
+[2026-11-09T17:44:13+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+
+[2026-11-09T17:44:13+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 32944
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+Da luu: CH01-POS01-20261109-000002 | 10001 VND | PENDING
+Da luu: CH01-POS01-20261109-000003 | 10002 VND | PENDING
+Da luu: CH01-POS01-20261109-000004 | 10003 VND | PENDING
+Da luu: CH01-POS01-20261109-000005 | 10004 VND | PENDING
+
+[2026-11-09T17:44:14+07:00] tich-hop> dong-bo-bat
+Tự đồng bộ CH01/POS01 đã bật; PID 18460
+
+[2026-11-09T17:44:14+07:00] tich-hop> cua-hang CH02 POS01
+Da khoi tao kho giao dich CH02/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606\DuLieu\CuaHang\CH02_POS01.db
+Đang chọn: CH02/POS01
+
+[2026-11-09T17:44:14+07:00] tich-hop> ngat-cua-hang
+Mô phỏng ngắt HTTP cho cửa hàng đang chọn.
+Da luu: CH02-POS01-20261109-000001 | 10000 VND | PENDING
+Da luu: CH02-POS01-20261109-000002 | 10001 VND | PENDING
+Da luu: CH02-POS01-20261109-000003 | 10002 VND | PENDING
+Da luu: CH02-POS01-20261109-000004 | 10003 VND | PENDING
+Da luu: CH02-POS01-20261109-000005 | 10004 VND | PENDING
+
+[2026-11-09T17:44:14+07:00] tich-hop> dong-bo-bat
+Tự đồng bộ CH02/POS01 đã bật; PID 30948
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:44:15
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         5        0      0       5
+DuLieu/CuaHang/CH02_POS01.db                5        0      5       0
+Tổng kho: 10 | Trụ sở: 5 | Chưa ACK: 5
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 5 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Còn 5 giao dịch chưa có ACK hợp lệ
+! Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:44:15+07:00] tich-hop> noi-cua-hang
+Tự đồng bộ CH02/POS01 đã dừng (chỉ tiến trình do demo tạo).
+Tự đồng bộ CH02/POS01 đã bật; PID 26268
+Đã nối lại HTTP cho cửa hàng đang chọn.
+
+[2026-11-09T17:44:15+07:00] tich-hop> dong-bo-tat
+Tự đồng bộ CH02/POS01 đã dừng (chỉ tiến trình do demo tạo).
+
+[2026-11-09T17:44:15+07:00] tich-hop> cua-hang CH01 POS01
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606\DuLieu\cuahang01.db
+Đang chọn: CH01/POS01
+
+[2026-11-09T17:44:15+07:00] tich-hop> dong-bo-tat
+Tự đồng bộ CH01/POS01 đã dừng (chỉ tiến trình do demo tạo).
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:44:15
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         5        0      0       5
+DuLieu/CuaHang/CH02_POS01.db                5        0      0       5
+Tổng kho: 10 | Trụ sở: 10 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:44:15+07:00] tich-hop> gui-lap
+KIEM THU GUI LAP: 2026-11-09T17:44:15.733739
+So giao dich cua hang: 5
+So giao dich tru so truoc gui: 10
+CH01-POS01-20261109-000001 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000002 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000003 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000004 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000005 | DA_TON_TAI | ACK hop le
+
+--- KET QUA ---
+So phan hoi xac nhan hop le: 5
+So giao dich tru so sau gui: 10
+So ban ghi du ma: 0
+Du lieu cap cua hang/POS khop: True
+DAT: Gui lap khong lam thay doi du lieu tru so.
+
+[2026-11-09T17:44:15+07:00] tich-hop> cua-hang CH02 POS01
+Da khoi tao kho giao dich CH02/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606\DuLieu\CuaHang\CH02_POS01.db
+Đang chọn: CH02/POS01
+
+[2026-11-09T17:44:15+07:00] tich-hop> gui-lap
+KIEM THU GUI LAP: 2026-11-09T17:44:15.956644
+So giao dich cua hang: 5
+So giao dich tru so truoc gui: 10
+CH02-POS01-20261109-000001 | DA_TON_TAI | ACK hop le
+CH02-POS01-20261109-000002 | DA_TON_TAI | ACK hop le
+CH02-POS01-20261109-000003 | DA_TON_TAI | ACK hop le
+CH02-POS01-20261109-000004 | DA_TON_TAI | ACK hop le
+CH02-POS01-20261109-000005 | DA_TON_TAI | ACK hop le
+
+--- KET QUA ---
+So phan hoi xac nhan hop le: 5
+So giao dich tru so sau gui: 10
+So ban ghi du ma: 0
+Du lieu cap cua hang/POS khop: True
+DAT: Gui lap khong lam thay doi du lieu tru so.
+
+[2026-11-09T17:44:16+07:00] tich-hop> gui-bu
+LỖI ĐƯỢC CHỜ ĐỢI: RuntimeError: Công cụ TV2 hiện dành cho CH01/POS01; dùng giam-sat để đối chiếu nhiều kho. Chưa mở rộng gửi bù TV2 cho nhiều cửa hàng.
+
+[2026-11-09T17:44:16+07:00] tich-hop> trang-thai
+Cửa hàng/POS đang chọn: CH02/POS01
+Phiên: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606
+Trụ sở: ĐANG CHẠY
+Auto sync: TẮT
+Log: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606\MinhChung
+CH01/POS01 | auto sync: False | mô phỏng ngắt HTTP: False
+CH02/POS01 | auto sync: False | mô phỏng ngắt HTTP: False
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:44:16
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         5        0      0       5
+DuLieu/CuaHang/CH02_POS01.db                5        0      0       5
+Tổng kho: 10 | Trụ sở: 10 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+NC04_HAI_CUA_HANG PASS
+
+[2026-11-09T17:44:16+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174416_189706\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174416_189706
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+Da luu: CH01-POS01-20261109-000002 | 10000 VND | PENDING
+
+CONFIG_REJECTED {'TV3_STORE_ID': '../BAD'} 1 Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from Script.store_agent import khoi_tao; khoi_tao()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174416_189706\Script\store_agent.py", line 17, in <module>
+    raise ValueError("Mã cửa hàng/POS: 2–16 ký tự A–Z, 0–9; bắt đầu bằng chữ")
+ValueError: Mã cửa hàng/POS: 2–16 ký tự A–Z, 0–9; bắt đầu bằng chữ
+
+CONFIG_REJECTED {'TV3_DB_PATH': '../ngoai_phien.db'} 1 Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from Script.store_agent import khoi_tao; khoi_tao()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174416_189706\Script\store_agent.py", line 20, in <module>
+    raise ValueError("CSDL phải nằm trong phiên hiện tại")
+ValueError: CSDL phải nằm trong phiên hiện tại
+
+CONFIG_REJECTED {'TV3_STORE_ID': 'CH02', 'TV3_DB_PATH': 'DuLieu/cuahang01.db'} 1 Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from Script.store_agent import khoi_tao; khoi_tao()
+                                             ~~~~~~~~^^
+  File "RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174416_189706\Script\store_agent.py", line 59, in khoi_tao
+    kiem_tra_danh_tinh(ket_noi)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174416_189706\Script\store_agent.py", line 31, in kiem_tra_danh_tinh
+    raise ValueError("CSDL đã có giao dịch của cặp cửa hàng/POS khác; cần file riêng")
+ValueError: CSDL đã có giao dịch của cặp cửa hàng/POS khác; cần file riêng
+
+
+NC05_CAU_HINH_VA_BO_DEM PASS
+
+[2026-11-09T17:44:16+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174416_904157\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174416_904157
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+
+[2026-11-09T17:44:17+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 20672
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+
+[2026-11-09T17:44:17+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:44:19
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         1        0      0       1
+Tổng kho: 1 | Trụ sở: 1 | Chưa ACK: 0
+Dịch vụ: KHÔNG PHẢN HỒI
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 1 | Trùng: 0
+! Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng
+! Dịch vụ nhận hiện không phản hồi HTTP
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+[2026-11-09T17:44:19+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174419_033327\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174419_033327
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:44:20
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         0        0      0       0
+Tổng kho: 0 | Trụ sở: ? | Chưa ACK: 0
+Dịch vụ: KHÔNG PHẢN HỒI
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Dịch vụ nhận hiện không phản hồi HTTP
+! Không đủ dữ liệu để kết luận; xem lỗi CSDL
+LỖI: Trụ sở: no such table: giao_dich
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+NC06_GIAM_SAT_LECH_VA_LOI_SCHEMA PASS
+BẢN TÍCH HỢP THỬ NGHIỆM TV2–TV3 | NHÁNH NÂNG CAO TV3
+Giai đoạn 1 và 2 đã ĐẠT trên localhost; xem báo cáo và log đã lưu.
+Phiên demo mới chưa được tạo hoặc kiểm thử; dùng phien-moi để bắt đầu.
+Kết quả bổ sung được ghi riêng trong BAO_CAO_KIEM_THU_TICH_HOP.md.
+
+Lệnh nhập tại tich-hop> (không phải lệnh PowerShell):
+  phien-moi                 Tạo phiên mới riêng; giữ nguyên mọi phiên cũ
+  tru-so-bat | tru-so-tat    Bật/tắt receiver của phiên trên localhost:18000
+  tao-5                     Tạo thêm đúng 5 giao dịch mẫu trong phiên hiện tại
+  dong-bo-bat | dong-bo-tat  Bật/tắt auto sync; chờ 10 giây sau mỗi lượt
+  gui-mot-luot              Gửi thủ công khi auto sync đã tắt
+  gui-lap                   Gửi lặp và kiểm tra; auto sync phải tắt
+  doi-chieu                 Đối chiếu; 0/0 hoặc thiếu dữ liệu không coi là đạt
+  sao-luu-tru-so            Sao lưu trụ sở, giữ tất cả bản sao
+  danh-sach-ban-sao         Xem tên bản sao để lựa chọn
+  phuc-hoi TEN_FILE.db      Dừng sender/receiver, sao lưu hiện trạng, phục hồi
+  gui-bu                    Gửi ACKED mà trụ sở thiếu rồi đối chiếu lại
+  xuat-csv | sao-luu-kho    Công cụ kho cửa hàng; chỉ dùng dữ liệu phiên
+  phuc-hoi-kho TEN_FILE.db  Thử phục hồi kho vào file riêng
+  cua-hang CH02 POS01       Chọn/tạo kho riêng; không dừng sender cửa hàng khác
+  ngat-cua-hang             Mô phỏng chặn gửi HTTP riêng cửa hàng đang chọn
+  noi-cua-hang              Nối lại; giữ auto sync nếu trước đó đang chạy
+  giam-sat                  Tổng hợp chỉ đọc mọi kho và trụ sở
+  trang-thai | tro-giup | thoat
+Dùng thoat để dừng các tiến trình của phiên trước khi đóng Terminal.
+Schema TV3 là lựa chọn tạm thời, cần TV2 xác nhận.
+
+tich-hop> Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174420_209299\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174420_209299
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+tich-hop> Trụ sở đã bật; PID 29520
+tich-hop> Tự đồng bộ CH01/POS01 đã bật; PID 32656
+tich-hop> Da khoi tao kho giao dich CH02/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174420_209299\DuLieu\CuaHang\CH02_POS01.db
+Đang chọn: CH02/POS01
+tich-hop> Tự đồng bộ CH02/POS01 đã bật; PID 14372
+tich-hop> Tự đồng bộ CH01/POS01 đã dừng (chỉ tiến trình do demo tạo).
+Tự đồng bộ CH02/POS01 đã dừng (chỉ tiến trình do demo tạo).
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+
+NC07_CLI_DON_HAI_SENDER PASS
+RESULT={"status": "PASS", "cases": 13, "error": null}

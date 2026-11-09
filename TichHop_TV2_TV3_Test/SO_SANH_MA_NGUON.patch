@@ -1088,3 +1088,915 @@
 +
 +if __name__ == "__main__":
 +    raise SystemExit(main())
+
+--- c88fdb9/Script/store_agent.py
++++ Script/store_agent.py
+@@ -1,4 +1,5 @@
+ import os
++import re
+ import json
+ from urllib.request import Request, urlopen
+ from urllib.error import URLError
+@@ -9,8 +10,25 @@
+ # Xác định thư mục gốc của dự án nmcnnt
+ THU_MUC_GOC = Path(__file__).resolve().parent.parent
+ 
+-# File cơ sở dữ liệu của cửa hàng 01
+-FILE_DB = THU_MUC_GOC / "DuLieu" / "cuahang01.db"
++# Mỗi cặp cửa hàng/POS dùng file riêng; mặc định tương thích demo cũ.
++MA_CUA_HANG = os.environ.get("TV3_STORE_ID", "CH01")
++MA_MAY = os.environ.get("TV3_POS_ID", "POS01")
++if any(not re.fullmatch(r"[A-Z][A-Z0-9]{1,15}", value) for value in (MA_CUA_HANG, MA_MAY)):
++    raise ValueError("Mã cửa hàng/POS: 2–16 ký tự A–Z, 0–9; bắt đầu bằng chữ")
++FILE_DB = (THU_MUC_GOC / os.environ.get("TV3_DB_PATH", "DuLieu/cuahang01.db")).resolve()
++if not FILE_DB.is_relative_to(THU_MUC_GOC.resolve()):
++    raise ValueError("CSDL phải nằm trong phiên hiện tại")
++OFFLINE = os.environ.get("TV3_OFFLINE", "0")
++if OFFLINE not in {"0", "1"}:
++    raise ValueError("TV3_OFFLINE chỉ nhận 0 hoặc 1")
++
++
++def kiem_tra_danh_tinh(ket_noi):
++    if ket_noi.execute(
++        "SELECT 1 FROM giao_dich WHERE ma_cua_hang != ? OR ma_may != ? LIMIT 1",
++        (MA_CUA_HANG, MA_MAY)
++    ).fetchone():
++        raise ValueError("CSDL đã có giao dịch của cặp cửa hàng/POS khác; cần file riêng")
+ 
+ 
+ def khoi_tao():
+@@ -36,11 +54,16 @@
+     ket_noi.commit()
+     ket_noi.close()
+ 
+-    print("Da khoi tao kho luu giao dich cua cua hang 01.")
++    # Chặn dùng nhầm file đã có dữ liệu của cửa hàng/POS khác.
++    with sqlite3.connect(FILE_DB) as ket_noi:
++        kiem_tra_danh_tinh(ket_noi)
++    print(f"Da khoi tao kho giao dich {MA_CUA_HANG}/{MA_MAY}.")
+     print("Vi tri:", FILE_DB)
+ 
+ 
+ def tao_giao_dich(so_tien):
++    if type(so_tien) is not int or so_tien <= 0:
++        raise ValueError("Số tiền phải là số nguyên dương")
+     hien_tai = datetime.now()
+     ngay = hien_tai.strftime("%Y%m%d")
+     thoi_gian = hien_tai.isoformat(timespec="seconds")
+@@ -58,6 +81,7 @@
+ 
+         # Khóa lượt ghi để hai lần tạo không lấy cùng một số thứ tự
+         ket_noi.execute("BEGIN IMMEDIATE")
++        kiem_tra_danh_tinh(ket_noi)
+ 
+         ket_noi.execute("""
+             INSERT INTO bo_dem (ngay, so_cuoi)
+@@ -76,7 +100,7 @@
+             (ngay,)
+         ).fetchone()[0]
+ 
+-        ma_gd = f"CH01-POS01-{ngay}-{so_thu_tu:06d}"
++        ma_gd = f"{MA_CUA_HANG}-{MA_MAY}-{ngay}-{so_thu_tu:06d}"
+ 
+         # Ghi giao dịch xuống ổ đĩa trước khi thực hiện gửi
+         ket_noi.execute("""
+@@ -84,7 +108,7 @@
+                 (ma_gd, ma_cua_hang, ma_may,
+                  thoi_gian, so_tien, trang_thai)
+             VALUES (?, ?, ?, ?, ?, ?)
+-        """, (ma_gd, "CH01", "POS01", thoi_gian, so_tien, "PENDING"))
++        """, (ma_gd, MA_CUA_HANG, MA_MAY, thoi_gian, so_tien, "PENDING"))
+ 
+         ket_noi.commit()
+         print(f"Da luu: {ma_gd} | {so_tien} VND | PENDING")
+@@ -143,6 +167,9 @@
+             """, (ma_gd,))
+             ket_noi.commit()
+ 
++            if OFFLINE == "1":
++                print(f"MO PHONG NGAT KET NOI: {ma_gd} | SENT; giu du lieu, khong gui HTTP.")
++                continue
+             du_lieu = json.dumps(giao_dich).encode("utf-8")
+             yeu_cau = Request(
+                 dia_chi,
+
+--- c88fdb9/Script/kiem_tra_trung.py
++++ Script/kiem_tra_trung.py
+@@ -6,7 +6,10 @@
+ from urllib.request import Request, urlopen
+ 
+ THU_MUC_GOC = Path(__file__).resolve().parent.parent
+-DB_CUA_HANG = THU_MUC_GOC / "DuLieu" / "cuahang01.db"
++try:
++    from .store_agent import FILE_DB as DB_CUA_HANG, MA_CUA_HANG, MA_MAY
++except ImportError:
++    from store_agent import FILE_DB as DB_CUA_HANG, MA_CUA_HANG, MA_MAY
+ DB_TRU_SO = THU_MUC_GOC / "DuLieu" / "truso.db"
+ 
+ CAU_LENH = """
+@@ -42,7 +45,11 @@
+     print("So giao dich cua hang:", len(cua_hang))
+     print("So giao dich tru so truoc gui:", len(truoc_gui))
+ 
+-    if not cua_hang or cua_hang != truoc_gui:
++    # HQ có thể chứa nhiều cửa hàng; chỉ gửi lặp cặp đang chọn,
++    # nhưng vẫn xác nhận TOÀN BỘ HQ không đổi trước/sau.
++    truoc_cua_hang = [row for row in truoc_gui
++                     if row["ma_cua_hang"] == MA_CUA_HANG and row["ma_may"] == MA_MAY]
++    if not cua_hang or cua_hang != truoc_cua_hang:
+         print("CHUA DAT: Du lieu hai ben chua khop truoc khi thu.")
+         return False
+ 
+@@ -82,7 +89,9 @@
+     print("So phan hoi xac nhan hop le:", so_xac_nhan)
+     print("So giao dich tru so sau gui:", len(sau_gui))
+     print("So ban ghi du ma:", so_ma_trung)
+-    print("Du lieu hai ben khop:", cua_hang == sau_gui)
++    sau_cua_hang = [row for row in sau_gui
++                   if row["ma_cua_hang"] == MA_CUA_HANG and row["ma_may"] == MA_MAY]
++    print("Du lieu cap cua hang/POS khop:", cua_hang == sau_cua_hang)
+ 
+     if sau_gui == truoc_gui and so_ma_trung == 0:
+         print("DAT: Gui lap khong lam thay doi du lieu tru so.")
+
+--- c88fdb9/demo_tich_hop.py
++++ demo_tich_hop.py
+@@ -1,6 +1,7 @@
+ """Bộ điều khiển bản thử TV2–TV3; mỗi phiên có dữ liệu và tiến trình riêng."""
+ import json
+ import os
++import re
+ from pathlib import Path
+ import shlex
+ import socket
+@@ -13,7 +14,9 @@
+ SESSION_ROOT = ROOT / "PhienThu"
+ TEMPLATES = ROOT / "Script"
+ HQ_PORT = 18000
+-ENV = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUNBUFFERED="1",
++ENV = dict({key: value for key, value in os.environ.items()
++            if key not in {"TV3_STORE_ID", "TV3_POS_ID", "TV3_DB_PATH", "TV3_OFFLINE"}},
++           PYTHONIOENCODING="utf-8", PYTHONUNBUFFERED="1",
+            TV23_HQ_PORT=str(HQ_PORT),
+            TV23_HQ_URL="http://127.0.0.1:" + str(HQ_PORT) + "/giao-dich")
+ 
+@@ -26,9 +29,10 @@
+ 
+ class Child:
+     """Chỉ quản lý tiến trình do chính bộ điều khiển này tạo."""
+-    def __init__(self, label, filename, logfile):
++    def __init__(self, label, filename, logfile, env=None):
+         self.label, self.filename, self.logfile = label, filename, logfile
+         self.process = None
++        self.env = env
+ 
+     def running(self):
+         return self.process is not None and self.process.poll() is None
+@@ -45,7 +49,7 @@
+         with (session / "MinhChung" / self.logfile).open("ab") as log:
+             self.process = subprocess.Popen(
+                 [sys.executable, "-B", "-u", str(script)],
+-                cwd=session, env=ENV, stdin=subprocess.DEVNULL,
++                cwd=session, env=self.env if self.env is not None else ENV, stdin=subprocess.DEVNULL,
+                 stdout=log, stderr=subprocess.STDOUT)
+         try:
+             if self.filename == "hq_receiver.py":
+@@ -84,7 +88,54 @@
+     def __init__(self):
+         self.session = None
+         self.receiver = Child("Trụ sở", "hq_receiver.py", "receiver_log.txt")
+-        self.agent = Child("Tự đồng bộ", "auto_sync.py", "auto_sync_log.txt")
++        self.reset_stores()
++
++    def reset_stores(self):
++        self.selected = ("CH01", "POS01")
++        self.links = {self.selected: False}
++        self.agents = {self.selected: Child("Tự đồng bộ CH01/POS01", "auto_sync.py", "auto_sync_log.txt")}
++        self.agent = self.agents[self.selected]
++
++    def store_env(self):
++        store, pos = self.selected
++        path = ("DuLieu/cuahang01.db" if self.selected == ("CH01", "POS01")
++                else f"DuLieu/CuaHang/{store}_{pos}.db")
++        return dict(ENV, TV3_STORE_ID=store, TV3_POS_ID=pos, TV3_DB_PATH=path,
++                    TV3_OFFLINE="1" if self.links[self.selected] else "0")
++
++    def select_store(self, store, pos):
++        session = self.require_session()
++        if any(not re.fullmatch(r"[A-Z][A-Z0-9]{1,15}", value) for value in (store, pos)):
++            raise ValueError("Mã cửa hàng/POS: 2–16 ký tự A–Z, 0–9; bắt đầu bằng chữ")
++        self.selected = (store, pos)
++        if self.selected not in self.agents:
++            self.links[self.selected] = False
++            self.agents[self.selected] = Child("Tự đồng bộ " + store + "/" + pos,
++                "auto_sync.py", f"auto_sync_{store}_{pos}.txt")
++        self.agent = self.agents[self.selected]
++        self.agent.env = self.store_env()
++        self.run(code="from Script.store_agent import khoi_tao; khoi_tao()")
++        print("Đang chọn:", store + "/" + pos)
++
++    def set_offline(self, offline):
++        session = self.require_session()
++        if not offline and not self.receiver.running() and port_busy(HQ_PORT):
++            raise RuntimeError("Cổng 18000 do tiến trình ngoài phiên sử dụng; giữ ngắt HTTP, không gửi.")
++        was_running = self.agent.running()
++        self.agent.stop()
++        self.links[self.selected] = offline
++        self.agent.env = self.store_env()
++        if was_running:
++            self.agent.start(session)
++        print("Mô phỏng ngắt HTTP cho cửa hàng đang chọn." if offline
++              else "Đã nối lại HTTP cho cửa hàng đang chọn.")
++
++    def require_single_store_tv2(self, label="TV2"):
++        if self.selected != ("CH01", "POS01") or list(
++                (self.require_session() / "DuLieu" / "CuaHang").glob("*.db")):
++            raise RuntimeError(f"Công cụ {label} hiện dành cho phiên chỉ có CH01/POS01; "
++                               "dùng giam-sat để đối chiếu nhiều kho. "
++                               "Chưa mở rộng công cụ này cho nhiều cửa hàng.")
+ 
+     def require_session(self):
+         if self.session is None:
+@@ -112,7 +163,7 @@
+             if not script.is_file():
+                 raise FileNotFoundError(f"Thiếu script của phiên: {filename}")
+             command += [str(script), *args]
+-        result = subprocess.run(command, cwd=session, env=ENV,
++        result = subprocess.run(command, cwd=session, env=self.store_env(),
+                                 capture_output=True, text=True, encoding="utf-8",
+                                 errors="replace", timeout=120)
+         output = result.stdout + result.stderr
+@@ -129,6 +180,7 @@
+ 
+     def new_session(self):
+         self.close()
++        self.reset_stores()
+         SESSION_ROOT.mkdir(exist_ok=True)
+         session = SESSION_ROOT / datetime.now().strftime("Phien_%Y%m%d_%H%M%S_%f")
+         session.mkdir(exist_ok=False)
+@@ -174,7 +226,8 @@
+                  "dong-bo-bat": 0, "dong-bo-tat": 0, "gui-mot-luot": 0, "gui-lap": 0,
+                  "doi-chieu": 0, "gui-bu": 0, "sao-luu-tru-so": 0, "danh-sach-ban-sao": 0,
+                  "phuc-hoi": 1, "xuat-csv": 0, "sao-luu-kho": 0, "phuc-hoi-kho": 1,
+-                 "trang-thai": 0, "tro-giup": 0, "thoat": 0}
++                 "trang-thai": 0, "tro-giup": 0, "thoat": 0,
++                 "giam-sat": 0, "cua-hang": 2, "ngat-cua-hang": 0, "noi-cua-hang": 0}
+         if action not in arity or len(args) != arity[action]:
+             raise ValueError("Lệnh hoặc tham số không hợp lệ; dùng tro-giup.")
+         if action == "thoat":
+@@ -186,13 +239,22 @@
+             self.new_session()
+             return True
+         session = self.require_session()
+-        if action == "tru-so-bat":
++        if action == "cua-hang":
++            self.select_store(*args)
++        elif action == "ngat-cua-hang":
++            self.set_offline(True)
++        elif action == "noi-cua-hang":
++            self.set_offline(False)
++        elif action == "giam-sat":
++            self.run("giam_sat.py", "--session", str(session))
++        elif action == "tru-so-bat":
+             self.receiver.start(session)
+         elif action == "tru-so-tat":
+             self.receiver.stop()
+         elif action == "dong-bo-bat":
+             if not self.receiver.running() and port_busy(HQ_PORT):
+                 raise RuntimeError("Cổng 18000 do tiến trình ngoài phiên sử dụng; không gửi.")
++            self.agent.env = self.store_env()
+             self.agent.start(session)
+         elif action == "dong-bo-tat":
+             self.agent.stop()
+@@ -210,9 +272,11 @@
+                 raise RuntimeError("Bật receiver của phiên trước khi gửi lặp.")
+             self.run("kiem_tra_trung.py")
+         elif action == "doi-chieu":
++            self.require_single_store_tv2()
+             self.require_paused()
+             self.run("doi_chieu.py")
+         elif action == "gui-bu":
++            self.require_single_store_tv2()
+             self.require_paused()
+             if not self.receiver.running():
+                 raise RuntimeError("Bật receiver của phiên trước khi gửi bù.")
+@@ -226,28 +290,44 @@
+         elif action == "phuc-hoi":
+             self.restore_hq(args[0])
+         elif action == "xuat-csv":
++            self.require_single_store_tv2("TV3 xuất/sao lưu/phục hồi kho")
+             self.require_paused()
+             self.run("xuat_giao_dich.py")
+         elif action == "sao-luu-kho":
++            self.require_single_store_tv2("TV3 xuất/sao lưu/phục hồi kho")
+             self.require_paused()
+             self.run("sao_luu.py")
+         elif action == "phuc-hoi-kho":
++            self.require_single_store_tv2("TV3 xuất/sao lưu/phục hồi kho")
+             self.require_paused()
+             name = self.backup_name(args[0], "SaoLuu")
+             self.run("kiem_tra_phuc_hoi.py", "--file", name)
+         elif action == "trang-thai":
++            print("Cửa hàng/POS đang chọn:", "/".join(self.selected))
+             print("Phiên:", session)
+             print("Trụ sở:", "ĐANG CHẠY" if self.receiver.running() else "TẮT")
+             print("Auto sync:", "ĐANG CHẠY" if self.agent.running() else "TẮT")
+             print("Log:", session / "MinhChung")
++            for key, agent in self.agents.items():
++                print("/".join(key), "| auto sync:", agent.running(),
++                      "| mô phỏng ngắt HTTP:", self.links[key])
++            self.run("giam_sat.py", "--session", str(session))
+         return True
+ 
+     def close(self):
+         # Luôn thử dừng receiver, kể cả khi dừng sender phát sinh lỗi.
++        error = None
+         try:
+-            self.agent.stop()
++            for agent in self.agents.values():
++                try:
++                    agent.stop()
++                except Exception as exc:
++                    if error is None:
++                        error = exc
+         finally:
+             self.receiver.stop()
++        if error is not None:
++            raise error
+ 
+ 
+ HELP = """
+@@ -265,6 +345,10 @@
+   gui-bu                    Gửi ACKED mà trụ sở thiếu rồi đối chiếu lại
+   xuat-csv | sao-luu-kho    Công cụ kho cửa hàng; chỉ dùng dữ liệu phiên
+   phuc-hoi-kho TEN_FILE.db  Thử phục hồi kho vào file riêng
++  cua-hang CH02 POS01       Chọn/tạo kho riêng; không dừng sender cửa hàng khác
++  ngat-cua-hang             Mô phỏng chặn gửi HTTP riêng cửa hàng đang chọn
++  noi-cua-hang              Nối lại; giữ auto sync nếu trước đó đang chạy
++  giam-sat                  Tổng hợp chỉ đọc mọi kho và trụ sở
+   trang-thai | tro-giup | thoat
+ Dùng thoat để dừng các tiến trình của phiên trước khi đóng Terminal.
+ Schema TV3 là lựa chọn tạm thời, cần TV2 xác nhận.
+@@ -280,13 +364,13 @@
+         TEMPLATES / name for name in (
+             "store_agent.py", "hq_receiver.py", "auto_sync.py", "kiem_tra_trung.py",
+             "doi_chieu.py", "sao_luu_tru_so.py", "sao_luu.py",
+-            "kiem_tra_phuc_hoi.py", "xuat_giao_dich.py")
++            "kiem_tra_phuc_hoi.py", "xuat_giao_dich.py", "giam_sat.py")
+     ]
+     missing = [str(path.relative_to(ROOT)) for path in required if not path.is_file()]
+     if missing:
+         raise SystemExit("Thiếu file bắt buộc; không khởi động: " + ", ".join(missing))
+     demo = Demo()
+-    print("BẢN TÍCH HỢP THỬ NGHIỆM TV2–TV3")
++    print("BẢN TÍCH HỢP THỬ NGHIỆM TV2–TV3 | NHÁNH NÂNG CAO TV3")
+     print("Giai đoạn 1 và 2 đã ĐẠT trên localhost; xem báo cáo và log đã lưu.")
+     print("Phiên demo mới chưa được tạo hoặc kiểm thử; dùng phien-moi để bắt đầu.")
+     print("Kết quả bổ sung được ghi riêng trong BAO_CAO_KIEM_THU_TICH_HOP.md.")
+
+--- c88fdb9/KiemThu/kiem_thu_bo_sung.py
++++ KiemThu/kiem_thu_bo_sung.py
+@@ -26,7 +26,7 @@
+ SCRIPT_NAMES = (
+     "store_agent.py", "hq_receiver.py", "auto_sync.py", "kiem_tra_trung.py",
+     "doi_chieu.py", "sao_luu_tru_so.py", "sao_luu.py",
+-    "kiem_tra_phuc_hoi.py", "xuat_giao_dich.py")
++    "kiem_tra_phuc_hoi.py", "xuat_giao_dich.py", "giam_sat.py")
+ 
+ 
+ def stamp():
+
+--- /dev/null
++++ Script/giam_sat.py
+@@ -0,0 +1,166 @@
++"""Giám sát SQLite chỉ đọc; mỗi lần lấy ảnh chụp riêng, không kết luận từ 0/0."""
++import argparse
++from collections import Counter
++from datetime import datetime
++import json
++from pathlib import Path
++import sqlite3
++import sys
++import time
++from urllib.error import HTTPError, URLError
++from urllib.request import Request, urlopen
++
++FIELDS = ("ma_gd", "ma_cua_hang", "ma_may", "thoi_gian", "so_tien")
++STATES = ("PENDING", "SENT", "ACKED")
++
++
++def read_rows(path, session, store=False):
++    path = path.resolve()
++    if not path.is_relative_to(session.resolve()):
++        raise ValueError("Từ chối CSDL ngoài phiên")
++    if not path.is_file():
++        raise FileNotFoundError("CSDL chưa được tạo: " + path.name)
++    conn = sqlite3.connect(path.as_uri() + "?mode=ro", uri=True, timeout=2)
++    conn.row_factory = sqlite3.Row
++    try:
++        conn.execute("PRAGMA query_only = ON")
++        conn.execute("BEGIN")
++        columns = ", ".join(FIELDS) + (", trang_thai" if store else "")
++        rows = [dict(row) for row in conn.execute(
++            "SELECT " + columns + " FROM giao_dich ORDER BY ma_gd")]
++        if store and any(row["trang_thai"] not in STATES for row in rows):
++            raise ValueError("Trạng thái giao dịch ngoài PENDING/SENT/ACKED")
++        return rows
++    finally:
++        conn.close()
++
++
++def service_status(url):
++    # GET không tạo giao dịch. 501 cũng chứng minh có HTTP phản hồi,
++    # nhưng không xác thực danh tính receiver hoặc đảm bảo POST/ACK hoạt động.
++    try:
++        with urlopen(Request(url, method="GET"), timeout=1) as response:
++            return {"reachable": True, "http": response.status, "identity_verified": False}
++    except HTTPError as exc:
++        return {"reachable": True, "http": exc.code, "identity_verified": False}
++    except (URLError, OSError, ValueError) as exc:
++        return {"reachable": False, "error": type(exc).__name__, "identity_verified": False}
++
++
++def collect(session, url="http://127.0.0.1:18000/giao-dich"):
++    session = Path(session).resolve()
++    if not (session / "phien.json").is_file():
++        raise ValueError("Thiếu phien.json; chỉ giám sát phiên thử được nhận diện")
++    errors, warnings, stores, local = [], [], [], []
++    paths = [session / "DuLieu" / "cuahang01.db"]
++    paths += sorted((session / "DuLieu" / "CuaHang").glob("*.db"))
++    for path in paths:
++        try:
++            rows = read_rows(path, session, True)
++            states = dict.fromkeys(STATES, 0)
++            states.update(Counter(row["trang_thai"] for row in rows))
++            stores.append({"db": path.relative_to(session).as_posix(),
++                           "total": len(rows), "states": states})
++            local.extend(rows)
++        except (OSError, sqlite3.Error, ValueError) as exc:
++            errors.append(path.name + ": " + str(exc))
++            stores.append({"db": path.relative_to(session).as_posix(),
++                           "total": None, "states": None})
++    hq = None
++    try:
++        hq = read_rows(session / "DuLieu" / "truso.db", session)
++    except (OSError, sqlite3.Error, ValueError) as exc:
++        errors.append("Trụ sở: " + str(exc))
++    states = dict.fromkeys(STATES, 0)
++    states.update(Counter(row["trang_thai"] for row in local))
++    unacked = states["PENDING"] + states["SENT"]
++    if unacked:
++        warnings.append(f"Còn {unacked} giao dịch chưa có ACK hợp lệ")
++    local_ids = Counter(row["ma_gd"] for row in local)
++    duplicates = sorted(key for key, count in local_ids.items() if count > 1)
++    missing, extra, changed, acked_missing = [], [], [], []
++    matched = False
++    if hq is not None:
++        index = {row["ma_gd"]: row for row in hq}
++        duplicates += sorted(key for key, count in Counter(row["ma_gd"] for row in hq).items() if count > 1)
++        missing = sorted(set(local_ids) - set(index))
++        extra = sorted(set(index) - set(local_ids))
++        changed = sorted({row["ma_gd"] for row in local
++                          if row["ma_gd"] in index and any(
++                              row[field] != index[row["ma_gd"]][field] for field in FIELDS)})
++        acked_missing = sorted(row["ma_gd"] for row in local
++                               if row["trang_thai"] == "ACKED" and row["ma_gd"] in missing)
++        matched = bool(local) and not errors and not (missing or extra or changed or duplicates)
++        if missing or extra or changed or duplicates:
++            warnings.append("Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng")
++    if not local and not errors:
++        warnings.append("Chưa có giao dịch; 0/0 không chứng minh đồng bộ thành công")
++    service = service_status(url)
++    if not service["reachable"]:
++        warnings.append("Dịch vụ nhận hiện không phản hồi HTTP")
++    if errors:
++        warnings.append("Không đủ dữ liệu để kết luận; xem lỗi CSDL")
++    return {"time": datetime.now().isoformat(timespec="seconds"),
++            "stores": stores, "store_total": len(local) if not any(s["total"] is None for s in stores) else None,
++            "states": states, "unconfirmed": unacked, "hq_total": len(hq) if hq is not None else None,
++            "service": service, "data_match": matched,
++            "sync_complete": matched and unacked == 0,
++            "missing_hq": missing, "extra_hq": extra, "changed": changed,
++            "acked_missing": acked_missing, "duplicate_ids": sorted(set(duplicates)),
++            "errors": errors, "warnings": warnings,
++            "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."}
++
++
++def display(value):
++    def count(number):
++        return "?" if number is None else str(number)
++    print("\n" + "=" * 78)
++    print("TV3 | GIÁM SÁT GIAO DỊCH | " + value["time"])
++    print(f"{'Kho / POS':38} {'Tổng':>6} {'PENDING':>8} {'SENT':>6} {'ACKED':>7}")
++    for store in value["stores"]:
++        state = store["states"] or dict.fromkeys(STATES, None)
++        print(f"{store['db']:38} {count(store['total']):>6} "
++              f"{count(state['PENDING']):>8} {count(state['SENT']):>6} {count(state['ACKED']):>7}")
++    print("Tổng kho:", count(value["store_total"]), "| Trụ sở:", count(value["hq_total"]),
++          "| Chưa ACK:", value["unconfirmed"])
++    service = value["service"]
++    print("Dịch vụ:", ("HTTP phản hồi, mã " + str(service["http"])) if service["reachable"] else "KHÔNG PHẢN HỒI")
++    print("GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.")
++    print("Đối chiếu:", "KHỚP 5 TRƯỜNG" if value["data_match"] else "CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU")
++    print("Đồng bộ:", "HOÀN TẤT" if value["sync_complete"] else "CHƯA HOÀN TẤT")
++    print("Thiếu HQ:", len(value["missing_hq"]), "| Thừa HQ:", len(value["extra_hq"]),
++          "| Lệch:", len(value["changed"]), "| Trùng:", len(value["duplicate_ids"]))
++    for warning in value["warnings"]:
++        print("! " + warning)
++    for error in value["errors"]:
++        print("LỖI: " + error)
++    print(value["snapshot_note"])
++
++
++def main():
++    for stream in (sys.stdout, sys.stderr):
++        if hasattr(stream, "reconfigure"):
++            stream.reconfigure(encoding="utf-8", errors="replace")
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--session", type=Path, required=True)
++    parser.add_argument("--json", action="store_true")
++    parser.add_argument("--watch", type=float, default=0)
++    args = parser.parse_args()
++    if args.watch and not 1 <= args.watch <= 60:
++        parser.error("--watch cần nằm trong khoảng 1–60 giây")
++    try:
++        while True:
++            value = collect(args.session)
++            if args.json:
++                print(json.dumps(value, ensure_ascii=False, indent=2))
++            else:
++                display(value)
++            if not args.watch:
++                return
++            time.sleep(args.watch)
++    except KeyboardInterrupt:
++        print("\nĐã dừng giám sát; không tác động receiver/auto sync.")
++
++
++if __name__ == "__main__":
++    main()
+
+--- /dev/null
++++ KiemThu/kiem_thu_nang_cao.py
+@@ -0,0 +1,361 @@
++"""Kiểm thử nâng cao TV3 trên runtime MỚI; không chạm phiên minh chứng cũ."""
++import argparse
++import contextlib
++import hashlib
++import importlib.util
++import json
++import os
++from pathlib import Path
++import re
++import sqlite3
++import subprocess
++import sys
++import time
++import traceback
++
++SOURCE = Path(__file__).resolve().parents[1]
++
++
++def load(path, name):
++    spec = importlib.util.spec_from_file_location(name, path)
++    module = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(module)
++    return module
++
++
++FAKE = r"""
++import json, os
++from http.server import HTTPServer
++import hq_receiver as real
++
++class Fake(real.BoNhan):
++    def do_POST(self):
++        payload = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
++        mode = os.environ["TV3_FAKE_MODE"]
++        replies = {
++            "wrong_id": {"ack": True, "ma_gd": payload["ma_gd"] + "-WRONG"},
++            "array": [{"ack": True, "ma_gd": payload["ma_gd"]}],
++            "ack_false": {"ack": False, "ma_gd": payload["ma_gd"]},
++            "ack_number": {"ack": 1, "ma_gd": payload["ma_gd"]},
++            "ack_string": {"ack": "true", "ma_gd": payload["ma_gd"]},
++            "missing_ack": {"ma_gd": payload["ma_gd"]}
++        }
++        body = b"{invalid-json" if mode == "invalid_json" else json.dumps(replies[mode]).encode()
++        print("FAKE_REPLY", mode, body.decode(), flush=True)
++        self.send_response(200)
++        self.send_header("Content-Type", "application/json")
++        self.send_header("Content-Length", str(len(body)))
++        self.end_headers()
++        self.wfile.write(body)
++
++real.khoi_tao()  # HQ rỗng; receiver giả không ghi giao dịch.
++server = HTTPServer(("127.0.0.1", int(os.environ["TV23_HQ_PORT"])), Fake)
++try:
++    server.serve_forever()
++finally:
++    server.server_close()
++"""
++
++
++def main():
++    for stream in (sys.stdout, sys.stderr):
++        if hasattr(stream, "reconfigure"):
++            stream.reconfigure(encoding="utf-8", errors="replace")
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--runtime-root", type=Path, required=True)
++    parser.add_argument("--only-guards", action="store_true", help="Chỉ kiểm tra giới hạn công cụ cũ, không chạy lại các ca đã đạt")
++    parser.add_argument("--only-port-guard", action="store_true", help="Chỉ thử từ chối nối lại tới cổng ngoài phiên")
++    args = parser.parse_args()
++    runtime = args.runtime_root.resolve()
++    if runtime.exists() or runtime.is_relative_to(SOURCE):
++        raise SystemExit("Runtime cần mới hoàn toàn và nằm ngoài mã nguồn")
++    helper = load(SOURCE / "KiemThu" / "kiem_thu_bo_sung.py", "helpers_tv3")
++    helper.free_port()
++    runtime.parent.mkdir(parents=True, exist_ok=True)
++    helper.copy_runtime(runtime)
++    module = helper.load_controller(runtime)
++    monitor = load(runtime / "Script" / "giam_sat.py", "monitor_tv3")
++    evidence = runtime / "MinhChung"
++    evidence.mkdir()
++    results, demos = [], []
++    error, active = None, "SETUP"
++    started = helper.stamp()
++
++    class Tee:
++        def __init__(self, *streams):
++            self.streams = streams
++        def write(self, value):
++            for stream in self.streams:
++                stream.write(value)
++                stream.flush()
++            return len(value)
++        def flush(self):
++            for stream in self.streams:
++                stream.flush()
++
++    def command(demo, text):
++        return helper.command(demo, text)
++
++    def new():
++        demo = module.Demo()
++        demos.append(demo)
++        command(demo, "phien-moi")
++        return demo
++
++    def create(demo, count):
++        demo.run(code="from Script.store_agent import tao_giao_dich\n"
++                      f"for i in range({count}): tao_giao_dich(10000+i)")
++
++    def snapshot(demo):
++        files = list((demo.session / "DuLieu").rglob("*.db"))
++        before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
++        value = monitor.collect(demo.session)
++        assert {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in files} == before
++        assert set(files) == set((demo.session / "DuLieu").rglob("*.db"))
++        monitor.display(value)
++        return value
++
++    def wait_for(check, seconds=40):
++        deadline = time.monotonic() + seconds
++        while time.monotonic() < deadline:
++            value = check()
++            if value:
++                return value
++            time.sleep(0.15)
++        raise AssertionError("Hết thời gian chờ điều kiện thực tế")
++
++    def states(demo, db="cuahang01.db"):
++        return helper.read_db(demo.session, db, True)["states"]
++
++    def pass_case(name, actual):
++        results.append({"case": name, "status": "PASS", "time": helper.stamp(), "actual": actual})
++        print("\n" + name + " PASS", flush=True)
++        with (evidence / (name + ".json")).open("x", encoding="utf-8") as f:
++            json.dump(results[-1], f, ensure_ascii=False, indent=2)
++
++    with (evidence / "terminal_nang_cao.txt").open("x", encoding="utf-8") as log:
++        with contextlib.redirect_stdout(Tee(sys.stdout, log)):
++            try:
++                if args.only_port_guard:
++                    active = "NC09_NOI_LAI_TU_CHOI_CONG_LA"
++                    demo = new()
++                    command(demo, "ngat-cua-hang")
++                    with module.socket.socket() as blocker:
++                        if hasattr(module.socket, "SO_EXCLUSIVEADDRUSE"):
++                            blocker.setsockopt(module.socket.SOL_SOCKET, module.socket.SO_EXCLUSIVEADDRUSE, 1)
++                        blocker.bind(("127.0.0.1", 18000))
++                        blocker.listen(2)
++                        helper.expect_error(RuntimeError, lambda: command(demo, "noi-cua-hang"), "ngoài phiên")
++                        assert demo.links[demo.selected]
++                        assert demo.agent.env["TV3_OFFLINE"] == "1"
++                        assert blocker.fileno() >= 0 and demo.agent.process is None
++                    helper.free_port()
++                    demo.close()
++                    pass_case(active, {"foreign_port_preserved": True, "sender_not_started": True,
++                                       "offline_retained": True, "transactions_created": 0})
++                elif args.only_guards:
++                    active = "NC08_CHAN_CONG_CU_CO_DINH_KHO"
++                    demo = new()
++                    command(demo, "cua-hang CH02 POS01")
++                    before = {p.relative_to(demo.session).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
++                              for p in demo.session.rglob("*") if p.is_file()}
++                    blocked = []
++                    for action in ["doi-chieu", "gui-bu", "xuat-csv", "sao-luu-kho",
++                                   "phuc-hoi-kho khong_ton_tai.db"]:
++                        helper.expect_error(RuntimeError, lambda action=action: command(demo, action), "Công cụ")
++                        blocked.append(action)
++                    after = {p.relative_to(demo.session).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
++                             for p in demo.session.rglob("*") if p.is_file()}
++                    assert before == after, "Lệnh bị chặn không được thực hiện tác dụng phụ"
++                    assert not demo.receiver.running() and all(not a.running() for a in demo.agents.values())
++                    demo.close()
++                    pass_case(active, {"blocked": blocked, "files_and_databases_unchanged": True,
++                                       "transactions_created": 0, "services_started": False})
++                else:
++                    active = "NC01_GIAM_SAT_RONG"
++                    demo = new()
++                    absent = snapshot(demo)
++                    assert absent["hq_total"] is None and absent["errors"] and not absent["sync_complete"]
++                    assert not (demo.session / "DuLieu" / "truso.db").exists()
++                    command(demo, "tru-so-bat")
++                    empty = snapshot(demo)
++                    assert empty["store_total"] == empty["hq_total"] == 0
++                    assert not empty["sync_complete"] and empty["service"]["reachable"]
++                    command(demo, "giam-sat")
++                    demo.close()
++                    pass_case(active, {"missing_db": absent, "empty_pair": empty, "read_only_hashes": "unchanged"})
++
++                    for mode in ["wrong_id", "array", "invalid_json", "ack_false", "ack_number", "ack_string", "missing_ack"]:
++                        active = "NC02_ACK_" + mode
++                        demo = new()
++                        create(demo, 1)
++                        pending = helper.read_db(demo.session, "cuahang01.db", True)
++                        fake_path = demo.session / "Script" / "receiver_gia_lap.py"
++                        with fake_path.open("x", encoding="utf-8") as f:
++                            f.write(FAKE)
++                        demo.receiver = module.Child("Receiver giả " + mode, fake_path.name,
++                            "receiver_gia_lap.txt", env=dict(module.ENV, TV3_FAKE_MODE=mode))
++                        helper.free_port()
++                        command(demo, "tru-so-bat")
++                        wait_for(lambda: module.port_busy(18000), 5)
++                        command(demo, "gui-mot-luot")
++                        rejected = snapshot(demo)
++                        assert rejected["states"] == {"PENDING": 0, "SENT": 1, "ACKED": 0}
++                        assert rejected["hq_total"] == 0 and not rejected["sync_complete"]
++                        retained = helper.read_db(demo.session, "cuahang01.db", True)
++                        assert all(pending["rows"][0][k] == retained["rows"][0][k] for k in ("ma_gd","ma_cua_hang","ma_may","thoi_gian","so_tien"))
++                        command(demo, "tru-so-tat")
++                        demo.receiver = module.Child("Trụ sở", "hq_receiver.py", "receiver_log.txt")
++                        command(demo, "tru-so-bat")
++                        command(demo, "gui-mot-luot")
++                        recovered = snapshot(demo)
++                        assert recovered["sync_complete"] and recovered["states"]["ACKED"] == 1 and recovered["hq_total"] == 1
++                        demo.close()
++                        helper.free_port()
++                        pass_case(active, {"rejected": rejected, "recovered": recovered, "payload_retained": True})
++
++                    active = "NC03_CHO_20_VA_TU_PHUC_HOI"
++                    demo = new()
++                    create(demo, 20)
++                    command(demo, "dong-bo-bat")
++                    wait_for(lambda: states(demo) == {"SENT": 20})
++                    held = snapshot(demo)
++                    assert held["store_total"] == held["unconfirmed"] == 20 and held["states"]["ACKED"] == 0
++                    sender_pid = demo.agent.process.pid
++                    command(demo, "tru-so-bat")
++                    wait_for(lambda: states(demo) == {"ACKED": 20})
++                    assert demo.agent.process.pid == sender_pid, "Không được gọi gửi thủ công hoặc thay sender"
++                    command(demo, "dong-bo-tat")
++                    complete = snapshot(demo)
++                    assert complete["sync_complete"] and complete["hq_total"] == 20 and not complete["duplicate_ids"]
++                    command(demo, "gui-lap")
++                    assert snapshot(demo)["hq_total"] == 20
++                    demo.close()
++                    pass_case(active, {"held": held, "recovered": complete, "same_auto_sync_process": True, "duplicate_replay": 20})
++
++                    active = "NC04_HAI_CUA_HANG"
++                    demo = new()
++                    command(demo, "tru-so-bat")
++                    create(demo, 5)
++                    command(demo, "dong-bo-bat")
++                    ch1_pid = demo.agent.process.pid
++                    command(demo, "cua-hang CH02 POS01")
++                    command(demo, "ngat-cua-hang")
++                    create(demo, 5)
++                    command(demo, "dong-bo-bat")
++                    wait_for(lambda: states(demo) == {"ACKED": 5}
++                             and states(demo, "CuaHang/CH02_POS01.db") == {"SENT": 5})
++                    isolated = snapshot(demo)
++                    assert isolated["store_total"] == 10 and isolated["hq_total"] == 5
++                    assert isolated["unconfirmed"] == 5 and not isolated["sync_complete"]
++                    assert demo.agents[("CH01","POS01")].process.pid == ch1_pid
++                    command(demo, "noi-cua-hang")
++                    wait_for(lambda: states(demo, "CuaHang/CH02_POS01.db") == {"ACKED": 5})
++                    command(demo, "dong-bo-tat")
++                    command(demo, "cua-hang CH01 POS01")
++                    command(demo, "dong-bo-tat")
++                    final = snapshot(demo)
++                    assert final["sync_complete"] and final["store_total"] == final["hq_total"] == 10
++                    assert final["states"]["ACKED"] == 10 and not final["duplicate_ids"]
++                    hq_file = demo.session / "DuLieu" / "truso.db"
++                    before = hashlib.sha256(hq_file.read_bytes()).hexdigest()
++                    command(demo, "gui-lap")
++                    command(demo, "cua-hang CH02 POS01")
++                    command(demo, "gui-lap")
++                    assert hashlib.sha256(hq_file.read_bytes()).hexdigest() == before
++                    helper.expect_error(RuntimeError, lambda: command(demo, "gui-bu"), "TV2")
++                    command(demo, "trang-thai")
++                    demo.close()
++                    pass_case(active, {"isolated": isolated, "final": final, "replay_each_store": 5,
++                                      "hq_unchanged_after_replay": True, "tv2_multistore_guard": True})
++
++                    active = "NC05_CAU_HINH_VA_BO_DEM"
++                    demo = new()
++                    create(demo, 1)
++                    create(demo, 1)  # Hai subprocess riêng, bộ đếm không reset.
++                    rows = helper.read_db(demo.session, "cuahang01.db", True)["rows"]
++                    assert len(rows) == 2 and rows[0]["ma_gd"] != rows[1]["ma_gd"]
++                    assert rows[1]["ma_gd"].endswith("-000002")
++                    demo.run(code="from Script.store_agent import tao_giao_dich\n"
++                             "for value in [0,-1,True,1.5,'1000']:\n"
++                             " try: tao_giao_dich(value)\n"
++                             " except ValueError: pass\n"
++                             " else: raise AssertionError('Accepted invalid amount')\n")
++                    assert helper.read_db(demo.session, "cuahang01.db", True)["count"] == 2
++                    for override in [
++                        {"TV3_STORE_ID": "../BAD"}, {"TV3_DB_PATH": "../ngoai_phien.db"},
++                        {"TV3_STORE_ID": "CH02", "TV3_DB_PATH": "DuLieu/cuahang01.db"}
++                    ]:
++                        db = demo.session / "DuLieu" / "cuahang01.db"
++                        before = hashlib.sha256(db.read_bytes()).hexdigest()
++                        child = subprocess.run([sys.executable,"-B","-c","from Script.store_agent import khoi_tao; khoi_tao()"],
++                            cwd=demo.session, env=dict(demo.store_env(),**override),
++                            text=True,encoding="utf-8",capture_output=True,timeout=10)
++                        print("CONFIG_REJECTED", override, child.returncode, child.stderr, flush=True)
++                        assert child.returncode != 0
++                        assert hashlib.sha256(db.read_bytes()).hexdigest() == before
++                    demo.close()
++                    pass_case(active, {"restart_counter_unique": True, "invalid_amounts_rejected": 5,
++                                      "unsafe_or_mixed_config_rejected": 3, "rows_preserved": 2})
++
++                    active = "NC06_GIAM_SAT_LECH_VA_LOI_SCHEMA"
++                    demo = new()
++                    command(demo, "tru-so-bat")
++                    create(demo, 1)
++                    command(demo, "gui-mot-luot")
++                    demo.close()
++                    # Fixture cố ý sai trong phiên MỚI; không phải kết quả giao dịch thật.
++                    with sqlite3.connect(demo.session / "DuLieu" / "truso.db") as conn:
++                        conn.execute("UPDATE giao_dich SET so_tien = so_tien + 1")
++                    changed = snapshot(demo)
++                    assert changed["store_total"] == changed["hq_total"] == 1
++                    assert len(changed["changed"]) == 1 and not changed["sync_complete"]
++                    schema_demo = new()
++                    with sqlite3.connect(schema_demo.session / "DuLieu" / "truso.db") as conn:
++                        conn.execute("CREATE TABLE fixture_khong_phai_giao_dich (x INTEGER)")
++                    schema = snapshot(schema_demo)
++                    assert schema["hq_total"] is None and schema["errors"] and not schema["sync_complete"]
++                    schema_demo.close()
++                    pass_case(active, {"injected_content_mismatch": changed, "injected_wrong_schema": schema,
++                                      "fixture_only": True, "monitor_read_only": True})
++
++                    active = "NC07_CLI_DON_HAI_SENDER"
++                    cli = subprocess.run([sys.executable,"-B","-u",str(runtime/"demo_tich_hop.py")],
++                        input="phien-moi\ntru-so-bat\ndong-bo-bat\ncua-hang CH02 POS01\ndong-bo-bat\nthoat\n",
++                        cwd=runtime,env=module.ENV,capture_output=True,text=True,encoding="utf-8",timeout=25)
++                    print(cli.stdout + cli.stderr, flush=True)
++                    pids = [int(p) for p in re.findall(r"PID (\d+)",cli.stdout)]
++                    assert cli.returncode == 0 and len(pids) == 3
++                    assert all(not helper.process_running(pid) for pid in pids)
++                    helper.free_port()
++                    pass_case(active, {"exit": cli.returncode, "owned_pids": pids, "all_stopped": True})
++            except BaseException as exc:
++                error = type(exc).__name__ + ": " + str(exc)
++                results.append({"case":active,"status":"FAIL","error":error})
++                traceback.print_exc(file=log)
++                print("CHƯA ĐẠT: " + error, flush=True)
++            finally:
++                for demo in reversed(demos):
++                    try:
++                        demo.close()
++                    except BaseException as exc:
++                        error = (error + "; " if error else "") + "Cleanup: " + str(exc)
++                try:
++                    helper.free_port()
++                except OSError as exc:
++                    error = (error + "; " if error else "") + "Port: " + str(exc)
++                result = {"status":"PASS" if error is None else "FAIL",
++                          "started":started,"finished":helper.stamp(),"cases":results,"error":error,
++                          "base_commit":"c88fdb963ecc93efcac0584f2da9b9c740b3e1d8",
++                          "runtime_root":str(runtime),"old_sessions_used":False,
++                          "source_sha256":{p.relative_to(SOURCE).as_posix():hashlib.sha256(p.read_bytes()).hexdigest()
++                              for p in [SOURCE/"demo_tich_hop.py",SOURCE/"chay_demo.ps1",
++                                        SOURCE/"KiemThu/kiem_thu_nang_cao.py"] + sorted((SOURCE/"Script").glob("*.py"))}}
++                with (evidence/"KET_QUA_NANG_CAO.json").open("x",encoding="utf-8") as f:
++                    json.dump(result,f,ensure_ascii=False,indent=2)
++                print("RESULT="+json.dumps({"status":result["status"],"cases":len(results),"error":error}),flush=True)
++    return 0 if error is None else 1
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())

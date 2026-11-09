@@ -1,0 +1,23 @@
+
+[2026-11-09T17:43:08] khoi-tao-kho 
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174308_288890\DuLieu\cuahang01.db
+
+Ma thoat: 0
+
+[2026-11-09T17:43:10] giam_sat.py --session RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174308_288890
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:43:10
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         0        0      0       0
+Tổng kho: 0 | Trụ sở: 0 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: CHƯA KHỚP / CHƯA ĐỦ DỮ LIỆU
+Đồng bộ: CHƯA HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+! Chưa có giao dịch; 0/0 không chứng minh đồng bộ thành công
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+Ma thoat: 0

@@ -1,0 +1,91 @@
+{
+  "fault": {
+    "injection": "drop_first_ack_after_commit",
+    "reply_not_delivered": {
+      "ack": true,
+      "ma_gd": "CH01-POS01-20261109-000001",
+      "ket_qua": "DA_LUU"
+    },
+    "committed_row": {
+      "ma_gd": "CH01-POS01-20261109-000001",
+      "ma_cua_hang": "CH01",
+      "ma_may": "POS01",
+      "thoi_gian": "2026-11-09T17:42:02",
+      "so_tien": 50000
+    }
+  },
+  "after_lost_ack": {
+    "store": {
+      "rows": [
+        {
+          "ma_gd": "CH01-POS01-20261109-000001",
+          "ma_cua_hang": "CH01",
+          "ma_may": "POS01",
+          "thoi_gian": "2026-11-09T17:42:02",
+          "so_tien": 50000,
+          "trang_thai": "SENT"
+        }
+      ],
+      "count": 1,
+      "states": {
+        "SENT": 1
+      },
+      "duplicate_ids": 0,
+      "integrity_check": "ok"
+    },
+    "hq": {
+      "rows": [
+        {
+          "ma_gd": "CH01-POS01-20261109-000001",
+          "ma_cua_hang": "CH01",
+          "ma_may": "POS01",
+          "thoi_gian": "2026-11-09T17:42:02",
+          "so_tien": 50000
+        }
+      ],
+      "count": 1,
+      "states": {},
+      "duplicate_ids": 0,
+      "integrity_check": "ok"
+    },
+    "five_fields_equal": true
+  },
+  "after_retry": {
+    "store": {
+      "rows": [
+        {
+          "ma_gd": "CH01-POS01-20261109-000001",
+          "ma_cua_hang": "CH01",
+          "ma_may": "POS01",
+          "thoi_gian": "2026-11-09T17:42:02",
+          "so_tien": 50000,
+          "trang_thai": "ACKED"
+        }
+      ],
+      "count": 1,
+      "states": {
+        "ACKED": 1
+      },
+      "duplicate_ids": 0,
+      "integrity_check": "ok"
+    },
+    "hq": {
+      "rows": [
+        {
+          "ma_gd": "CH01-POS01-20261109-000001",
+          "ma_cua_hang": "CH01",
+          "ma_may": "POS01",
+          "thoi_gian": "2026-11-09T17:42:02",
+          "so_tien": 50000
+        }
+      ],
+      "count": 1,
+      "states": {},
+      "duplicate_ids": 0,
+      "integrity_check": "ok"
+    },
+    "five_fields_equal": true
+  },
+  "retry_result_observed": "DA_TON_TAI",
+  "valid_ack_received_before_acked": true
+}

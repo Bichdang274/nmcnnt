@@ -1,0 +1,1042 @@
+{
+  "status": "PASS",
+  "started": "2026-11-09T17:43:08+07:00",
+  "finished": "2026-11-09T17:44:21+07:00",
+  "cases": [
+    {
+      "case": "NC01_GIAM_SAT_RONG",
+      "status": "PASS",
+      "time": "2026-11-09T17:43:10+07:00",
+      "actual": {
+        "missing_db": {
+          "time": "2026-11-09T17:43:09",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 0,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 0,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 0
+          },
+          "unconfirmed": 0,
+          "hq_total": null,
+          "service": {
+            "reachable": false,
+            "error": "URLError",
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [
+            "Trụ sở: CSDL chưa được tạo: truso.db"
+          ],
+          "warnings": [
+            "Dịch vụ nhận hiện không phản hồi HTTP",
+            "Không đủ dữ liệu để kết luận; xem lỗi CSDL"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "empty_pair": {
+          "time": "2026-11-09T17:43:10",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 0,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 0,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 0
+          },
+          "unconfirmed": 0,
+          "hq_total": 0,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [
+            "Chưa có giao dịch; 0/0 không chứng minh đồng bộ thành công"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "read_only_hashes": "unchanged"
+      }
+    },
+    {
+      "case": "NC02_ACK_wrong_id",
+      "status": "PASS",
+      "time": "2026-11-09T17:43:11+07:00",
+      "actual": {
+        "rejected": {
+          "time": "2026-11-09T17:43:11",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 1,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 1,
+            "ACKED": 0
+          },
+          "unconfirmed": 1,
+          "hq_total": 0,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [
+            "CH01-POS01-20261109-000001"
+          ],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [
+            "Còn 1 giao dịch chưa có ACK hợp lệ",
+            "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "recovered": {
+          "time": "2026-11-09T17:43:11",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 1
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 1
+          },
+          "unconfirmed": 0,
+          "hq_total": 1,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": true,
+          "sync_complete": true,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "payload_retained": true
+      }
+    },
+    {
+      "case": "NC02_ACK_array",
+      "status": "PASS",
+      "time": "2026-11-09T17:43:13+07:00",
+      "actual": {
+        "rejected": {
+          "time": "2026-11-09T17:43:12",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 1,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 1,
+            "ACKED": 0
+          },
+          "unconfirmed": 1,
+          "hq_total": 0,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [
+            "CH01-POS01-20261109-000001"
+          ],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [
+            "Còn 1 giao dịch chưa có ACK hợp lệ",
+            "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "recovered": {
+          "time": "2026-11-09T17:43:13",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 1
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 1
+          },
+          "unconfirmed": 0,
+          "hq_total": 1,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": true,
+          "sync_complete": true,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "payload_retained": true
+      }
+    },
+    {
+      "case": "NC02_ACK_invalid_json",
+      "status": "PASS",
+      "time": "2026-11-09T17:43:14+07:00",
+      "actual": {
+        "rejected": {
+          "time": "2026-11-09T17:43:14",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 1,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 1,
+            "ACKED": 0
+          },
+          "unconfirmed": 1,
+          "hq_total": 0,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [
+            "CH01-POS01-20261109-000001"
+          ],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [
+            "Còn 1 giao dịch chưa có ACK hợp lệ",
+            "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "recovered": {
+          "time": "2026-11-09T17:43:14",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 1
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 1
+          },
+          "unconfirmed": 0,
+          "hq_total": 1,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": true,
+          "sync_complete": true,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "payload_retained": true
+      }
+    },
+    {
+      "case": "NC02_ACK_ack_false",
+      "status": "PASS",
+      "time": "2026-11-09T17:43:16+07:00",
+      "actual": {
+        "rejected": {
+          "time": "2026-11-09T17:43:15",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 1,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 1,
+            "ACKED": 0
+          },
+          "unconfirmed": 1,
+          "hq_total": 0,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [
+            "CH01-POS01-20261109-000001"
+          ],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [
+            "Còn 1 giao dịch chưa có ACK hợp lệ",
+            "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "recovered": {
+          "time": "2026-11-09T17:43:16",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 1
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 1
+          },
+          "unconfirmed": 0,
+          "hq_total": 1,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": true,
+          "sync_complete": true,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "payload_retained": true
+      }
+    },
+    {
+      "case": "NC02_ACK_ack_number",
+      "status": "PASS",
+      "time": "2026-11-09T17:43:18+07:00",
+      "actual": {
+        "rejected": {
+          "time": "2026-11-09T17:43:17",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 1,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 1,
+            "ACKED": 0
+          },
+          "unconfirmed": 1,
+          "hq_total": 0,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [
+            "CH01-POS01-20261109-000001"
+          ],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [
+            "Còn 1 giao dịch chưa có ACK hợp lệ",
+            "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "recovered": {
+          "time": "2026-11-09T17:43:18",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 1
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 1
+          },
+          "unconfirmed": 0,
+          "hq_total": 1,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": true,
+          "sync_complete": true,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "payload_retained": true
+      }
+    },
+    {
+      "case": "NC02_ACK_ack_string",
+      "status": "PASS",
+      "time": "2026-11-09T17:43:19+07:00",
+      "actual": {
+        "rejected": {
+          "time": "2026-11-09T17:43:18",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 1,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 1,
+            "ACKED": 0
+          },
+          "unconfirmed": 1,
+          "hq_total": 0,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [
+            "CH01-POS01-20261109-000001"
+          ],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [
+            "Còn 1 giao dịch chưa có ACK hợp lệ",
+            "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "recovered": {
+          "time": "2026-11-09T17:43:19",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 1
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 1
+          },
+          "unconfirmed": 0,
+          "hq_total": 1,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": true,
+          "sync_complete": true,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "payload_retained": true
+      }
+    },
+    {
+      "case": "NC02_ACK_missing_ack",
+      "status": "PASS",
+      "time": "2026-11-09T17:43:21+07:00",
+      "actual": {
+        "rejected": {
+          "time": "2026-11-09T17:43:20",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 1,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 1,
+            "ACKED": 0
+          },
+          "unconfirmed": 1,
+          "hq_total": 0,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [
+            "CH01-POS01-20261109-000001"
+          ],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [
+            "Còn 1 giao dịch chưa có ACK hợp lệ",
+            "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "recovered": {
+          "time": "2026-11-09T17:43:21",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 1
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 1
+          },
+          "unconfirmed": 0,
+          "hq_total": 1,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": true,
+          "sync_complete": true,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "payload_retained": true
+      }
+    },
+    {
+      "case": "NC03_CHO_20_VA_TU_PHUC_HOI",
+      "status": "PASS",
+      "time": "2026-11-09T17:44:13+07:00",
+      "actual": {
+        "held": {
+          "time": "2026-11-09T17:44:01",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 20,
+              "states": {
+                "PENDING": 0,
+                "SENT": 20,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 20,
+          "states": {
+            "PENDING": 0,
+            "SENT": 20,
+            "ACKED": 0
+          },
+          "unconfirmed": 20,
+          "hq_total": null,
+          "service": {
+            "reachable": false,
+            "error": "URLError",
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [
+            "Trụ sở: CSDL chưa được tạo: truso.db"
+          ],
+          "warnings": [
+            "Còn 20 giao dịch chưa có ACK hợp lệ",
+            "Dịch vụ nhận hiện không phản hồi HTTP",
+            "Không đủ dữ liệu để kết luận; xem lỗi CSDL"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "recovered": {
+          "time": "2026-11-09T17:44:13",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 20,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 20
+              }
+            }
+          ],
+          "store_total": 20,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 20
+          },
+          "unconfirmed": 0,
+          "hq_total": 20,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": true,
+          "sync_complete": true,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "same_auto_sync_process": true,
+        "duplicate_replay": 20
+      }
+    },
+    {
+      "case": "NC04_HAI_CUA_HANG",
+      "status": "PASS",
+      "time": "2026-11-09T17:44:16+07:00",
+      "actual": {
+        "isolated": {
+          "time": "2026-11-09T17:44:15",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 5,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 5
+              }
+            },
+            {
+              "db": "DuLieu/CuaHang/CH02_POS01.db",
+              "total": 5,
+              "states": {
+                "PENDING": 0,
+                "SENT": 5,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 10,
+          "states": {
+            "PENDING": 0,
+            "SENT": 5,
+            "ACKED": 5
+          },
+          "unconfirmed": 5,
+          "hq_total": 5,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [
+            "CH02-POS01-20261109-000001",
+            "CH02-POS01-20261109-000002",
+            "CH02-POS01-20261109-000003",
+            "CH02-POS01-20261109-000004",
+            "CH02-POS01-20261109-000005"
+          ],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [
+            "Còn 5 giao dịch chưa có ACK hợp lệ",
+            "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "final": {
+          "time": "2026-11-09T17:44:15",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 5,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 5
+              }
+            },
+            {
+              "db": "DuLieu/CuaHang/CH02_POS01.db",
+              "total": 5,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 5
+              }
+            }
+          ],
+          "store_total": 10,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 10
+          },
+          "unconfirmed": 0,
+          "hq_total": 10,
+          "service": {
+            "reachable": true,
+            "http": 501,
+            "identity_verified": false
+          },
+          "data_match": true,
+          "sync_complete": true,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "replay_each_store": 5,
+        "hq_unchanged_after_replay": true,
+        "tv2_multistore_guard": true
+      }
+    },
+    {
+      "case": "NC05_CAU_HINH_VA_BO_DEM",
+      "status": "PASS",
+      "time": "2026-11-09T17:44:16+07:00",
+      "actual": {
+        "restart_counter_unique": true,
+        "invalid_amounts_rejected": 5,
+        "unsafe_or_mixed_config_rejected": 3,
+        "rows_preserved": 2
+      }
+    },
+    {
+      "case": "NC06_GIAM_SAT_LECH_VA_LOI_SCHEMA",
+      "status": "PASS",
+      "time": "2026-11-09T17:44:20+07:00",
+      "actual": {
+        "injected_content_mismatch": {
+          "time": "2026-11-09T17:44:19",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 1,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 1
+              }
+            }
+          ],
+          "store_total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 1
+          },
+          "unconfirmed": 0,
+          "hq_total": 1,
+          "service": {
+            "reachable": false,
+            "error": "URLError",
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [
+            "CH01-POS01-20261109-000001"
+          ],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [],
+          "warnings": [
+            "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng",
+            "Dịch vụ nhận hiện không phản hồi HTTP"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "injected_wrong_schema": {
+          "time": "2026-11-09T17:44:20",
+          "stores": [
+            {
+              "db": "DuLieu/cuahang01.db",
+              "total": 0,
+              "states": {
+                "PENDING": 0,
+                "SENT": 0,
+                "ACKED": 0
+              }
+            }
+          ],
+          "store_total": 0,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 0
+          },
+          "unconfirmed": 0,
+          "hq_total": null,
+          "service": {
+            "reachable": false,
+            "error": "URLError",
+            "identity_verified": false
+          },
+          "data_match": false,
+          "sync_complete": false,
+          "missing_hq": [],
+          "extra_hq": [],
+          "changed": [],
+          "acked_missing": [],
+          "duplicate_ids": [],
+          "errors": [
+            "Trụ sở: no such table: giao_dich"
+          ],
+          "warnings": [
+            "Dịch vụ nhận hiện không phản hồi HTTP",
+            "Không đủ dữ liệu để kết luận; xem lỗi CSDL"
+          ],
+          "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+        },
+        "fixture_only": true,
+        "monitor_read_only": true
+      }
+    },
+    {
+      "case": "NC07_CLI_DON_HAI_SENDER",
+      "status": "PASS",
+      "time": "2026-11-09T17:44:21+07:00",
+      "actual": {
+        "exit": 0,
+        "owned_pids": [
+          29520,
+          32656,
+          14372
+        ],
+        "all_stopped": true
+      }
+    }
+  ],
+  "error": null,
+  "base_commit": "c88fdb963ecc93efcac0584f2da9b9c740b3e1d8",
+  "runtime_root": "RUNTIME_TV3/NangCao_20261109_174308_0814826",
+  "old_sessions_used": false,
+  "source_sha256": {
+    "demo_tich_hop.py": "e00a147ca9e23dc96124510bc052af7138206f160c56019a110ce35a0788a5ee",
+    "chay_demo.ps1": "c061217b4313b78766e4193c4cbb926d62e29a56ff61a123b007c44240ab1c46",
+    "KiemThu/kiem_thu_nang_cao.py": "5bbe459a40fc61474f28a956cac5aa34bc31c751ee05444a2d34ce40e5fa2a9e",
+    "Script/auto_sync.py": "773a20228e1c8025472c489b7c9a4f29b8486e9f5fcccf3b07094a790a6ada69",
+    "Script/doi_chieu.py": "77ed4ebc27f76fc4b85a0d85dd677c03cddefdacadf4872dc5cb858fcc372108",
+    "Script/giam_sat.py": "ce24b26df94e7b5f6d9f06acd81e6a122f12e7328901cc3aec677c1b1c3fde5d",
+    "Script/hq_receiver.py": "19c0bca02421bbbf06a9a2860c065e4250b69839fa17fece17d262a003242a40",
+    "Script/kiem_tra_phuc_hoi.py": "53511bc5b8b86d9ff46357344d61b9d7f38f1284eca55d77166476912745b880",
+    "Script/kiem_tra_trung.py": "4a1e3a44f0bcb1085fc1fb45504b44286566e98adf27a1cca76363bed10437cb",
+    "Script/sao_luu.py": "bd7691d0d56141cd7e2bacd261483d27b4fab6f78f200d28b6b59bc290947e06",
+    "Script/sao_luu_tru_so.py": "1da34a6bc83f688845c0faf034da0837323ab3145aee5e7eafcd2c634ce81767",
+    "Script/store_agent.py": "78c099c45054c5c9f63ff5db4335679c69efe97813eeac0dbad2cbdbd7d245d8",
+    "Script/xuat_giao_dich.py": "7d2729a79c1141c8d55500b073d6f384b9fb04115605888a4ca4795c7b3b46cb"
+  }
+}

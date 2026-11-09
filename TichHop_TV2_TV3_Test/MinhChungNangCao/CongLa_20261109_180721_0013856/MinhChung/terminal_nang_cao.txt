@@ -1,0 +1,15 @@
+
+[2026-11-09T18:07:21+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/CongLa_20261109_180721_0013856\PhienThu\Phien_20261109_180721_180065\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/CongLa_20261109_180721_0013856\PhienThu\Phien_20261109_180721_180065
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+
+[2026-11-09T18:07:21+07:00] tich-hop> ngat-cua-hang
+Mô phỏng ngắt HTTP cho cửa hàng đang chọn.
+
+[2026-11-09T18:07:21+07:00] tich-hop> noi-cua-hang
+LỖI ĐƯỢC CHỜ ĐỢI: RuntimeError: Cổng 18000 do tiến trình ngoài phiên sử dụng; giữ ngắt HTTP, không gửi.
+
+NC09_NOI_LAI_TU_CHOI_CONG_LA PASS
+RESULT={"status": "PASS", "cases": 1, "error": null}

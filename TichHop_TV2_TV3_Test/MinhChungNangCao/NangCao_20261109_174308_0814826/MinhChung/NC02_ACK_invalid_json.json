@@ -1,0 +1,87 @@
+{
+  "case": "NC02_ACK_invalid_json",
+  "status": "PASS",
+  "time": "2026-11-09T17:43:14+07:00",
+  "actual": {
+    "rejected": {
+      "time": "2026-11-09T17:43:14",
+      "stores": [
+        {
+          "db": "DuLieu/cuahang01.db",
+          "total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 1,
+            "ACKED": 0
+          }
+        }
+      ],
+      "store_total": 1,
+      "states": {
+        "PENDING": 0,
+        "SENT": 1,
+        "ACKED": 0
+      },
+      "unconfirmed": 1,
+      "hq_total": 0,
+      "service": {
+        "reachable": true,
+        "http": 501,
+        "identity_verified": false
+      },
+      "data_match": false,
+      "sync_complete": false,
+      "missing_hq": [
+        "CH01-POS01-20261109-000001"
+      ],
+      "extra_hq": [],
+      "changed": [],
+      "acked_missing": [],
+      "duplicate_ids": [],
+      "errors": [],
+      "warnings": [
+        "Còn 1 giao dịch chưa có ACK hợp lệ",
+        "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng"
+      ],
+      "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+    },
+    "recovered": {
+      "time": "2026-11-09T17:43:14",
+      "stores": [
+        {
+          "db": "DuLieu/cuahang01.db",
+          "total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 1
+          }
+        }
+      ],
+      "store_total": 1,
+      "states": {
+        "PENDING": 0,
+        "SENT": 0,
+        "ACKED": 1
+      },
+      "unconfirmed": 0,
+      "hq_total": 1,
+      "service": {
+        "reachable": true,
+        "http": 501,
+        "identity_verified": false
+      },
+      "data_match": true,
+      "sync_complete": true,
+      "missing_hq": [],
+      "extra_hq": [],
+      "changed": [],
+      "acked_missing": [],
+      "duplicate_ids": [],
+      "errors": [],
+      "warnings": [],
+      "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+    },
+    "payload_retained": true
+  }
+}

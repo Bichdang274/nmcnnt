@@ -1,0 +1,10 @@
+
+[2026-11-09T17:42:03] khoi-tao-kho 
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174203_559823\DuLieu\cuahang01.db
+
+Ma thoat: 0
+
+[2026-11-09T17:42:03] khoi-tao-kho 
+
+Ma thoat: 7

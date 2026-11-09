@@ -1,0 +1,4 @@
+FAKE_REPLY ack_number {"ack": 1, "ma_gd": "CH01-POS01-20261109-000001"}
+127.0.0.1 - - [09/Nov/2026 17:43:17] "POST /giao-dich HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 17:43:17] code 501, message Unsupported method ('GET')
+127.0.0.1 - - [09/Nov/2026 17:43:17] "GET /giao-dich HTTP/1.1" 501 -

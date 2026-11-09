@@ -1,0 +1,111 @@
+{
+  "case": "NC04_HAI_CUA_HANG",
+  "status": "PASS",
+  "time": "2026-11-09T17:44:16+07:00",
+  "actual": {
+    "isolated": {
+      "time": "2026-11-09T17:44:15",
+      "stores": [
+        {
+          "db": "DuLieu/cuahang01.db",
+          "total": 5,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 5
+          }
+        },
+        {
+          "db": "DuLieu/CuaHang/CH02_POS01.db",
+          "total": 5,
+          "states": {
+            "PENDING": 0,
+            "SENT": 5,
+            "ACKED": 0
+          }
+        }
+      ],
+      "store_total": 10,
+      "states": {
+        "PENDING": 0,
+        "SENT": 5,
+        "ACKED": 5
+      },
+      "unconfirmed": 5,
+      "hq_total": 5,
+      "service": {
+        "reachable": true,
+        "http": 501,
+        "identity_verified": false
+      },
+      "data_match": false,
+      "sync_complete": false,
+      "missing_hq": [
+        "CH02-POS01-20261109-000001",
+        "CH02-POS01-20261109-000002",
+        "CH02-POS01-20261109-000003",
+        "CH02-POS01-20261109-000004",
+        "CH02-POS01-20261109-000005"
+      ],
+      "extra_hq": [],
+      "changed": [],
+      "acked_missing": [],
+      "duplicate_ids": [],
+      "errors": [],
+      "warnings": [
+        "Còn 5 giao dịch chưa có ACK hợp lệ",
+        "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng"
+      ],
+      "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+    },
+    "final": {
+      "time": "2026-11-09T17:44:15",
+      "stores": [
+        {
+          "db": "DuLieu/cuahang01.db",
+          "total": 5,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 5
+          }
+        },
+        {
+          "db": "DuLieu/CuaHang/CH02_POS01.db",
+          "total": 5,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 5
+          }
+        }
+      ],
+      "store_total": 10,
+      "states": {
+        "PENDING": 0,
+        "SENT": 0,
+        "ACKED": 10
+      },
+      "unconfirmed": 0,
+      "hq_total": 10,
+      "service": {
+        "reachable": true,
+        "http": 501,
+        "identity_verified": false
+      },
+      "data_match": true,
+      "sync_complete": true,
+      "missing_hq": [],
+      "extra_hq": [],
+      "changed": [],
+      "acked_missing": [],
+      "duplicate_ids": [],
+      "errors": [],
+      "warnings": [],
+      "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+    },
+    "replay_each_store": 5,
+    "hq_unchanged_after_replay": true,
+    "tv2_multistore_guard": true
+  }
+}

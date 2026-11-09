@@ -1,4 +1,5 @@
 import os
+import re
 import json
 from urllib.request import Request, urlopen
 from urllib.error import URLError
@@ -9,8 +10,25 @@ from pathlib import Path
 # Xác định thư mục gốc của dự án nmcnnt
 THU_MUC_GOC = Path(__file__).resolve().parent.parent
 
-# File cơ sở dữ liệu của cửa hàng 01
-FILE_DB = THU_MUC_GOC / "DuLieu" / "cuahang01.db"
+# Mỗi cặp cửa hàng/POS dùng file riêng; mặc định tương thích demo cũ.
+MA_CUA_HANG = os.environ.get("TV3_STORE_ID", "CH01")
+MA_MAY = os.environ.get("TV3_POS_ID", "POS01")
+if any(not re.fullmatch(r"[A-Z][A-Z0-9]{1,15}", value) for value in (MA_CUA_HANG, MA_MAY)):
+    raise ValueError("Mã cửa hàng/POS: 2–16 ký tự A–Z, 0–9; bắt đầu bằng chữ")
+FILE_DB = (THU_MUC_GOC / os.environ.get("TV3_DB_PATH", "DuLieu/cuahang01.db")).resolve()
+if not FILE_DB.is_relative_to(THU_MUC_GOC.resolve()):
+    raise ValueError("CSDL phải nằm trong phiên hiện tại")
+OFFLINE = os.environ.get("TV3_OFFLINE", "0")
+if OFFLINE not in {"0", "1"}:
+    raise ValueError("TV3_OFFLINE chỉ nhận 0 hoặc 1")
+
+
+def kiem_tra_danh_tinh(ket_noi):
+    if ket_noi.execute(
+        "SELECT 1 FROM giao_dich WHERE ma_cua_hang != ? OR ma_may != ? LIMIT 1",
+        (MA_CUA_HANG, MA_MAY)
+    ).fetchone():
+        raise ValueError("CSDL đã có giao dịch của cặp cửa hàng/POS khác; cần file riêng")
 
 
 def khoi_tao():
@@ -36,11 +54,16 @@ def khoi_tao():
     ket_noi.commit()
     ket_noi.close()
 
-    print("Da khoi tao kho luu giao dich cua cua hang 01.")
+    # Chặn dùng nhầm file đã có dữ liệu của cửa hàng/POS khác.
+    with sqlite3.connect(FILE_DB) as ket_noi:
+        kiem_tra_danh_tinh(ket_noi)
+    print(f"Da khoi tao kho giao dich {MA_CUA_HANG}/{MA_MAY}.")
     print("Vi tri:", FILE_DB)
 
 
 def tao_giao_dich(so_tien):
+    if type(so_tien) is not int or so_tien <= 0:
+        raise ValueError("Số tiền phải là số nguyên dương")
     hien_tai = datetime.now()
     ngay = hien_tai.strftime("%Y%m%d")
     thoi_gian = hien_tai.isoformat(timespec="seconds")
@@ -58,6 +81,7 @@ def tao_giao_dich(so_tien):
 
         # Khóa lượt ghi để hai lần tạo không lấy cùng một số thứ tự
         ket_noi.execute("BEGIN IMMEDIATE")
+        kiem_tra_danh_tinh(ket_noi)
 
         ket_noi.execute("""
             INSERT INTO bo_dem (ngay, so_cuoi)
@@ -76,7 +100,7 @@ def tao_giao_dich(so_tien):
             (ngay,)
         ).fetchone()[0]
 
-        ma_gd = f"CH01-POS01-{ngay}-{so_thu_tu:06d}"
+        ma_gd = f"{MA_CUA_HANG}-{MA_MAY}-{ngay}-{so_thu_tu:06d}"
 
         # Ghi giao dịch xuống ổ đĩa trước khi thực hiện gửi
         ket_noi.execute("""
@@ -84,7 +108,7 @@ def tao_giao_dich(so_tien):
                 (ma_gd, ma_cua_hang, ma_may,
                  thoi_gian, so_tien, trang_thai)
             VALUES (?, ?, ?, ?, ?, ?)
-        """, (ma_gd, "CH01", "POS01", thoi_gian, so_tien, "PENDING"))
+        """, (ma_gd, MA_CUA_HANG, MA_MAY, thoi_gian, so_tien, "PENDING"))
 
         ket_noi.commit()
         print(f"Da luu: {ma_gd} | {so_tien} VND | PENDING")
@@ -143,6 +167,9 @@ def gui_giao_dich():
             """, (ma_gd,))
             ket_noi.commit()
 
+            if OFFLINE == "1":
+                print(f"MO PHONG NGAT KET NOI: {ma_gd} | SENT; giu du lieu, khong gui HTTP.")
+                continue
             du_lieu = json.dumps(giao_dich).encode("utf-8")
             yeu_cau = Request(
                 dia_chi,

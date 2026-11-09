@@ -1,0 +1,24 @@
+
+[2026-11-09T17:43:16] khoi-tao-kho 
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174316_521104\DuLieu\cuahang01.db
+
+Ma thoat: 0
+
+[2026-11-09T17:43:16] khoi-tao-kho 
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+
+Ma thoat: 0
+
+[2026-11-09T17:43:17] khoi-tao-kho 
+Co 1 giao dich dang cho gui.
+Chua xac nhan: CH01-POS01-20261109-000001 | Xac nhan khong hop le
+Van giu giao dich trong kho de gui lai.
+
+Ma thoat: 0
+
+[2026-11-09T17:43:18] khoi-tao-kho 
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+
+Ma thoat: 0

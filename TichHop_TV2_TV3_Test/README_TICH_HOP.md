@@ -1,5 +1,8 @@
 # Môi trường thử tích hợp TV2 và TV3
 
+> Trên nhánh tv3-nang-cao-demo có giám sát và cấu hình nhiều kho; xem [hướng dẫn mới](TV3_HUONG_DAN_DEMO_NANG_CAO.md). Phần mô tả dưới đây giữ phạm vi bản c88fdb9 để tham chiếu luồng TV2–TV3 một cửa hàng. Kết quả mới có nguồn riêng, không thay các kết quả lịch sử.
+
+
 **Trạng thái: giai đoạn 1, giai đoạn 2 và kiểm thử bổ sung đã ĐẠT trên localhost; đây vẫn là bản thử nghiệm. Phiên demo mới chỉ được tạo khi người dùng chọn phien-moi.**
 
 - TV3: `2159cc8987e44a53e20ce4ee3bded194e8122969`.

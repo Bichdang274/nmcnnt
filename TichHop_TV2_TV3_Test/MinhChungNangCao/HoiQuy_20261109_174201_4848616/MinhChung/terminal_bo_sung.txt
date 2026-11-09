@@ -1,0 +1,189 @@
+
+[2026-11-09T17:42:01+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174201_677643\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174201_677643
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+
+[2026-11-09T17:42:01+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 33896
+Da luu: CH01-POS01-20261109-000001 | 50000 VND | PENDING
+
+[2026-11-09T17:42:02+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+KT-BS1 ĐẠT: HTTP 409; HQ giữ nguyên một bản ghi, không ghi đè hoặc ghi trùng.
+
+[2026-11-09T17:42:02+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174202_815829\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174202_815829
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+Da luu: CH01-POS01-20261109-000001 | 50000 VND | PENDING
+
+[2026-11-09T17:42:02+07:00] tich-hop> tru-so-bat
+Receiver thử mất ACK đã bật; PID 24316
+
+[2026-11-09T17:42:03+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Chua xac nhan: CH01-POS01-20261109-000001 | Remote end closed connection without response
+Van giu giao dich trong kho de gui lai.
+
+[2026-11-09T17:42:03+07:00] tich-hop> gui-mot-luot
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+Receiver thử mất ACK đã dừng (chỉ tiến trình do demo tạo).
+
+KT-BS2 ĐẠT: HQ commit nhưng ACK bị ngắt; kho giữ SENT; gửi lại nhận DA_TON_TAI và ACKED, HQ vẫn 1.
+
+[2026-11-09T17:42:03+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174203_559823\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174203_559823
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+
+[2026-11-09T17:42:03+07:00] tich-hop> tru-so-bat
+LỖI ĐƯỢC CHỜ ĐỢI: RuntimeError: Cổng 18000 đang được dùng; không dừng hoặc chiếm dịch vụ bên ngoài.
+
+HR-01 ĐẠT: Từ chối cổng do socket thử giữ; không tạo/đóng tiến trình ngoài phiên.
+
+[2026-11-09T17:42:03+07:00] tich-hop> dong-bo-bat
+LỖI ĐƯỢC CHỜ ĐỢI: FileNotFoundError: Thiếu script của phiên: khong_ton_tai.py
+
+LỖI ĐƯỢC CHỜ ĐỢI: RuntimeError: Lệnh chưa đạt (mã thoát 7). Xem log để xác định nguyên nhân; không coi bước này đã đạt.
+LỖI ĐƯỢC CHỜ ĐỢI: RuntimeError: Auto sync dừng khi khởi động; xem auto_sync_log.txt.
+
+HR-02 ĐẠT: Thiếu script và script con exit 7/9 đều báo lỗi, không báo bước đã đạt.
+
+[2026-11-09T17:42:04+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174204_303656\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174204_303656
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+
+[2026-11-09T17:42:04+07:00] tich-hop> tru-so-bat
+Trụ sở đã bật; PID 33064
+Da luu: CH01-POS01-20261109-000001 | 50000 VND | PENDING
+
+[2026-11-09T17:42:05+07:00] tich-hop> dong-bo-bat
+Tự đồng bộ CH01/POS01 đã bật; PID 32256
+Tự đồng bộ CH01/POS01 đã dừng (chỉ tiến trình do demo tạo).
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+LỖI ĐƯỢC CHỜ ĐỢI: OSError: Mô phỏng lỗi dừng sender sau khi sender đã dừng
+
+HR-03 ĐẠT: Hồi quy auto sync 1 ACKED; close vẫn dừng receiver khi sender.stop báo lỗi.
+CLI thoat
+BẢN TÍCH HỢP THỬ NGHIỆM TV2–TV3 | NHÁNH NÂNG CAO TV3
+Giai đoạn 1 và 2 đã ĐẠT trên localhost; xem báo cáo và log đã lưu.
+Phiên demo mới chưa được tạo hoặc kiểm thử; dùng phien-moi để bắt đầu.
+Kết quả bổ sung được ghi riêng trong BAO_CAO_KIEM_THU_TICH_HOP.md.
+
+Lệnh nhập tại tich-hop> (không phải lệnh PowerShell):
+  phien-moi                 Tạo phiên mới riêng; giữ nguyên mọi phiên cũ
+  tru-so-bat | tru-so-tat    Bật/tắt receiver của phiên trên localhost:18000
+  tao-5                     Tạo thêm đúng 5 giao dịch mẫu trong phiên hiện tại
+  dong-bo-bat | dong-bo-tat  Bật/tắt auto sync; chờ 10 giây sau mỗi lượt
+  gui-mot-luot              Gửi thủ công khi auto sync đã tắt
+  gui-lap                   Gửi lặp và kiểm tra; auto sync phải tắt
+  doi-chieu                 Đối chiếu; 0/0 hoặc thiếu dữ liệu không coi là đạt
+  sao-luu-tru-so            Sao lưu trụ sở, giữ tất cả bản sao
+  danh-sach-ban-sao         Xem tên bản sao để lựa chọn
+  phuc-hoi TEN_FILE.db      Dừng sender/receiver, sao lưu hiện trạng, phục hồi
+  gui-bu                    Gửi ACKED mà trụ sở thiếu rồi đối chiếu lại
+  xuat-csv | sao-luu-kho    Công cụ kho cửa hàng; chỉ dùng dữ liệu phiên
+  phuc-hoi-kho TEN_FILE.db  Thử phục hồi kho vào file riêng
+  cua-hang CH02 POS01       Chọn/tạo kho riêng; không dừng sender cửa hàng khác
+  ngat-cua-hang             Mô phỏng chặn gửi HTTP riêng cửa hàng đang chọn
+  noi-cua-hang              Nối lại; giữ auto sync nếu trước đó đang chạy
+  giam-sat                  Tổng hợp chỉ đọc mọi kho và trụ sở
+  trang-thai | tro-giup | thoat
+Dùng thoat để dừng các tiến trình của phiên trước khi đóng Terminal.
+Schema TV3 là lựa chọn tạm thời, cần TV2 xác nhận.
+
+tich-hop> Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174205_599651\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174205_599651
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+tich-hop> Trụ sở đã bật; PID 22556
+tich-hop> Tự đồng bộ CH01/POS01 đã bật; PID 29772
+tich-hop> Tự đồng bộ CH01/POS01 đã dừng (chỉ tiến trình do demo tạo).
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+CLI EOF
+BẢN TÍCH HỢP THỬ NGHIỆM TV2–TV3 | NHÁNH NÂNG CAO TV3
+Giai đoạn 1 và 2 đã ĐẠT trên localhost; xem báo cáo và log đã lưu.
+Phiên demo mới chưa được tạo hoặc kiểm thử; dùng phien-moi để bắt đầu.
+Kết quả bổ sung được ghi riêng trong BAO_CAO_KIEM_THU_TICH_HOP.md.
+
+Lệnh nhập tại tich-hop> (không phải lệnh PowerShell):
+  phien-moi                 Tạo phiên mới riêng; giữ nguyên mọi phiên cũ
+  tru-so-bat | tru-so-tat    Bật/tắt receiver của phiên trên localhost:18000
+  tao-5                     Tạo thêm đúng 5 giao dịch mẫu trong phiên hiện tại
+  dong-bo-bat | dong-bo-tat  Bật/tắt auto sync; chờ 10 giây sau mỗi lượt
+  gui-mot-luot              Gửi thủ công khi auto sync đã tắt
+  gui-lap                   Gửi lặp và kiểm tra; auto sync phải tắt
+  doi-chieu                 Đối chiếu; 0/0 hoặc thiếu dữ liệu không coi là đạt
+  sao-luu-tru-so            Sao lưu trụ sở, giữ tất cả bản sao
+  danh-sach-ban-sao         Xem tên bản sao để lựa chọn
+  phuc-hoi TEN_FILE.db      Dừng sender/receiver, sao lưu hiện trạng, phục hồi
+  gui-bu                    Gửi ACKED mà trụ sở thiếu rồi đối chiếu lại
+  xuat-csv | sao-luu-kho    Công cụ kho cửa hàng; chỉ dùng dữ liệu phiên
+  phuc-hoi-kho TEN_FILE.db  Thử phục hồi kho vào file riêng
+  cua-hang CH02 POS01       Chọn/tạo kho riêng; không dừng sender cửa hàng khác
+  ngat-cua-hang             Mô phỏng chặn gửi HTTP riêng cửa hàng đang chọn
+  noi-cua-hang              Nối lại; giữ auto sync nếu trước đó đang chạy
+  giam-sat                  Tổng hợp chỉ đọc mọi kho và trụ sở
+  trang-thai | tro-giup | thoat
+Dùng thoat để dừng các tiến trình của phiên trước khi đóng Terminal.
+Schema TV3 là lựa chọn tạm thời, cần TV2 xác nhận.
+
+tich-hop> Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174206_794668\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174206_794668
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+tich-hop> Trụ sở đã bật; PID 25180
+tich-hop> Tự đồng bộ CH01/POS01 đã bật; PID 30528
+tich-hop> 
+Dừng bộ điều khiển.
+Tự đồng bộ CH01/POS01 đã dừng (chỉ tiến trình do demo tạo).
+Trụ sở đã dừng (chỉ tiến trình do demo tạo).
+
+LAUNCHER
+BẢN TÍCH HỢP THỬ NGHIỆM TV2–TV3 | NHÁNH NÂNG CAO TV3
+Giai đoạn 1 và 2 đã ĐẠT trên localhost; xem báo cáo và log đã lưu.
+Phiên demo mới chưa được tạo hoặc kiểm thử; dùng phien-moi để bắt đầu.
+Kết quả bổ sung được ghi riêng trong BAO_CAO_KIEM_THU_TICH_HOP.md.
+
+Lệnh nhập tại tich-hop> (không phải lệnh PowerShell):
+  phien-moi                 Tạo phiên mới riêng; giữ nguyên mọi phiên cũ
+  tru-so-bat | tru-so-tat    Bật/tắt receiver của phiên trên localhost:18000
+  tao-5                     Tạo thêm đúng 5 giao dịch mẫu trong phiên hiện tại
+  dong-bo-bat | dong-bo-tat  Bật/tắt auto sync; chờ 10 giây sau mỗi lượt
+  gui-mot-luot              Gửi thủ công khi auto sync đã tắt
+  gui-lap                   Gửi lặp và kiểm tra; auto sync phải tắt
+  doi-chieu                 Đối chiếu; 0/0 hoặc thiếu dữ liệu không coi là đạt
+  sao-luu-tru-so            Sao lưu trụ sở, giữ tất cả bản sao
+  danh-sach-ban-sao         Xem tên bản sao để lựa chọn
+  phuc-hoi TEN_FILE.db      Dừng sender/receiver, sao lưu hiện trạng, phục hồi
+  gui-bu                    Gửi ACKED mà trụ sở thiếu rồi đối chiếu lại
+  xuat-csv | sao-luu-kho    Công cụ kho cửa hàng; chỉ dùng dữ liệu phiên
+  phuc-hoi-kho TEN_FILE.db  Thử phục hồi kho vào file riêng
+  cua-hang CH02 POS01       Chọn/tạo kho riêng; không dừng sender cửa hàng khác
+  ngat-cua-hang             Mô phỏng chặn gửi HTTP riêng cửa hàng đang chọn
+  noi-cua-hang              Nối lại; giữ auto sync nếu trước đó đang chạy
+  giam-sat                  Tổng hợp chỉ đọc mọi kho và trụ sở
+  trang-thai | tro-giup | thoat
+Dùng thoat để dừng các tiến trình của phiên trước khi đóng Terminal.
+Schema TV3 là lựa chọn tạm thời, cần TV2 xác nhận.
+
+tich-hop> 
+
+HR-04 ĐẠT: CLI thoat và EOF dọn cả hai tiến trình; launcher PowerShell thoát 0.
+KHỞI ĐỘNG THIẾU FILE
+Thiếu file bắt buộc; không khởi động: Script\auto_sync.py
+
+
+HR-05 ĐẠT: Khởi động thiếu auto_sync.py dừng trước tạo phiên hoặc dịch vụ.
+RESULT={"status": "PASS", "cases": 7, "error": null, "runtime_root": "RUNTIME_TV3/HoiQuy_20261109_174201_4848616"}

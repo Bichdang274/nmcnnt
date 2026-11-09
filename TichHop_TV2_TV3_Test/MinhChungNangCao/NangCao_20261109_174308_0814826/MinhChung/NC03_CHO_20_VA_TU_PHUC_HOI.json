@@ -1,0 +1,89 @@
+{
+  "case": "NC03_CHO_20_VA_TU_PHUC_HOI",
+  "status": "PASS",
+  "time": "2026-11-09T17:44:13+07:00",
+  "actual": {
+    "held": {
+      "time": "2026-11-09T17:44:01",
+      "stores": [
+        {
+          "db": "DuLieu/cuahang01.db",
+          "total": 20,
+          "states": {
+            "PENDING": 0,
+            "SENT": 20,
+            "ACKED": 0
+          }
+        }
+      ],
+      "store_total": 20,
+      "states": {
+        "PENDING": 0,
+        "SENT": 20,
+        "ACKED": 0
+      },
+      "unconfirmed": 20,
+      "hq_total": null,
+      "service": {
+        "reachable": false,
+        "error": "URLError",
+        "identity_verified": false
+      },
+      "data_match": false,
+      "sync_complete": false,
+      "missing_hq": [],
+      "extra_hq": [],
+      "changed": [],
+      "acked_missing": [],
+      "duplicate_ids": [],
+      "errors": [
+        "Trụ sở: CSDL chưa được tạo: truso.db"
+      ],
+      "warnings": [
+        "Còn 20 giao dịch chưa có ACK hợp lệ",
+        "Dịch vụ nhận hiện không phản hồi HTTP",
+        "Không đủ dữ liệu để kết luận; xem lỗi CSDL"
+      ],
+      "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+    },
+    "recovered": {
+      "time": "2026-11-09T17:44:13",
+      "stores": [
+        {
+          "db": "DuLieu/cuahang01.db",
+          "total": 20,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 20
+          }
+        }
+      ],
+      "store_total": 20,
+      "states": {
+        "PENDING": 0,
+        "SENT": 0,
+        "ACKED": 20
+      },
+      "unconfirmed": 0,
+      "hq_total": 20,
+      "service": {
+        "reachable": true,
+        "http": 501,
+        "identity_verified": false
+      },
+      "data_match": true,
+      "sync_complete": true,
+      "missing_hq": [],
+      "extra_hq": [],
+      "changed": [],
+      "acked_missing": [],
+      "duplicate_ids": [],
+      "errors": [],
+      "warnings": [],
+      "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+    },
+    "same_auto_sync_process": true,
+    "duplicate_replay": 20
+  }
+}

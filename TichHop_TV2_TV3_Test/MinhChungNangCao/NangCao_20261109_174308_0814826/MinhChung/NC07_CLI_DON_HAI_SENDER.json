@@ -1,0 +1,14 @@
+{
+  "case": "NC07_CLI_DON_HAI_SENDER",
+  "status": "PASS",
+  "time": "2026-11-09T17:44:21+07:00",
+  "actual": {
+    "exit": 0,
+    "owned_pids": [
+      29520,
+      32656,
+      14372
+    ],
+    "all_stopped": true
+  }
+}

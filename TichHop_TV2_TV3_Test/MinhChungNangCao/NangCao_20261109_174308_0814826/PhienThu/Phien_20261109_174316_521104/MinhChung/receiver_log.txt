@@ -1,0 +1,8 @@
+TRU SO DANG CHO NHAN GIAO DICH
+Dia chi: http://127.0.0.1:18000/giao-dich
+Du lieu: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174316_521104\DuLieu\truso.db
+Nhan Ctrl + C de dung.
+[2026-11-09T17:43:18] CH01-POS01-20261109-000001 | DA_LUU
+127.0.0.1 - - [09/Nov/2026 17:43:18] "POST /giao-dich HTTP/1.1" 200 -
+127.0.0.1 - - [09/Nov/2026 17:43:18] code 501, message Unsupported method ('GET')
+127.0.0.1 - - [09/Nov/2026 17:43:18] "GET /giao-dich HTTP/1.1" 501 -

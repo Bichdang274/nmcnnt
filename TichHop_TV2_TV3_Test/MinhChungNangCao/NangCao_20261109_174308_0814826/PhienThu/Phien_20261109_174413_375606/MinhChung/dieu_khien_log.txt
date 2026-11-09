@@ -1,0 +1,97 @@
+
+[2026-11-09T17:44:13] khoi-tao-kho 
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606\DuLieu\cuahang01.db
+
+Ma thoat: 0
+
+[2026-11-09T17:44:14] khoi-tao-kho 
+Da luu: CH01-POS01-20261109-000001 | 10000 VND | PENDING
+Da luu: CH01-POS01-20261109-000002 | 10001 VND | PENDING
+Da luu: CH01-POS01-20261109-000003 | 10002 VND | PENDING
+Da luu: CH01-POS01-20261109-000004 | 10003 VND | PENDING
+Da luu: CH01-POS01-20261109-000005 | 10004 VND | PENDING
+
+Ma thoat: 0
+
+[2026-11-09T17:44:14] khoi-tao-kho 
+Da khoi tao kho giao dich CH02/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606\DuLieu\CuaHang\CH02_POS01.db
+
+Ma thoat: 0
+
+[2026-11-09T17:44:14] khoi-tao-kho 
+Da luu: CH02-POS01-20261109-000001 | 10000 VND | PENDING
+Da luu: CH02-POS01-20261109-000002 | 10001 VND | PENDING
+Da luu: CH02-POS01-20261109-000003 | 10002 VND | PENDING
+Da luu: CH02-POS01-20261109-000004 | 10003 VND | PENDING
+Da luu: CH02-POS01-20261109-000005 | 10004 VND | PENDING
+
+Ma thoat: 0
+
+[2026-11-09T17:44:15] khoi-tao-kho 
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606\DuLieu\cuahang01.db
+
+Ma thoat: 0
+
+[2026-11-09T17:44:15] kiem_tra_trung.py 
+KIEM THU GUI LAP: 2026-11-09T17:44:15.733739
+So giao dich cua hang: 5
+So giao dich tru so truoc gui: 10
+CH01-POS01-20261109-000001 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000002 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000003 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000004 | DA_TON_TAI | ACK hop le
+CH01-POS01-20261109-000005 | DA_TON_TAI | ACK hop le
+
+--- KET QUA ---
+So phan hoi xac nhan hop le: 5
+So giao dich tru so sau gui: 10
+So ban ghi du ma: 0
+Du lieu cap cua hang/POS khop: True
+DAT: Gui lap khong lam thay doi du lieu tru so.
+
+Ma thoat: 0
+
+[2026-11-09T17:44:15] khoi-tao-kho 
+Da khoi tao kho giao dich CH02/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606\DuLieu\CuaHang\CH02_POS01.db
+
+Ma thoat: 0
+
+[2026-11-09T17:44:16] kiem_tra_trung.py 
+KIEM THU GUI LAP: 2026-11-09T17:44:15.956644
+So giao dich cua hang: 5
+So giao dich tru so truoc gui: 10
+CH02-POS01-20261109-000001 | DA_TON_TAI | ACK hop le
+CH02-POS01-20261109-000002 | DA_TON_TAI | ACK hop le
+CH02-POS01-20261109-000003 | DA_TON_TAI | ACK hop le
+CH02-POS01-20261109-000004 | DA_TON_TAI | ACK hop le
+CH02-POS01-20261109-000005 | DA_TON_TAI | ACK hop le
+
+--- KET QUA ---
+So phan hoi xac nhan hop le: 5
+So giao dich tru so sau gui: 10
+So ban ghi du ma: 0
+Du lieu cap cua hang/POS khop: True
+DAT: Gui lap khong lam thay doi du lieu tru so.
+
+Ma thoat: 0
+
+[2026-11-09T17:44:16] giam_sat.py --session RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606
+
+==============================================================================
+TV3 | GIÁM SÁT GIAO DỊCH | 2026-11-09T17:44:16
+Kho / POS                                Tổng  PENDING   SENT   ACKED
+DuLieu/cuahang01.db                         5        0      0       5
+DuLieu/CuaHang/CH02_POS01.db                5        0      0       5
+Tổng kho: 10 | Trụ sở: 10 | Chưa ACK: 0
+Dịch vụ: HTTP phản hồi, mã 501
+GET chỉ kiểm tra HTTP; không xác thực receiver hoặc chứng minh POST/ACK.
+Đối chiếu: KHỚP 5 TRƯỜNG
+Đồng bộ: HOÀN TẤT
+Thiếu HQ: 0 | Thừa HQ: 0 | Lệch: 0 | Trùng: 0
+Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm.
+
+Ma thoat: 0

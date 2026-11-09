@@ -1,0 +1,17 @@
+{
+  "case": "NC08_CHAN_CONG_CU_CO_DINH_KHO",
+  "status": "PASS",
+  "time": "2026-11-09T17:52:23+07:00",
+  "actual": {
+    "blocked": [
+      "doi-chieu",
+      "gui-bu",
+      "xuat-csv",
+      "sao-luu-kho",
+      "phuc-hoi-kho khong_ton_tai.db"
+    ],
+    "files_and_databases_unchanged": true,
+    "transactions_created": 0,
+    "services_started": false
+  }
+}

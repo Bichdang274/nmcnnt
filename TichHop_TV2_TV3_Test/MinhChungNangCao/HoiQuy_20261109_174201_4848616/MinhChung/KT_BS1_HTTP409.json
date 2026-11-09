@@ -1,0 +1,86 @@
+{
+  "http_status": 409,
+  "response": {
+    "loi": "Cung ma giao dich nhung khac noi dung",
+    "ma_gd": "CH01-POS01-20261109-000001"
+  },
+  "conflicting_request": {
+    "ma_gd": "CH01-POS01-20261109-000001",
+    "ma_cua_hang": "CH01",
+    "ma_may": "POS01",
+    "thoi_gian": "2026-11-09T17:42:02",
+    "so_tien": 50001
+  },
+  "before": {
+    "store": {
+      "rows": [
+        {
+          "ma_gd": "CH01-POS01-20261109-000001",
+          "ma_cua_hang": "CH01",
+          "ma_may": "POS01",
+          "thoi_gian": "2026-11-09T17:42:02",
+          "so_tien": 50000,
+          "trang_thai": "ACKED"
+        }
+      ],
+      "count": 1,
+      "states": {
+        "ACKED": 1
+      },
+      "duplicate_ids": 0,
+      "integrity_check": "ok"
+    },
+    "hq": {
+      "rows": [
+        {
+          "ma_gd": "CH01-POS01-20261109-000001",
+          "ma_cua_hang": "CH01",
+          "ma_may": "POS01",
+          "thoi_gian": "2026-11-09T17:42:02",
+          "so_tien": 50000
+        }
+      ],
+      "count": 1,
+      "states": {},
+      "duplicate_ids": 0,
+      "integrity_check": "ok"
+    },
+    "five_fields_equal": true
+  },
+  "after": {
+    "store": {
+      "rows": [
+        {
+          "ma_gd": "CH01-POS01-20261109-000001",
+          "ma_cua_hang": "CH01",
+          "ma_may": "POS01",
+          "thoi_gian": "2026-11-09T17:42:02",
+          "so_tien": 50000,
+          "trang_thai": "ACKED"
+        }
+      ],
+      "count": 1,
+      "states": {
+        "ACKED": 1
+      },
+      "duplicate_ids": 0,
+      "integrity_check": "ok"
+    },
+    "hq": {
+      "rows": [
+        {
+          "ma_gd": "CH01-POS01-20261109-000001",
+          "ma_cua_hang": "CH01",
+          "ma_may": "POS01",
+          "thoi_gian": "2026-11-09T17:42:02",
+          "so_tien": 50000
+        }
+      ],
+      "count": 1,
+      "states": {},
+      "duplicate_ids": 0,
+      "integrity_check": "ok"
+    },
+    "five_fields_equal": true
+  }
+}

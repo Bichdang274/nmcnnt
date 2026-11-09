@@ -6,7 +6,10 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 
 THU_MUC_GOC = Path(__file__).resolve().parent.parent
-DB_CUA_HANG = THU_MUC_GOC / "DuLieu" / "cuahang01.db"
+try:
+    from .store_agent import FILE_DB as DB_CUA_HANG, MA_CUA_HANG, MA_MAY
+except ImportError:
+    from store_agent import FILE_DB as DB_CUA_HANG, MA_CUA_HANG, MA_MAY
 DB_TRU_SO = THU_MUC_GOC / "DuLieu" / "truso.db"
 
 CAU_LENH = """
@@ -42,7 +45,11 @@ def kiem_tra():
     print("So giao dich cua hang:", len(cua_hang))
     print("So giao dich tru so truoc gui:", len(truoc_gui))
 
-    if not cua_hang or cua_hang != truoc_gui:
+    # HQ có thể chứa nhiều cửa hàng; chỉ gửi lặp cặp đang chọn,
+    # nhưng vẫn xác nhận TOÀN BỘ HQ không đổi trước/sau.
+    truoc_cua_hang = [row for row in truoc_gui
+                     if row["ma_cua_hang"] == MA_CUA_HANG and row["ma_may"] == MA_MAY]
+    if not cua_hang or cua_hang != truoc_cua_hang:
         print("CHUA DAT: Du lieu hai ben chua khop truoc khi thu.")
         return False
 
@@ -82,7 +89,9 @@ def kiem_tra():
     print("So phan hoi xac nhan hop le:", so_xac_nhan)
     print("So giao dich tru so sau gui:", len(sau_gui))
     print("So ban ghi du ma:", so_ma_trung)
-    print("Du lieu hai ben khop:", cua_hang == sau_gui)
+    sau_cua_hang = [row for row in sau_gui
+                   if row["ma_cua_hang"] == MA_CUA_HANG and row["ma_may"] == MA_MAY]
+    print("Du lieu cap cua hang/POS khop:", cua_hang == sau_cua_hang)
 
     if sau_gui == truoc_gui and so_ma_trung == 0:
         print("DAT: Gui lap khong lam thay doi du lieu tru so.")

@@ -1,0 +1,13 @@
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/NangCao_20261109_174308_0814826\PhienThu\Phien_20261109_174413_375606\DuLieu\cuahang01.db
+=== HE THONG DONG BO TU DONG TV3 ===
+Chu ky gui lai: 10 giay
+Nhan Ctrl + C de dung chuong trinh.
+
+[17:44:14] Kiem tra giao dich...
+Co 5 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+Da xac nhan: CH01-POS01-20261109-000002 | ACKED
+Da xac nhan: CH01-POS01-20261109-000003 | ACKED
+Da xac nhan: CH01-POS01-20261109-000004 | ACKED
+Da xac nhan: CH01-POS01-20261109-000005 | ACKED

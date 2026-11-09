@@ -1,5 +1,10 @@
 # BẢN TÍCH HỢP THỬ NGHIỆM TV2–TV3
 
+> **Bản nâng cao TV3:** nhánh tv3-nang-cao-demo từ c88fdb9, được quản lý riêng và chưa merge vào dự án chính. Đã thử giám sát chỉ đọc, ACK lỗi, hàng đợi 20 và hai cửa hàng 5+5. Xem [tổng kết họp nhóm](TV3_TONG_KET_HOP_NHOM.md), [demo nâng cao](TV3_HUONG_DAN_DEMO_NANG_CAO.md) và [báo cáo mới](TV3_BAO_CAO_NANG_CAO.md).
+>
+> Phần bên dưới mô tả bộ bàn giao tại mốc c88fdb9 và các kiểm thử trước đó. Các dòng một cửa hàng/chưa thử ACK sai/nhiều cửa hàng là phạm vi lịch sử; khả năng và giới hạn hiện tại của nhánh nâng cao nằm trong ba tài liệu trên. Nguon/ và các phiên cũ giữ nguyên. Công cụ TV2 và CSV/sao lưu/phục hồi kho cũ vẫn chỉ dùng phiên một kho.
+
+
 Bản này được lưu riêng trên nhánh `tich-hop-tv2-tv3-test`, xuất phát từ TV3 commit `2159cc8987e44a53e20ce4ee3bded194e8122969`. Đây là bản thử để rà soát và quản lý phiên bản, chưa phải bản tích hợp chính thức của nhóm.
 
 ## Đọc tài liệu và minh chứng

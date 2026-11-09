@@ -1,0 +1,11 @@
+{
+  "case": "NC09_NOI_LAI_TU_CHOI_CONG_LA",
+  "status": "PASS",
+  "time": "2026-11-09T18:07:21+07:00",
+  "actual": {
+    "foreign_port_preserved": true,
+    "sender_not_started": true,
+    "offline_retained": true,
+    "transactions_created": 0
+  }
+}

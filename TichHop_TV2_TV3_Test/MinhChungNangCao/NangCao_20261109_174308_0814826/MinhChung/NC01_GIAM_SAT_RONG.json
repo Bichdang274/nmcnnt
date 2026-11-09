@@ -1,0 +1,89 @@
+{
+  "case": "NC01_GIAM_SAT_RONG",
+  "status": "PASS",
+  "time": "2026-11-09T17:43:10+07:00",
+  "actual": {
+    "missing_db": {
+      "time": "2026-11-09T17:43:09",
+      "stores": [
+        {
+          "db": "DuLieu/cuahang01.db",
+          "total": 0,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 0
+          }
+        }
+      ],
+      "store_total": 0,
+      "states": {
+        "PENDING": 0,
+        "SENT": 0,
+        "ACKED": 0
+      },
+      "unconfirmed": 0,
+      "hq_total": null,
+      "service": {
+        "reachable": false,
+        "error": "URLError",
+        "identity_verified": false
+      },
+      "data_match": false,
+      "sync_complete": false,
+      "missing_hq": [],
+      "extra_hq": [],
+      "changed": [],
+      "acked_missing": [],
+      "duplicate_ids": [],
+      "errors": [
+        "Trụ sở: CSDL chưa được tạo: truso.db"
+      ],
+      "warnings": [
+        "Dịch vụ nhận hiện không phản hồi HTTP",
+        "Không đủ dữ liệu để kết luận; xem lỗi CSDL"
+      ],
+      "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+    },
+    "empty_pair": {
+      "time": "2026-11-09T17:43:10",
+      "stores": [
+        {
+          "db": "DuLieu/cuahang01.db",
+          "total": 0,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 0
+          }
+        }
+      ],
+      "store_total": 0,
+      "states": {
+        "PENDING": 0,
+        "SENT": 0,
+        "ACKED": 0
+      },
+      "unconfirmed": 0,
+      "hq_total": 0,
+      "service": {
+        "reachable": true,
+        "http": 501,
+        "identity_verified": false
+      },
+      "data_match": false,
+      "sync_complete": false,
+      "missing_hq": [],
+      "extra_hq": [],
+      "changed": [],
+      "acked_missing": [],
+      "duplicate_ids": [],
+      "errors": [],
+      "warnings": [
+        "Chưa có giao dịch; 0/0 không chứng minh đồng bộ thành công"
+      ],
+      "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+    },
+    "read_only_hashes": "unchanged"
+  }
+}

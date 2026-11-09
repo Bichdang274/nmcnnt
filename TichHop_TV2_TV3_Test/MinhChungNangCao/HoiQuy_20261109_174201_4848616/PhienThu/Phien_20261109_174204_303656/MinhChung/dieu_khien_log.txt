@@ -1,0 +1,11 @@
+
+[2026-11-09T17:42:04] khoi-tao-kho 
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/HoiQuy_20261109_174201_4848616\PhienThu\Phien_20261109_174204_303656\DuLieu\cuahang01.db
+
+Ma thoat: 0
+
+[2026-11-09T17:42:05] khoi-tao-kho 
+Da luu: CH01-POS01-20261109-000001 | 50000 VND | PENDING
+
+Ma thoat: 0

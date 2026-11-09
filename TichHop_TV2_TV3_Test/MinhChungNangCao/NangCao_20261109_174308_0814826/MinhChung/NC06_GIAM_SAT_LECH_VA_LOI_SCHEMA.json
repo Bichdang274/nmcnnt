@@ -1,0 +1,93 @@
+{
+  "case": "NC06_GIAM_SAT_LECH_VA_LOI_SCHEMA",
+  "status": "PASS",
+  "time": "2026-11-09T17:44:20+07:00",
+  "actual": {
+    "injected_content_mismatch": {
+      "time": "2026-11-09T17:44:19",
+      "stores": [
+        {
+          "db": "DuLieu/cuahang01.db",
+          "total": 1,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 1
+          }
+        }
+      ],
+      "store_total": 1,
+      "states": {
+        "PENDING": 0,
+        "SENT": 0,
+        "ACKED": 1
+      },
+      "unconfirmed": 0,
+      "hq_total": 1,
+      "service": {
+        "reachable": false,
+        "error": "URLError",
+        "identity_verified": false
+      },
+      "data_match": false,
+      "sync_complete": false,
+      "missing_hq": [],
+      "extra_hq": [],
+      "changed": [
+        "CH01-POS01-20261109-000001"
+      ],
+      "acked_missing": [],
+      "duplicate_ids": [],
+      "errors": [],
+      "warnings": [
+        "Hai phía thiếu/thừa/lệch nội dung hoặc có mã trùng",
+        "Dịch vụ nhận hiện không phản hồi HTTP"
+      ],
+      "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+    },
+    "injected_wrong_schema": {
+      "time": "2026-11-09T17:44:20",
+      "stores": [
+        {
+          "db": "DuLieu/cuahang01.db",
+          "total": 0,
+          "states": {
+            "PENDING": 0,
+            "SENT": 0,
+            "ACKED": 0
+          }
+        }
+      ],
+      "store_total": 0,
+      "states": {
+        "PENDING": 0,
+        "SENT": 0,
+        "ACKED": 0
+      },
+      "unconfirmed": 0,
+      "hq_total": null,
+      "service": {
+        "reachable": false,
+        "error": "URLError",
+        "identity_verified": false
+      },
+      "data_match": false,
+      "sync_complete": false,
+      "missing_hq": [],
+      "extra_hq": [],
+      "changed": [],
+      "acked_missing": [],
+      "duplicate_ids": [],
+      "errors": [
+        "Trụ sở: no such table: giao_dich"
+      ],
+      "warnings": [
+        "Dịch vụ nhận hiện không phản hồi HTTP",
+        "Không đủ dữ liệu để kết luận; xem lỗi CSDL"
+      ],
+      "snapshot_note": "Ảnh chụp từng CSDL; khi đang gửi, số liệu hai file có thể khác thời điểm."
+    },
+    "fixture_only": true,
+    "monitor_read_only": true
+  }
+}

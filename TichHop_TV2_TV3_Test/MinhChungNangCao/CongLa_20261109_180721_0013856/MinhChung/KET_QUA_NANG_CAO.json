@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "started": "2026-11-09T18:07:21+07:00",
+  "finished": "2026-11-09T18:07:21+07:00",
+  "cases": [
+    {
+      "case": "NC09_NOI_LAI_TU_CHOI_CONG_LA",
+      "status": "PASS",
+      "time": "2026-11-09T18:07:21+07:00",
+      "actual": {
+        "foreign_port_preserved": true,
+        "sender_not_started": true,
+        "offline_retained": true,
+        "transactions_created": 0
+      }
+    }
+  ],
+  "error": null,
+  "base_commit": "c88fdb963ecc93efcac0584f2da9b9c740b3e1d8",
+  "runtime_root": "RUNTIME_TV3/CongLa_20261109_180721_0013856",
+  "old_sessions_used": false,
+  "source_sha256": {
+    "demo_tich_hop.py": "2d3d72b89357e835365a906943ef41823176d140d0cf5255a776fa76e574d62f",
+    "chay_demo.ps1": "c061217b4313b78766e4193c4cbb926d62e29a56ff61a123b007c44240ab1c46",
+    "KiemThu/kiem_thu_nang_cao.py": "0268905250aef1918921f7252af19481d1d6dd5ca1f3deee7c1d71856440254e",
+    "Script/auto_sync.py": "773a20228e1c8025472c489b7c9a4f29b8486e9f5fcccf3b07094a790a6ada69",
+    "Script/doi_chieu.py": "77ed4ebc27f76fc4b85a0d85dd677c03cddefdacadf4872dc5cb858fcc372108",
+    "Script/giam_sat.py": "ce24b26df94e7b5f6d9f06acd81e6a122f12e7328901cc3aec677c1b1c3fde5d",
+    "Script/hq_receiver.py": "19c0bca02421bbbf06a9a2860c065e4250b69839fa17fece17d262a003242a40",
+    "Script/kiem_tra_phuc_hoi.py": "53511bc5b8b86d9ff46357344d61b9d7f38f1284eca55d77166476912745b880",
+    "Script/kiem_tra_trung.py": "4a1e3a44f0bcb1085fc1fb45504b44286566e98adf27a1cca76363bed10437cb",
+    "Script/sao_luu.py": "bd7691d0d56141cd7e2bacd261483d27b4fab6f78f200d28b6b59bc290947e06",
+    "Script/sao_luu_tru_so.py": "1da34a6bc83f688845c0faf034da0837323ab3145aee5e7eafcd2c634ce81767",
+    "Script/store_agent.py": "78c099c45054c5c9f63ff5db4335679c69efe97813eeac0dbad2cbdbd7d245d8",
+    "Script/xuat_giao_dich.py": "7d2729a79c1141c8d55500b073d6f384b9fb04115605888a4ca4795c7b3b46cb"
+  }
+}

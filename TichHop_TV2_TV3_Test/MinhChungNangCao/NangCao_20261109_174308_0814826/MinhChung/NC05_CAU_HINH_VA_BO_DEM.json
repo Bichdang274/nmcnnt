@@ -1,0 +1,11 @@
+{
+  "case": "NC05_CAU_HINH_VA_BO_DEM",
+  "status": "PASS",
+  "time": "2026-11-09T17:44:16+07:00",
+  "actual": {
+    "restart_counter_unique": true,
+    "invalid_amounts_rejected": 5,
+    "unsafe_or_mixed_config_rejected": 3,
+    "rows_preserved": 2
+  }
+}

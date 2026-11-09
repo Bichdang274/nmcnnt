@@ -1,0 +1,29 @@
+
+[2026-11-09T17:52:23+07:00] tich-hop> phien-moi
+Da khoi tao kho giao dich CH01/POS01.
+Vi tri: RUNTIME_TV3/GioiHan_20261109_175222_2296345\PhienThu\Phien_20261109_175223_081603\DuLieu\cuahang01.db
+Phiên mới: RUNTIME_TV3/GioiHan_20261109_175222_2296345\PhienThu\Phien_20261109_175223_081603
+Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.
+
+[2026-11-09T17:52:23+07:00] tich-hop> cua-hang CH02 POS01
+Da khoi tao kho giao dich CH02/POS01.
+Vi tri: RUNTIME_TV3/GioiHan_20261109_175222_2296345\PhienThu\Phien_20261109_175223_081603\DuLieu\CuaHang\CH02_POS01.db
+Đang chọn: CH02/POS01
+
+[2026-11-09T17:52:23+07:00] tich-hop> doi-chieu
+LỖI ĐƯỢC CHỜ ĐỢI: RuntimeError: Công cụ TV2 hiện dành cho phiên chỉ có CH01/POS01; dùng giam-sat để đối chiếu nhiều kho. Chưa mở rộng công cụ này cho nhiều cửa hàng.
+
+[2026-11-09T17:52:23+07:00] tich-hop> gui-bu
+LỖI ĐƯỢC CHỜ ĐỢI: RuntimeError: Công cụ TV2 hiện dành cho phiên chỉ có CH01/POS01; dùng giam-sat để đối chiếu nhiều kho. Chưa mở rộng công cụ này cho nhiều cửa hàng.
+
+[2026-11-09T17:52:23+07:00] tich-hop> xuat-csv
+LỖI ĐƯỢC CHỜ ĐỢI: RuntimeError: Công cụ TV3 xuất/sao lưu/phục hồi kho hiện dành cho phiên chỉ có CH01/POS01; dùng giam-sat để đối chiếu nhiều kho. Chưa mở rộng công cụ này cho nhiều cửa hàng.
+
+[2026-11-09T17:52:23+07:00] tich-hop> sao-luu-kho
+LỖI ĐƯỢC CHỜ ĐỢI: RuntimeError: Công cụ TV3 xuất/sao lưu/phục hồi kho hiện dành cho phiên chỉ có CH01/POS01; dùng giam-sat để đối chiếu nhiều kho. Chưa mở rộng công cụ này cho nhiều cửa hàng.
+
+[2026-11-09T17:52:23+07:00] tich-hop> phuc-hoi-kho khong_ton_tai.db
+LỖI ĐƯỢC CHỜ ĐỢI: RuntimeError: Công cụ TV3 xuất/sao lưu/phục hồi kho hiện dành cho phiên chỉ có CH01/POS01; dùng giam-sat để đối chiếu nhiều kho. Chưa mở rộng công cụ này cho nhiều cửa hàng.
+
+NC08_CHAN_CONG_CU_CO_DINH_KHO PASS
+RESULT={"status": "PASS", "cases": 1, "error": null}

@@ -26,7 +26,7 @@ PORT = 18000
 SCRIPT_NAMES = (
     "store_agent.py", "hq_receiver.py", "auto_sync.py", "kiem_tra_trung.py",
     "doi_chieu.py", "sao_luu_tru_so.py", "sao_luu.py",
-    "kiem_tra_phuc_hoi.py", "xuat_giao_dich.py")
+    "kiem_tra_phuc_hoi.py", "xuat_giao_dich.py", "giam_sat.py")
 
 
 def stamp():
