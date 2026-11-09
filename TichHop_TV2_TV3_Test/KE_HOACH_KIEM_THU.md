@@ -1,6 +1,6 @@
 # Kế hoạch kiểm thử tích hợp TV2 + TV3
 
-**Chưa thực hiện. Các số liệu bên dưới là KỲ VỌNG, không phải kết quả đã đạt.**
+**Đây là kế hoạch và tiêu chí kỳ vọng. Kết quả thực tế giai đoạn 1/2 nằm trong báo cáo tổng hợp; KT-BS1, KT-BS2 và HR-01 đến HR-05 nằm trong báo cáo bổ sung. Không mặc định mọi ca trong bảng đã được chạy.**
 Chỉ dùng phiên mới do bộ điều khiển tạo. Không dùng database 15 giao dịch hoặc log cũ.
 
 ## Chuẩn bị
@@ -31,7 +31,7 @@ Thay `TEN_B5_THUC_TE.db` bằng tên chính xác của bản sao B5. Không gõ 
 - `sao-luu-kho` rồi `phuc-hoi-kho TEN_BAN_SAO_KHO.db`: dữ liệu và bộ đếm khớp; file phục hồi ở `PhucHoiThu`, không ghi đè kho.
 - `xuat-csv`: CSV có đúng số giao dịch và trạng thái tại thời điểm xuất.
 - Thiếu file CSDL/lỗi schema: chỉ thực hiện trong một phiên lỗi riêng sau khi được cho phép thao tác dữ liệu. Đối chiếu phải báo lỗi, không chuyển thành 0-0 thành công.
-- Cùng mã khác nội dung (HTTP 409), ACK sai mã, mất ACK sau commit: cần bổ sung cách kích lỗi có kiểm soát, chưa có bộ gây lỗi trong bản chuẩn bị này. Không tuyên bố đã kiểm thử các nhánh đó.
+- HTTP 409 và mất ACK sau commit đã có KT-BS1/KT-BS2 thực tế, dùng bộ thử riêng; ACK sai mã/sai định dạng vẫn chưa thử.
 - Chạy khôi phục lại cùng bản sao và gửi bù lại: dữ liệu vẫn đúng, không tạo bản trùng.
 
 ## Minh chứng cần lưu khi chạy thật
@@ -41,3 +41,17 @@ Ghi tên ca, thời gian, phiên, số kho/HQ/ACKED, số thiếu/trùng/lệch,
 
 Nếu kết quả khác kỳ vọng: dừng auto sync, giữ nguyên phiên và log, không làm mới/xóa dữ liệu để che lỗi.
 Không cộng bộ 5/10 của phép thử này với bộ TV3 gốc 15 hoặc log TV2 cũ 45.
+
+## Kết quả bổ sung và hồi quy đã chạy
+
+| Ca | Phạm vi | Trạng thái |
+|---|---|---|
+| KT-BS1 | Cùng mã khác số tiền, HTTP 409, HQ không đổi | ĐẠT |
+| KT-BS2 | Ngắt ACK đầu sau commit; SENT, gửi lại, DA_TON_TAI, ACKED | ĐẠT |
+| HR-01 | Cổng đang bị giữ | ĐẠT |
+| HR-02 | Thiếu script, exit 7, khởi động exit 9 | ĐẠT |
+| HR-03 | Auto sync một giao dịch và close khi sender.stop báo lỗi | ĐẠT |
+| HR-04 | Thoat/EOF, launcher và bảng mã cp1258 | ĐẠT |
+| HR-05 | Thiếu file bắt buộc trước khởi động CLI | ĐẠT |
+
+Chi tiết cách thử, lượt khởi tạo lỗi đã sửa và log: [BAO_CAO_KIEM_THU_BO_SUNG.md](BAO_CAO_KIEM_THU_BO_SUNG.md). Không chạy lại toàn bộ TH0–TH10 khi không có thay đổi cần hồi quy. Các ca chưa chạy vẫn được đánh dấu trong báo cáo tổng hợp.

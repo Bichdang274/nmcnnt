@@ -1,11 +1,11 @@
 # Môi trường thử tích hợp TV2 và TV3
 
-**Trạng thái bàn giao: chỉ chuẩn bị. Chưa chạy demo, dịch vụ, kiểm thử hoặc tạo giao dịch.**
+**Trạng thái: giai đoạn 1, giai đoạn 2 và kiểm thử bổ sung đã ĐẠT trên localhost; đây vẫn là bản thử nghiệm. Phiên demo mới chỉ được tạo khi người dùng chọn phien-moi.**
 
 - TV3: `2159cc8987e44a53e20ce4ee3bded194e8122969`.
 - TV2: `f4aeed5d29bc72e7a07e73d3c9ff1a5cb3152af8`.
 - Nguồn lấy trực tiếp từ Git object của hai commit; không lấy mã đang sửa trong working tree.
-- Không sao chép CSDL 15 giao dịch, file Packet Tracer, log 45 giao dịch hoặc bất kỳ dữ liệu kiểm thử cũ nào.
+- Không sao chép CSDL 15 giao dịch, file Packet Tracer hoặc log 45 giao dịch. Minh chứng giai đoạn 1/2 và bổ sung được tạo riêng trong môi trường thử, rồi đưa bản đã ẩn đường dẫn lên nhánh này.
 - **Schema `truso.db` TV3 là lựa chọn TẠM THỜI của bản thử. Cần TV2 xác nhận trước tích hợp chính thức.**
 
 ## Thành phần
@@ -26,14 +26,14 @@ TichHop_TV2_TV3_Test/
     TV3/chay_auto_sync.ps1
     TV2/Script/           Hai script TV2 nguyên gốc
     TV2/CSDL/             SQL cũ, chỉ tham khảo, KHÔNG áp vào CSDL thử
-  PhienThu/               Đang rỗng; mỗi lần phien-moi tạo thư mục con riêng
+  PhienThu/               Hai phiên minh chứng đã đạt; phien-moi tạo phiên chạy mới riêng
 ```
 
 Bộ điều khiển dùng Terminal, không cần website, Docker hay Packet Tracer. Không chép demo web cũ của TV2 vì bản đó dùng TV3 cũ và chưa quản lý auto_sync. Cơ chế dữ liệu vẫn dùng script thật của TV3 và hai script TV2, không viết lại receiver hoặc cơ chế ACK.
 
 ## Chạy ở bước tiếp theo, khi đã cho phép kiểm thử
 
-Các lệnh bên dưới **chưa được thực hiện trong bước chuẩn bị**.
+Các lệnh bên dưới hướng dẫn một lần demo mới. Kết quả đã chạy được ghi riêng trong [báo cáo tổng hợp](BAO_CAO_KIEM_THU_TICH_HOP.md) và [báo cáo bổ sung](BAO_CAO_KIEM_THU_BO_SUNG.md); không dùng kết quả cũ để kết luận phiên mới đã đạt.
 
 Mở một Terminal PowerShell:
 
@@ -85,6 +85,10 @@ Giao dịch truyền năm trường: `ma_gd`, `ma_cua_hang`, `ma_may`, `thoi_gia
 
 SQL cũ TV2 dùng `hq.db`, `ma_ch`, `ma_pos`, `tong_tien`, `so_mat_hang`, `nhat_ky_nhan`; chỉ lưu tham khảo trong `Nguon/TV2/CSDL`, không dùng thay schema thử.
 
-Chưa mở rộng nhiều cửa hàng/POS; chưa triển khai HTTPS, xác thực, mạng thật, lịch sao lưu độc lập hoặc chuyển bản sao sang Server-Backup. Bản thử không đổi báo cáo gốc và không chứng minh tích hợp đã ĐẠT.
+Chưa mở rộng nhiều cửa hàng/POS; chưa triển khai HTTPS, xác thực, mạng thật, lịch sao lưu độc lập hoặc chuyển bản sao sang Server-Backup. Các kết quả đã đạt chỉ áp dụng phạm vi và phiên có minh chứng; bản thử chưa được tích hợp chính thức vào dự án nhóm.
 
 Đọc [kế hoạch kiểm thử](KE_HOACH_KIEM_THU.md) và [nguồn, điều chỉnh](NGUON_VA_DIEU_CHINH.md) trước khi chạy.
+
+## Kiểm thử bổ sung và xử lý lỗi
+
+KT-BS1 xác nhận HTTP 409 không ghi đè HQ. KT-BS2 ngắt ACK sau commit, kiểm tra SENT rồi gửi lại nhận DA_TON_TAI/ACKED. Hồi quy đã kiểm tra cổng bị chiếm, thiếu script, exit 7/9, dọn tiến trình khi dừng sender báo lỗi, thoat/EOF và launcher dưới cp1258. Bộ điều khiển hiện dùng thông báo tiếng Việt, đầu ra UTF-8; launcher có BOM cho PowerShell 5. Không coi phiên mới đã đạt chỉ vì giai đoạn trước đạt. Mã bộ thử: [KiemThu/kiem_thu_bo_sung.py](KiemThu/kiem_thu_bo_sung.py). Những ca ACK sai, CSDL lỗi, đa cửa hàng và WAN vẫn chưa có kết quả.

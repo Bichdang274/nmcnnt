@@ -4,7 +4,7 @@
 
 Tài liệu giúp các thành viên trình bày cơ chế giữ giao dịch khi dịch vụ trụ sở dừng, tự gửi lại, chống trùng, sao lưu, phục hồi và gửi bù. Đây là demo dữ liệu trên localhost, một CH01/POS01; không tuyên bố chạy qua WAN thật hoặc đã tích hợp chính thức.
 
-Hai phiên ngày 09/11/2026 đã có kết quả thực tế trong [báo cáo kiểm thử](BAO_CAO_KIEM_THU_TICH_HOP.md). Hướng dẫn chạy mới bên dưới là kịch bản trình diễn cho lần sau; không được ghi kết quả kỳ vọng thành kết quả đã đạt khi chưa quan sát. Lần biên soạn tài liệu này không chạy lại demo.
+Hai phiên ngày 09/11/2026 đã có kết quả thực tế trong [báo cáo kiểm thử](BAO_CAO_KIEM_THU_TICH_HOP.md). Hướng dẫn chạy mới bên dưới là kịch bản trình diễn cho lần sau; không được ghi kết quả kỳ vọng thành kết quả đã đạt khi chưa quan sát. Đợt hoàn thiện chỉ chạy các ca bổ sung và hồi quy được ghi trong báo cáo riêng, không chạy lại toàn bộ hai giai đoạn.
 
 ## 2. Phương án xem minh chứng đã có, không chạy chương trình
 
@@ -49,7 +49,7 @@ doi-chieu
 
 Ghi lại đường dẫn `PhienThu/Phien_...` mà chương trình in ra. Đây phải là phiên mới, không phải tên hai phiên đã lưu minh chứng.
 
-Kỳ vọng: cửa hàng 0, trụ sở 0; công cụ báo chưa đạt, mã thoát 2. Giải thích: hai kho cùng rỗng chưa chứng minh dữ liệu đã được đồng bộ. Thông báo `CHUA HOAN TAT` ở ca này là cách bộ điều khiển chuyển tiếp mã 2 của phép đối chiếu.
+Kỳ vọng: cửa hàng 0, trụ sở 0; công cụ báo chưa đạt, mã thoát 2. Giải thích: hai kho cùng rỗng chưa chứng minh dữ liệu đã được đồng bộ. Thông báo `CHƯA HOÀN TẤT` ở ca này là cách bộ điều khiển chuyển tiếp mã 2 của phép đối chiếu.
 
 ## 5. Mất dịch vụ, tạo 5 và tự gửi lại
 
@@ -158,7 +158,7 @@ trang-thai
 thoat
 ```
 
-`thoat` cũng gọi hàm dừng hai tiến trình do bộ điều khiển tạo. Ưu tiên thoát bình thường, không đóng cưỡng bức cửa sổ. Mã có xử lý `Ctrl+C` để đi qua phần dọn dẹp; hai phiên đã kiểm tra kết thúc bằng `thoat` hoặc `Demo.close()`, chưa có ca riêng gây lỗi dọn dẹp.
+`thoat` cũng gọi hàm dừng hai tiến trình do bộ điều khiển tạo. Ưu tiên thoát bình thường, không đóng cưỡng bức cửa sổ. Mã có xử lý `Ctrl+C` để đi qua phần dọn dẹp. HR-03/04 bổ sung đã kiểm tra close khi sender.stop báo lỗi và kết thúc CLI bằng thoat/EOF; chưa gây tắt cưỡng bức hoặc thử nhánh kill do timeout.
 
 Ở Terminal đọc log, `Ctrl+C` chỉ dừng theo dõi `Get-Content -Wait`, không thay cho lệnh dừng auto sync. Sau khi thoát, có thể đọc lại trạng thái cổng:
 
@@ -173,8 +173,14 @@ Giữ nguyên thư mục phiên, hai CSDL, bản sao và toàn bộ `MinhChung/`
 ## 11. Cách trả lời về phạm vi demo
 
 - Đã có kết quả thực tế cho mất dịch vụ, tự gửi lại, gửi lặp 5, sao lưu trụ sở, phục hồi bản cũ, phát hiện thiếu và gửi bù.
-- HTTP 409 có nhánh xử lý trong mã nhưng chưa thử riêng.
-- Chưa thử mất ACK sau commit, nhiều POS/cửa hàng, gửi đồng thời hoặc WAN thật.
+- KT-BS1 đã thử HTTP 409; HQ giữ nguyên bản ghi và không tạo trùng.
+- KT-BS2 đã thử mất ACK sau commit trên localhost. Chưa thử ACK sai mã/sai JSON, nhiều POS/cửa hàng, gửi đồng thời hoặc WAN thật.
 - Lỗi từ chối kết nối khi receiver tắt không phải phép thử mất ACK sau commit.
 - Các chức năng xuất CSV, sao lưu và thử phục hồi kho cửa hàng có trong bộ mã; chưa được chạy trong hai phiên tích hợp.
 - Không nhận bản thử là sản phẩm đã tích hợp chính thức. Các điểm cần TV2 xác nhận nằm trong [tài liệu bàn giao](BAN_GIAO_CHO_TV2.md).
+
+## 12. Trình bày phần kiểm thử bổ sung
+
+Để rà soát mà không tạo thêm dữ liệu, mở [báo cáo bổ sung](BAO_CAO_KIEM_THU_BO_SUNG.md), JSON KT-BS1/KT-BS2 và Terminal được dẫn trong đó. Giải thích điểm ngắt ACK sau commit và việc HQ chỉ có một bản ghi trước/sau gửi lại. Lượt lỗi Unicode ban đầu là lỗi khởi tạo đã sửa, không phải kết quả HTTP 409; chỉ lượt có PASS mới làm minh chứng đạt.
+
+Nếu nhóm chủ động tái hiện sau này, dùng bộ thử KiemThu/kiem_thu_bo_sung.py với --runtime-root là thư mục mới ngoài mã nguồn như hướng dẫn trong báo cáo bổ sung. Bộ thử giữ runtime lỗi, dừng khi ca thất bại và dọn tiến trình. Không áp receiver gây lỗi lên phiên làm việc hoặc hai phiên đã lưu. Banner mới phân biệt kết quả lịch sử với phiên mới chưa chạy; thông báo thành công trong quá khứ không xác nhận ca hiện tại.

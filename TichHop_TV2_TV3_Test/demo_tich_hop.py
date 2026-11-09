@@ -1,4 +1,4 @@
-"""Bo dieu khien thu tich hop rieng. Chi tao du lieu khi nguoi dung ra lenh."""
+"""Bộ điều khiển bản thử TV2–TV3; mỗi phiên có dữ liệu và tiến trình riêng."""
 import json
 import os
 from pathlib import Path
@@ -25,7 +25,7 @@ def port_busy(port):
 
 
 class Child:
-    """Chi quan ly tien trinh do chinh bo dieu khien nay tao."""
+    """Chỉ quản lý tiến trình do chính bộ điều khiển này tạo."""
     def __init__(self, label, filename, logfile):
         self.label, self.filename, self.logfile = label, filename, logfile
         self.process = None
@@ -35,13 +35,16 @@ class Child:
 
     def start(self, session):
         if self.running():
-            print(self.label + " da chay.")
+            print(self.label + " đang chạy.")
             return
+        script = session / "Script" / self.filename
+        if not script.is_file():
+            raise FileNotFoundError(f"Thiếu script của phiên: {script.name}")
         if self.filename == "hq_receiver.py" and port_busy(HQ_PORT):
-            raise RuntimeError("Cong 18000 dang co chu. Khong dung/chiem dich vu ben ngoai.")
+            raise RuntimeError("Cổng 18000 đang được dùng; không dừng hoặc chiếm dịch vụ bên ngoài.")
         with (session / "MinhChung" / self.logfile).open("ab") as log:
             self.process = subprocess.Popen(
-                [sys.executable, "-B", "-u", str(session / "Script" / self.filename)],
+                [sys.executable, "-B", "-u", str(script)],
                 cwd=session, env=ENV, stdin=subprocess.DEVNULL,
                 stdout=log, stderr=subprocess.STDOUT)
         try:
@@ -49,20 +52,20 @@ class Child:
                 deadline = time.monotonic() + 5
                 while time.monotonic() < deadline:
                     if not self.running():
-                        raise RuntimeError("Tru so dung khi khoi dong; xem receiver_log.txt.")
+                        raise RuntimeError("Receiver dừng khi khởi động; xem receiver_log.txt.")
                     if port_busy(HQ_PORT):
                         break
                     time.sleep(0.1)
                 else:
-                    raise RuntimeError("Tru so khong mo cong 18000 trong 5 giay.")
+                    raise RuntimeError("Receiver chưa mở cổng 18000 trong 5 giây.")
             else:
                 time.sleep(0.3)
                 if not self.running():
-                    raise RuntimeError("Auto sync dung khi khoi dong; xem auto_sync_log.txt.")
+                    raise RuntimeError("Auto sync dừng khi khởi động; xem auto_sync_log.txt.")
         except BaseException:
             self.stop()
             raise
-        print(self.label + " da bat; PID " + str(self.process.pid))
+        print(self.label + " đã bật; PID " + str(self.process.pid))
 
     def stop(self):
         process = self.process
@@ -73,29 +76,29 @@ class Child:
             except subprocess.TimeoutExpired:
                 process.kill()
                 process.wait(timeout=5)
-            print(self.label + " da dung (chi tien trinh do demo tao).")
+            print(self.label + " đã dừng (chỉ tiến trình do demo tạo).")
         self.process = None
 
 
 class Demo:
     def __init__(self):
         self.session = None
-        self.receiver = Child("Tru so", "hq_receiver.py", "receiver_log.txt")
-        self.agent = Child("Tu dong dong bo", "auto_sync.py", "auto_sync_log.txt")
+        self.receiver = Child("Trụ sở", "hq_receiver.py", "receiver_log.txt")
+        self.agent = Child("Tự đồng bộ", "auto_sync.py", "auto_sync_log.txt")
 
     def require_session(self):
         if self.session is None:
-            raise RuntimeError("Chua co phien. Dung lenh phien-moi.")
+            raise RuntimeError("Chưa có phiên; dùng lệnh phien-moi.")
         resolved = self.session.resolve()
         if not resolved.is_relative_to(SESSION_ROOT.resolve()):
-            raise RuntimeError("Tu choi duong dan ngoai PhienThu.")
+            raise RuntimeError("Từ chối đường dẫn ngoài PhienThu.")
         if not (resolved / "phien.json").is_file():
-            raise RuntimeError("Thieu dau nhan dien phien.")
+            raise RuntimeError("Thiếu file nhận diện phien.json của phiên.")
         return resolved
 
     def require_paused(self):
         if self.agent.running():
-            raise RuntimeError("Dung dong-bo-tat truoc de co moc doi chieu on dinh.")
+            raise RuntimeError("Dùng dong-bo-tat trước để chốt số liệu đối chiếu ổn định.")
 
     def run(self, filename=None, *args, code=None):
         session = self.require_session()
@@ -104,8 +107,11 @@ class Demo:
             command += ["-c", code]
         else:
             if filename not in {p.name for p in TEMPLATES.glob("*.py")}:
-                raise RuntimeError("Script khong nam trong bo mau.")
-            command += [str(session / "Script" / filename), *args]
+                raise RuntimeError("Script không thuộc bộ mã mẫu.")
+            script = session / "Script" / filename
+            if not script.is_file():
+                raise FileNotFoundError(f"Thiếu script của phiên: {filename}")
+            command += [str(script), *args]
         result = subprocess.run(command, cwd=session, env=ENV,
                                 capture_output=True, text=True, encoding="utf-8",
                                 errors="replace", timeout=120)
@@ -117,13 +123,12 @@ class Demo:
             log.write(output)
             log.write("\nMa thoat: " + str(result.returncode) + "\n")
         if result.returncode != 0:
-            raise RuntimeError("Lenh chua dat (ma thoat " + str(result.returncode)
-                               + "). Xem log; khong coi la thanh cong.")
+            raise RuntimeError("Lệnh chưa đạt (mã thoát " + str(result.returncode)
+                               + "). Xem log để xác định nguyên nhân; không coi bước này đã đạt.")
         return result
 
     def new_session(self):
-        self.agent.stop()
-        self.receiver.stop()
+        self.close()
         SESSION_ROOT.mkdir(exist_ok=True)
         session = SESSION_ROOT / datetime.now().strftime("Phien_%Y%m%d_%H%M%S_%f")
         session.mkdir(exist_ok=False)
@@ -133,33 +138,32 @@ class Demo:
             with (session / "Script" / source.name).open("xb") as target:
                 target.write(source.read_bytes())
         with (session / "phien.json").open("x", encoding="utf-8") as target:
-            json.dump({"muc_dich": "du lieu thu rieng; khong phai minh chung da dat",
-                       "schema": "truso.db TV3 - tam thoi",
+            json.dump({"muc_dich": "Dữ liệu phiên mới; kết quả phải được kiểm tra trong phiên này.",
+                       "schema": "Schema truso.db TV3 tạm thời, cần TV2 xác nhận.",
                        "tao_luc": datetime.now().isoformat()}, target, ensure_ascii=False, indent=2)
         self.session = session
         self.run(code="from Script.store_agent import khoi_tao; khoi_tao()")
-        print("Phien moi:", session)
-        print("Chua tao giao dich; tru so va auto sync van TAT. Phien cu duoc giu nguyen.")
+        print("Phiên mới:", session)
+        print("Chưa tạo giao dịch; receiver và auto sync đang TẮT. Phiên cũ được giữ nguyên.")
 
     def backup_name(self, value, subdir):
         session = self.require_session()
         if not value or Path(value).name != value or "/" in value or "\\" in value:
-            raise ValueError("Chi nhap ten file .db, khong nhap duong dan.")
+            raise ValueError("Chỉ nhập tên file .db, không nhập đường dẫn.")
         directory = (session / "DuLieu" / subdir).resolve()
         candidate = (directory / value).resolve()
         if candidate.parent != directory or candidate.suffix != ".db" or not candidate.is_file():
-            raise ValueError("Khong tim thay ban sao hop le trong phien hien tai.")
+            raise ValueError("Không tìm thấy bản sao hợp lệ trong phiên hiện tại.")
         return value
 
     def restore_hq(self, name):
         name = self.backup_name(name, "SaoLuuTruSo")
-        self.agent.stop()
-        self.receiver.stop()
+        self.close()
         # Giu them mot ban hien trang truoc khi phuc hoi; khong xoa ban nao.
         self.run("sao_luu_tru_so.py", "sao-luu")
         self.run("sao_luu_tru_so.py", "khoi-phuc", "--file", name)
-        print("Da phuc hoi. Auto sync va tru so VAN TAT.")
-        print("Tiep: doi-chieu -> tru-so-bat -> gui-bu -> doi-chieu -> dong-bo-bat.")
+        print("Đã phục hồi. Auto sync và receiver vẫn TẮT.")
+        print("Tiếp theo: doi-chieu, tru-so-bat, gui-bu, doi-chieu; chỉ bật lại auto sync khi đã khớp.")
 
     def execute(self, line):
         parts = shlex.split(line)
@@ -172,7 +176,7 @@ class Demo:
                  "phuc-hoi": 1, "xuat-csv": 0, "sao-luu-kho": 0, "phuc-hoi-kho": 1,
                  "trang-thai": 0, "tro-giup": 0, "thoat": 0}
         if action not in arity or len(args) != arity[action]:
-            raise ValueError("Lenh/tham so khong hop le. Dung tro-giup.")
+            raise ValueError("Lệnh hoặc tham số không hợp lệ; dùng tro-giup.")
         if action == "thoat":
             return False
         if action == "tro-giup":
@@ -188,7 +192,7 @@ class Demo:
             self.receiver.stop()
         elif action == "dong-bo-bat":
             if not self.receiver.running() and port_busy(HQ_PORT):
-                raise RuntimeError("Cong 18000 do tien trinh ben ngoai chiem; khong gui.")
+                raise RuntimeError("Cổng 18000 do tiến trình ngoài phiên sử dụng; không gửi.")
             self.agent.start(session)
         elif action == "dong-bo-tat":
             self.agent.stop()
@@ -198,12 +202,12 @@ class Demo:
         elif action == "gui-mot-luot":
             self.require_paused()
             if not self.receiver.running() and port_busy(HQ_PORT):
-                raise RuntimeError("Cong 18000 do tien trinh ben ngoai chiem; khong gui.")
+                raise RuntimeError("Cổng 18000 do tiến trình ngoài phiên sử dụng; không gửi.")
             self.run(code="from Script.store_agent import gui_giao_dich; gui_giao_dich()")
         elif action == "gui-lap":
             self.require_paused()
             if not self.receiver.running():
-                raise RuntimeError("Bat tru so cua phien truoc khi gui lap.")
+                raise RuntimeError("Bật receiver của phiên trước khi gửi lặp.")
             self.run("kiem_tra_trung.py")
         elif action == "doi-chieu":
             self.require_paused()
@@ -211,7 +215,7 @@ class Demo:
         elif action == "gui-bu":
             self.require_paused()
             if not self.receiver.running():
-                raise RuntimeError("Bat tru so cua phien truoc khi gui bu.")
+                raise RuntimeError("Bật receiver của phiên trước khi gửi bù.")
             self.run("doi_chieu.py", "gui-bu")
             self.run("doi_chieu.py")
         elif action == "sao-luu-tru-so":
@@ -232,42 +236,60 @@ class Demo:
             name = self.backup_name(args[0], "SaoLuu")
             self.run("kiem_tra_phuc_hoi.py", "--file", name)
         elif action == "trang-thai":
-            print("Phien:", session)
-            print("Tru so:", "DANG CHAY" if self.receiver.running() else "TAT")
-            print("Auto sync:", "DANG CHAY" if self.agent.running() else "TAT")
+            print("Phiên:", session)
+            print("Trụ sở:", "ĐANG CHẠY" if self.receiver.running() else "TẮT")
+            print("Auto sync:", "ĐANG CHẠY" if self.agent.running() else "TẮT")
             print("Log:", session / "MinhChung")
         return True
 
     def close(self):
-        self.agent.stop()
-        self.receiver.stop()
+        # Luôn thử dừng receiver, kể cả khi dừng sender phát sinh lỗi.
+        try:
+            self.agent.stop()
+        finally:
+            self.receiver.stop()
 
 
 HELP = """
-Lenh trong bo dieu khien (khong phai lenh PowerShell):
-  phien-moi                 Tao phien RIENG; giu nguyen moi phien cu
-  tru-so-bat | tru-so-tat    Bat/tat receiver cua phien, localhost:18000
-  tao-5                     Tao 5 GD MAU trong phien hien tai
-  dong-bo-bat | dong-bo-tat  Bat/tat auto_sync.py cua TV3
-  gui-mot-luot              Gui thu cong; auto sync phai tat
-  gui-lap                   KT3-b; auto sync phai tat
-  doi-chieu                 0/0 khong duoc coi la DAT; can auto sync tat
-  sao-luu-tru-so            Tao ban sao HQ, giu tat ca ban
-  danh-sach-ban-sao         In ten file de chon ban phuc hoi
-  phuc-hoi TEN_FILE.db      Dung ca 2 tien trinh; sao luu hien trang; phuc hoi
-  gui-bu                    Gui ACKED ma HQ thieu; doi chieu lai
-  xuat-csv | sao-luu-kho    Cong cu TV3, chi tren du lieu phien
-  phuc-hoi-kho TEN_FILE.db  Thu phuc hoi kho vao file rieng, khong ghi de kho
+Lệnh nhập tại tich-hop> (không phải lệnh PowerShell):
+  phien-moi                 Tạo phiên mới riêng; giữ nguyên mọi phiên cũ
+  tru-so-bat | tru-so-tat    Bật/tắt receiver của phiên trên localhost:18000
+  tao-5                     Tạo thêm đúng 5 giao dịch mẫu trong phiên hiện tại
+  dong-bo-bat | dong-bo-tat  Bật/tắt auto sync; chờ 10 giây sau mỗi lượt
+  gui-mot-luot              Gửi thủ công khi auto sync đã tắt
+  gui-lap                   Gửi lặp và kiểm tra; auto sync phải tắt
+  doi-chieu                 Đối chiếu; 0/0 hoặc thiếu dữ liệu không coi là đạt
+  sao-luu-tru-so            Sao lưu trụ sở, giữ tất cả bản sao
+  danh-sach-ban-sao         Xem tên bản sao để lựa chọn
+  phuc-hoi TEN_FILE.db      Dừng sender/receiver, sao lưu hiện trạng, phục hồi
+  gui-bu                    Gửi ACKED mà trụ sở thiếu rồi đối chiếu lại
+  xuat-csv | sao-luu-kho    Công cụ kho cửa hàng; chỉ dùng dữ liệu phiên
+  phuc-hoi-kho TEN_FILE.db  Thử phục hồi kho vào file riêng
   trang-thai | tro-giup | thoat
-Du lieu 15 GD goc KHONG duoc sao chep vao day. Schema TV3 la lua chon TAM THOI.
+Dùng thoat để dừng các tiến trình của phiên trước khi đóng Terminal.
+Schema TV3 là lựa chọn tạm thời, cần TV2 xác nhận.
 """
 
 
 def main():
-    if not TEMPLATES.is_dir() or not (ROOT / "MANIFEST.json").is_file():
-        raise SystemExit("Thieu bo mau/manifest; khong khoi dong.")
+    # Windows có thể dùng cp1258 khi stdout được chuyển hướng; giữ tiếng Việt UTF-8.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
+    required = [ROOT / "MANIFEST.json"] + [
+        TEMPLATES / name for name in (
+            "store_agent.py", "hq_receiver.py", "auto_sync.py", "kiem_tra_trung.py",
+            "doi_chieu.py", "sao_luu_tru_so.py", "sao_luu.py",
+            "kiem_tra_phuc_hoi.py", "xuat_giao_dich.py")
+    ]
+    missing = [str(path.relative_to(ROOT)) for path in required if not path.is_file()]
+    if missing:
+        raise SystemExit("Thiếu file bắt buộc; không khởi động: " + ", ".join(missing))
     demo = Demo()
-    print("MOI TRUONG THU TICH HOP TV2 + TV3 - CHUA CO KET QUA KIEM THU")
+    print("BẢN TÍCH HỢP THỬ NGHIỆM TV2–TV3")
+    print("Giai đoạn 1 và 2 đã ĐẠT trên localhost; xem báo cáo và log đã lưu.")
+    print("Phiên demo mới chưa được tạo hoặc kiểm thử; dùng phien-moi để bắt đầu.")
+    print("Kết quả bổ sung được ghi riêng trong BAO_CAO_KIEM_THU_TICH_HOP.md.")
     print(HELP)
     try:
         while True:
@@ -275,9 +297,9 @@ def main():
                 if not demo.execute(input("tich-hop> ")):
                     break
             except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as exc:
-                print("CHUA HOAN TAT:", exc)
+                print("CHƯA HOÀN TẤT:", exc)
     except (KeyboardInterrupt, EOFError):
-        print("\nDung bo dieu khien.")
+        print("\nDừng bộ điều khiển.")
     finally:
         demo.close()
 

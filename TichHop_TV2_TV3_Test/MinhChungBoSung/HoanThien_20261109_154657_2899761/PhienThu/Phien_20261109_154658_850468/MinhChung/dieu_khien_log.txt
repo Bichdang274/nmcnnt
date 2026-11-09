@@ -1,0 +1,17 @@
+
+[2026-11-09T15:46:59] khoi-tao-kho 
+Da khoi tao kho luu giao dich cua cua hang 01.
+Vi tri: RUNTIME_BO_SUNG/HoanThien_20261109_154657_2899761\PhienThu\Phien_20261109_154658_850468\DuLieu\cuahang01.db
+
+Ma thoat: 0
+
+[2026-11-09T15:46:59] khoi-tao-kho 
+Da luu: CH01-POS01-20261109-000001 | 50000 VND | PENDING
+
+Ma thoat: 0
+
+[2026-11-09T15:47:00] khoi-tao-kho 
+Co 1 giao dich dang cho gui.
+Da xac nhan: CH01-POS01-20261109-000001 | ACKED
+
+Ma thoat: 0

@@ -1,0 +1,31 @@
+{
+  "status": "FAIL",
+  "started": "2026-11-09T09:19:13+07:00",
+  "finished": "2026-11-09T09:19:13+07:00",
+  "cases": [
+    {
+      "case": "KT-BS1",
+      "status": "FAIL",
+      "time": "2026-11-09T09:19:13+07:00",
+      "detail": "UnicodeEncodeError: 'charmap' codec can't encode character '\\u1edb' in position 7: character maps to <undefined>"
+    }
+  ],
+  "error": "UnicodeEncodeError: 'charmap' codec can't encode character '\\u1edb' in position 7: character maps to <undefined>",
+  "runtime_root": "RUNTIME_BO_SUNG/HoanThien_20261109_091911_9358106",
+  "endpoint": "http://127.0.0.1:18000/giao-dich",
+  "schema": "TV3 temporary; TV2 confirmation required",
+  "old_sessions_used": false,
+  "source_sha256": {
+    "demo_tich_hop.py": "eabe63a65d41ff7c9c38203ec9f1b1124ea044ba88139974a770691e26a82334",
+    "chay_demo.ps1": "d72067d6e41d6d3facc266e2aa63618b2d97cde6675bb19afb7a8f5f998319de",
+    "Script/store_agent.py": "0e18f0c3be3f0ff520a60bf71cafcc1b9b6a38e4a459e6cfa2579a8ae634edd4",
+    "Script/hq_receiver.py": "18ab051cb8575cab7dca076f9a782b59748e203d53f97e80d1283ddf3b3badfd",
+    "Script/auto_sync.py": "0533a32071265e603f2118ad038dbc50b5630c3d75d413b939d2e41af5e48f91",
+    "Script/kiem_tra_trung.py": "7c91701991f570e751878dd48624df2646d7a65980a22760a924ec03be6a6840",
+    "Script/doi_chieu.py": "9e81136497054ed764d7dbbc311bd48194c88144b0150e651043af57005e9c49",
+    "Script/sao_luu_tru_so.py": "6629c394718cad58cf7c59e6d3ba23d734d99698f56485f823f192a6f6d30db5",
+    "Script/sao_luu.py": "8f4046f52c642536b94f61e10511c6ba343834ac173d6f1f3fbc351be904f3f0",
+    "Script/kiem_tra_phuc_hoi.py": "573beec4887b3b095835e4d4628f0292e9a193691a043dc6c03efff63ff23bd4",
+    "Script/xuat_giao_dich.py": "805a289de662236e4287b27fc3ebf0388b204dafd5a712a3d67fd33998356b79"
+  }
+}

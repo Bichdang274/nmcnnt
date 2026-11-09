@@ -2,9 +2,9 @@
 
 **Đề tài:** Thiết kế hạ tầng CNTT cho chuỗi cửa hàng bán lẻ.  
 **Phạm vi:** Python, SQLite và HTTP trên một máy Windows; một cửa hàng CH01, một POS01.  
-**Kết luận:** Hai giai đoạn đã ĐẠT trong phạm vi đã chạy. Đây là bản tích hợp thử nghiệm để bàn giao và xem xét, chưa phải bản tích hợp chính thức trong repository nhóm.
+**Kết luận:** Hai giai đoạn và đợt kiểm thử bổ sung đã ĐẠT trong phạm vi đã chạy. Đây là bản tích hợp thử nghiệm để bàn giao và xem xét, chưa phải bản tích hợp chính thức trong repository nhóm.
 
-Báo cáo được tổng hợp từ mã nguồn, log và bản chụp dữ liệu đã lưu. Trong lần lập tài liệu này không chạy lại kiểm thử, không mở dịch vụ và không sửa CSDL. Các tài liệu README, kế hoạch, ghi chú và manifest ban đầu được giữ nguyên theo mốc chuẩn bị; những dòng “chưa chạy” trong đó cần được đọc theo mốc lịch sử. Kết quả thực tế hiện được dẫn trong báo cáo này.
+Báo cáo được tổng hợp từ mã nguồn, log và bản chụp dữ liệu thực tế. Kết quả giai đoạn 1 và 2 được giữ nguyên. Đợt hoàn thiện đã chạy riêng KT-BS1, KT-BS2 và hồi quy phần điều khiển; không chạy lại toàn bộ hai giai đoạn. [Báo cáo bổ sung](BAO_CAO_KIEM_THU_BO_SUNG.md) lưu cách gây lỗi, kết quả thực tế và một lượt khởi tạo lỗi bảng mã đã được sửa.
 
 ## 1. Mục tiêu và phiên bản nguồn
 
@@ -135,8 +135,8 @@ Bản sao 5 có SHA-256 trước và sau thử giống nhau: `645536ab69375d9aa9
 | Gửi lặp cùng mã, cùng nội dung | Đã thử với 5 giao dịch, đạt |
 | Sao lưu HQ, phục hồi bản 5, phát hiện thiếu và gửi bù | Đã thử, đạt |
 | Từ chối coi hai CSDL rỗng là đồng bộ thành công | Đã thử, đạt ca âm |
-| HTTP 409: cùng mã khác nội dung | Có nhánh mã, chưa kiểm thử riêng |
-| Mất phản hồi ACK sau khi trụ sở commit | Chưa kiểm thử; không suy ra từ lỗi từ chối kết nối |
+| HTTP 409: cùng mã khác nội dung | KT-BS1 đã thử: HTTP 409, HQ giữ nguyên một bản ghi, không trùng |
+| Mất phản hồi ACK sau khi trụ sở commit | KT-BS2 đã thử: HQ commit, ngắt ACK đầu; kho giữ SENT, gửi lại được DA_TON_TAI rồi ACKED |
 | Nhiều cửa hàng, nhiều POS hoặc gửi đồng thời | Chưa triển khai/kiểm thử trong bản này |
 | WAN thật, HTTP Python đi qua WAN Packet Tracer | Chưa kiểm thử; hai phiên chỉ dùng localhost |
 | Xuất CSV, sao lưu và phục hồi kho cửa hàng trong bản tích hợp | Có công cụ, chưa chạy trong hai phiên này |
@@ -158,3 +158,9 @@ Bộ điều khiển Terminal chưa có lệnh nạp lại phiên đã tồn t�
 Có thể bàn giao bản thử, mã, tài liệu và minh chứng cho TV2 để rà soát. Trước khi ghép repository chính cần xác nhận schema, lựa chọn các điều chỉnh cần giữ, bổ sung kiểm thử còn thiếu và thống nhất tài liệu nhóm. Không dùng bộ 15 giao dịch TV3 gốc hoặc log 45 giao dịch TV2 để thay cho minh chứng của hai phiên này.
 
 Đọc tiếp [hướng dẫn demo nhóm](HUONG_DAN_DEMO_NHOM.md) và [bàn giao cho TV2](BAN_GIAO_CHO_TV2.md).
+
+## 8. Đợt hoàn thiện cuối và hồi quy
+
+KT-BS1 và KT-BS2 đã ĐẠT bằng dữ liệu mới hoàn toàn. HR-01 đến HR-05 đã kiểm tra cổng bị chiếm, script thiếu/thất bại, đồng bộ một giao dịch, close khi sender.stop báo lỗi, thoat/EOF và launcher với cp1258. Một lượt khởi tạo trước đó dừng vì UnicodeEncodeError trước giao dịch/dịch vụ; lỗi đã được sửa bằng UTF-8 và lượt sau đạt. Chi tiết và log: [BAO_CAO_KIEM_THU_BO_SUNG.md](BAO_CAO_KIEM_THU_BO_SUNG.md).
+
+Các ca bổ sung không sử dụng hoặc thay đổi dữ liệu hai phiên trước. Không thay schema hay logic giao dịch. ACK sai mã/sai định dạng, lỗi CSDL, tắt cưỡng bức, đa cửa hàng và WAN vẫn chưa được kiểm thử. Các kết quả mới không đồng nghĩa bản thử đã merge hoặc schema đã được TV2 xác nhận.

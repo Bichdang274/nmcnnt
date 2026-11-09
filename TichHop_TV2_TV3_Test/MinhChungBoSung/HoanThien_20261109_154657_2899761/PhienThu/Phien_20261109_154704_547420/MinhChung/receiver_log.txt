@@ -1,0 +1,4 @@
+TRU SO DANG CHO NHAN GIAO DICH
+Dia chi: http://127.0.0.1:18000/giao-dich
+Du lieu: RUNTIME_BO_SUNG/HoanThien_20261109_154657_2899761\PhienThu\Phien_20261109_154704_547420\DuLieu\truso.db
+Nhan Ctrl + C de dung.

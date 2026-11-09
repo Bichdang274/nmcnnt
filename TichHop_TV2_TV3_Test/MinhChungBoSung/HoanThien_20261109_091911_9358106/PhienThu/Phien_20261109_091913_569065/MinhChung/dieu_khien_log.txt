@@ -1,0 +1,6 @@
+
+[2026-11-09T09:19:13] khoi-tao-kho 
+Da khoi tao kho luu giao dich cua cua hang 01.
+Vi tri: RUNTIME_BO_SUNG/HoanThien_20261109_091911_9358106\PhienThu\Phien_20261109_091913_569065\DuLieu\cuahang01.db
+
+Ma thoat: 0

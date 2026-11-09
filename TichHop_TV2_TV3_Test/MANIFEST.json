@@ -1,5 +1,5 @@
 {
-  "status": "PREPARED_ONLY_NOT_RUN",
+  "status": "VERIFIED_EXPERIMENTAL_LOCALHOST",
   "tv3_commit": "2159cc8987e44a53e20ce4ee3bded194e8122969",
   "tv2_commit": "f4aeed5d29bc72e7a07e73d3c9ff1a5cb3152af8",
   "schema_decision": "TV3 truso.db TEMPORARY; TV2 confirmation required",
@@ -78,7 +78,18 @@
       "sha256": "811465817c7bcf48e3b6faf85df1523bc0c4db60636ecea4603f1b7d8d4df2e4"
     }
   ],
-  "file_sha256": {
+  "preparation_status": "PREPARED_ONLY_NOT_RUN",
+  "preparation_static_checks": {
+    "python_ast_files": 19,
+    "powershell_parser": "passed",
+    "markdown": "passed",
+    "original_exports_sha256": "passed",
+    "application_executed": false,
+    "services_started": false,
+    "runtime_tests_performed": false,
+    "session_directory_empty": true
+  },
+  "preparation_file_sha256": {
     "chay_demo.ps1": "a1c860f72272e4d7eeebdaddf826b86d049ad834102ce6dbcaa5d0d998613007",
     "demo_tich_hop.py": "89f3ade7e6ab9b13e06c12cae841bd088f50a3fc3b2365912bbc6a539039471d",
     "KE_HOACH_KIEM_THU.md": "2644367cf773cb11735b8f8bcec6096336e5b0814925042647b296eaf60c2443",
@@ -108,14 +119,61 @@
     "Script/store_agent.py": "0e18f0c3be3f0ff520a60bf71cafcc1b9b6a38e4a459e6cfa2579a8ae634edd4",
     "Script/xuat_giao_dich.py": "805a289de662236e4287b27fc3ebf0388b204dafd5a712a3d67fd33998356b79"
   },
-  "static_checks": {
-    "python_ast_files": 19,
+  "finalization_base_commit": "a4c19aed4ce07a50b6983a2d95b869cb4ff216fe",
+  "verified_results": {
+    "stage1": {
+      "status": "PASS",
+      "evidence": "PhienThu/Phien_20261109_014617_838147/MinhChung/KET_QUA_GIAI_DOAN_1.json",
+      "rerun_in_finalization": false
+    },
+    "stage2": {
+      "status": "PASS",
+      "evidence": "PhienThu/Phien_GD2_20261109_020609_227458/MinhChung/KET_QUA_GIAI_DOAN_2.json",
+      "rerun_in_finalization": false
+    },
+    "supplementary": {
+      "status": "PASS",
+      "case_count": 7,
+      "cases": [
+        "KT-BS1",
+        "KT-BS2",
+        "HR-01",
+        "HR-02",
+        "HR-03",
+        "HR-04",
+        "HR-05"
+      ],
+      "evidence": "MinhChungBoSung/HoanThien_20261109_154657_2899761/MinhChung/KET_QUA_BO_SUNG.json",
+      "initial_setup_failure_preserved": "MinhChungBoSung/HoanThien_20261109_091911_9358106/MinhChung/KET_QUA_BO_SUNG.json"
+    }
+  },
+  "current_code_sha256": {
+    "demo_tich_hop.py": "8bac9471dfeb534ce5ca8bb9dc7d636b30b0bdc76ab75f2cf2fb70d04de56510",
+    "chay_demo.ps1": "48730b7d9cf8a062296d1f5c13a4e33f07fa943282edf34643d8f06769af6648",
+    "KiemThu/kiem_thu_bo_sung.py": "ea5bb8988dfb26b8a8a5d87b1303d2ed787aec2d2fe1834fbcb54d2cba5f57d7",
+    "Script/auto_sync.py": "0533a32071265e603f2118ad038dbc50b5630c3d75d413b939d2e41af5e48f91",
+    "Script/doi_chieu.py": "9e81136497054ed764d7dbbc311bd48194c88144b0150e651043af57005e9c49",
+    "Script/hq_receiver.py": "18ab051cb8575cab7dca076f9a782b59748e203d53f97e80d1283ddf3b3badfd",
+    "Script/kiem_tra_phuc_hoi.py": "573beec4887b3b095835e4d4628f0292e9a193691a043dc6c03efff63ff23bd4",
+    "Script/kiem_tra_trung.py": "7c91701991f570e751878dd48624df2646d7a65980a22760a924ec03be6a6840",
+    "Script/sao_luu.py": "8f4046f52c642536b94f61e10511c6ba343834ac173d6f1f3fbc351be904f3f0",
+    "Script/sao_luu_tru_so.py": "6629c394718cad58cf7c59e6d3ba23d734d99698f56485f823f192a6f6d30db5",
+    "Script/store_agent.py": "0e18f0c3be3f0ff520a60bf71cafcc1b9b6a38e4a459e6cfa2579a8ae634edd4",
+    "Script/xuat_giao_dich.py": "805a289de662236e4287b27fc3ebf0388b204dafd5a712a3d67fd33998356b79"
+  },
+  "current_static_checks": {
+    "python_ast_files": 20,
+    "powershell_parser_files": 2,
     "powershell_parser": "passed",
+    "markdown_relative_links": 96,
     "markdown": "passed",
-    "original_exports_sha256": "passed",
-    "application_executed": false,
-    "services_started": false,
-    "runtime_tests_performed": false,
-    "session_directory_empty": true
-  }
+    "tested_source_hashes": "matched",
+    "original_exports_sha256": "passed"
+  },
+  "limitations": [
+    "TV3 schema temporary; requires TV2 confirmation",
+    "Single CH01/POS01 localhost only; no real WAN/Packet Tracer Python route proven",
+    "Invalid ACK/schema corruption/power failure/forced terminal shutdown not tested",
+    "Experimental branch; not merged into main project"
+  ]
 }

@@ -1,0 +1,27 @@
+
+[2026-11-09T09:19:13+07:00] tich-hop> phien-moi
+Da khoi tao kho luu giao dich cua cua hang 01.
+Vi tri: RUNTIME_BO_SUNG/HoanThien_20261109_091911_9358106\PhienThu\Phien_20261109_091913_569065\DuLieu\cuahang01.db
+Traceback (most recent call last):
+  File "MA_NGUON_TICH_HOP\KiemThu\kiem_thu_bo_sung.py", line 234, in main
+    demo = new_demo()
+  File "MA_NGUON_TICH_HOP\KiemThu\kiem_thu_bo_sung.py", line 216, in new_demo
+    command(demo, "phien-moi")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "MA_NGUON_TICH_HOP\KiemThu\kiem_thu_bo_sung.py", line 98, in command
+    return demo.execute(value)
+           ~~~~~~~~~~~~^^^^^^^
+  File "RUNTIME_BO_SUNG/HoanThien_20261109_091911_9358106\demo_tich_hop.py", line 186, in execute
+    self.new_session()
+    ~~~~~~~~~~~~~~~~^^
+  File "RUNTIME_BO_SUNG/HoanThien_20261109_091911_9358106\demo_tich_hop.py", line 146, in new_session
+    print("Phiên mới:", session)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "MA_NGUON_TICH_HOP\KiemThu\kiem_thu_bo_sung.py", line 206, in write
+    stream.write(text)
+    ~~~~~~~~~~~~^^^^^^
+  File "THU_MUC_NGUOI_DUNG\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1258.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u1edb' in position 7: character maps to <undefined>
+RESULT={"status": "FAIL", "cases": 1, "error": "UnicodeEncodeError: 'charmap' codec can't encode character '\\u1edb' in position 7: character maps to <undefined>", "runtime_root": "THU_MUC_NGUOI_DUNG\\Downloads\\nmcnnt1\\TichHop_TV2_TV3_Test\\PhienThu\\HoanThien_20261109_091911_9358106"}

@@ -1,0 +1,319 @@
+{
+  "status": "PASS",
+  "started": "2026-11-09T15:46:58+07:00",
+  "finished": "2026-11-09T15:47:07+07:00",
+  "cases": [
+    {
+      "case": "KT-BS1",
+      "status": "PASS",
+      "time": "2026-11-09T15:47:00+07:00",
+      "detail": "HTTP 409; HQ giữ nguyên một bản ghi, không ghi đè hoặc ghi trùng.",
+      "actual": {
+        "http_status": 409,
+        "response": {
+          "loi": "Cung ma giao dich nhung khac noi dung",
+          "ma_gd": "CH01-POS01-20261109-000001"
+        },
+        "conflicting_request": {
+          "ma_gd": "CH01-POS01-20261109-000001",
+          "ma_cua_hang": "CH01",
+          "ma_may": "POS01",
+          "thoi_gian": "2026-11-09T15:46:59",
+          "so_tien": 50001
+        },
+        "before": {
+          "store": {
+            "rows": [
+              {
+                "ma_gd": "CH01-POS01-20261109-000001",
+                "ma_cua_hang": "CH01",
+                "ma_may": "POS01",
+                "thoi_gian": "2026-11-09T15:46:59",
+                "so_tien": 50000,
+                "trang_thai": "ACKED"
+              }
+            ],
+            "count": 1,
+            "states": {
+              "ACKED": 1
+            },
+            "duplicate_ids": 0,
+            "integrity_check": "ok"
+          },
+          "hq": {
+            "rows": [
+              {
+                "ma_gd": "CH01-POS01-20261109-000001",
+                "ma_cua_hang": "CH01",
+                "ma_may": "POS01",
+                "thoi_gian": "2026-11-09T15:46:59",
+                "so_tien": 50000
+              }
+            ],
+            "count": 1,
+            "states": {},
+            "duplicate_ids": 0,
+            "integrity_check": "ok"
+          },
+          "five_fields_equal": true
+        },
+        "after": {
+          "store": {
+            "rows": [
+              {
+                "ma_gd": "CH01-POS01-20261109-000001",
+                "ma_cua_hang": "CH01",
+                "ma_may": "POS01",
+                "thoi_gian": "2026-11-09T15:46:59",
+                "so_tien": 50000,
+                "trang_thai": "ACKED"
+              }
+            ],
+            "count": 1,
+            "states": {
+              "ACKED": 1
+            },
+            "duplicate_ids": 0,
+            "integrity_check": "ok"
+          },
+          "hq": {
+            "rows": [
+              {
+                "ma_gd": "CH01-POS01-20261109-000001",
+                "ma_cua_hang": "CH01",
+                "ma_may": "POS01",
+                "thoi_gian": "2026-11-09T15:46:59",
+                "so_tien": 50000
+              }
+            ],
+            "count": 1,
+            "states": {},
+            "duplicate_ids": 0,
+            "integrity_check": "ok"
+          },
+          "five_fields_equal": true
+        }
+      }
+    },
+    {
+      "case": "KT-BS2",
+      "status": "PASS",
+      "time": "2026-11-09T15:47:01+07:00",
+      "detail": "HQ commit nhưng ACK bị ngắt; kho giữ SENT; gửi lại nhận DA_TON_TAI và ACKED, HQ vẫn 1.",
+      "actual": {
+        "fault": {
+          "injection": "drop_first_ack_after_commit",
+          "reply_not_delivered": {
+            "ack": true,
+            "ma_gd": "CH01-POS01-20261109-000001",
+            "ket_qua": "DA_LUU"
+          },
+          "committed_row": {
+            "ma_gd": "CH01-POS01-20261109-000001",
+            "ma_cua_hang": "CH01",
+            "ma_may": "POS01",
+            "thoi_gian": "2026-11-09T15:47:00",
+            "so_tien": 50000
+          }
+        },
+        "after_lost_ack": {
+          "store": {
+            "rows": [
+              {
+                "ma_gd": "CH01-POS01-20261109-000001",
+                "ma_cua_hang": "CH01",
+                "ma_may": "POS01",
+                "thoi_gian": "2026-11-09T15:47:00",
+                "so_tien": 50000,
+                "trang_thai": "SENT"
+              }
+            ],
+            "count": 1,
+            "states": {
+              "SENT": 1
+            },
+            "duplicate_ids": 0,
+            "integrity_check": "ok"
+          },
+          "hq": {
+            "rows": [
+              {
+                "ma_gd": "CH01-POS01-20261109-000001",
+                "ma_cua_hang": "CH01",
+                "ma_may": "POS01",
+                "thoi_gian": "2026-11-09T15:47:00",
+                "so_tien": 50000
+              }
+            ],
+            "count": 1,
+            "states": {},
+            "duplicate_ids": 0,
+            "integrity_check": "ok"
+          },
+          "five_fields_equal": true
+        },
+        "after_retry": {
+          "store": {
+            "rows": [
+              {
+                "ma_gd": "CH01-POS01-20261109-000001",
+                "ma_cua_hang": "CH01",
+                "ma_may": "POS01",
+                "thoi_gian": "2026-11-09T15:47:00",
+                "so_tien": 50000,
+                "trang_thai": "ACKED"
+              }
+            ],
+            "count": 1,
+            "states": {
+              "ACKED": 1
+            },
+            "duplicate_ids": 0,
+            "integrity_check": "ok"
+          },
+          "hq": {
+            "rows": [
+              {
+                "ma_gd": "CH01-POS01-20261109-000001",
+                "ma_cua_hang": "CH01",
+                "ma_may": "POS01",
+                "thoi_gian": "2026-11-09T15:47:00",
+                "so_tien": 50000
+              }
+            ],
+            "count": 1,
+            "states": {},
+            "duplicate_ids": 0,
+            "integrity_check": "ok"
+          },
+          "five_fields_equal": true
+        },
+        "retry_result_observed": "DA_TON_TAI",
+        "valid_ack_received_before_acked": true
+      }
+    },
+    {
+      "case": "HR-01",
+      "status": "PASS",
+      "time": "2026-11-09T15:47:01+07:00",
+      "detail": "Từ chối cổng do socket thử giữ; không tạo/đóng tiến trình ngoài phiên.",
+      "actual": {
+        "error": "Cổng 18000 đang được dùng; không dừng hoặc chiếm dịch vụ bên ngoài."
+      }
+    },
+    {
+      "case": "HR-02",
+      "status": "PASS",
+      "time": "2026-11-09T15:47:02+07:00",
+      "detail": "Thiếu script và script con exit 7/9 đều báo lỗi, không báo bước đã đạt.",
+      "actual": {
+        "missing": "Thiếu script của phiên: khong_ton_tai.py",
+        "exit7": "Lệnh chưa đạt (mã thoát 7). Xem log để xác định nguyên nhân; không coi bước này đã đạt.",
+        "startup_failure": "Auto sync dừng khi khởi động; xem auto_sync_log.txt."
+      }
+    },
+    {
+      "case": "HR-03",
+      "status": "PASS",
+      "time": "2026-11-09T15:47:04+07:00",
+      "detail": "Hồi quy auto sync 1 ACKED; close vẫn dừng receiver khi sender.stop báo lỗi.",
+      "actual": {
+        "state": {
+          "store": {
+            "rows": [
+              {
+                "ma_gd": "CH01-POS01-20261109-000001",
+                "ma_cua_hang": "CH01",
+                "ma_may": "POS01",
+                "thoi_gian": "2026-11-09T15:47:03",
+                "so_tien": 50000,
+                "trang_thai": "ACKED"
+              }
+            ],
+            "count": 1,
+            "states": {
+              "ACKED": 1
+            },
+            "duplicate_ids": 0,
+            "integrity_check": "ok"
+          },
+          "hq": {
+            "rows": [
+              {
+                "ma_gd": "CH01-POS01-20261109-000001",
+                "ma_cua_hang": "CH01",
+                "ma_may": "POS01",
+                "thoi_gian": "2026-11-09T15:47:03",
+                "so_tien": 50000
+              }
+            ],
+            "count": 1,
+            "states": {},
+            "duplicate_ids": 0,
+            "integrity_check": "ok"
+          },
+          "five_fields_equal": true
+        },
+        "receiver_stopped": true,
+        "sender_stopped": true
+      }
+    },
+    {
+      "case": "HR-04",
+      "status": "PASS",
+      "time": "2026-11-09T15:47:07+07:00",
+      "detail": "CLI thoat và EOF dọn cả hai tiến trình; launcher PowerShell thoát 0.",
+      "actual": {
+        "cli": [
+          {
+            "mode": "thoat",
+            "returncode": 0,
+            "owned_pids": [
+              17980,
+              31716
+            ],
+            "all_children_stopped": true
+          },
+          {
+            "mode": "EOF",
+            "returncode": 0,
+            "owned_pids": [
+              22524,
+              2408
+            ],
+            "all_children_stopped": true
+          }
+        ],
+        "launcher_exit": 0
+      }
+    },
+    {
+      "case": "HR-05",
+      "status": "PASS",
+      "time": "2026-11-09T15:47:07+07:00",
+      "detail": "Khởi động thiếu auto_sync.py dừng trước tạo phiên hoặc dịch vụ.",
+      "actual": {
+        "exit": 1,
+        "error": "Thiếu file bắt buộc; không khởi động: Script\\auto_sync.py"
+      }
+    }
+  ],
+  "error": null,
+  "runtime_root": "RUNTIME_BO_SUNG/HoanThien_20261109_154657_2899761",
+  "endpoint": "http://127.0.0.1:18000/giao-dich",
+  "schema": "TV3 temporary; TV2 confirmation required",
+  "old_sessions_used": false,
+  "source_sha256": {
+    "demo_tich_hop.py": "8bac9471dfeb534ce5ca8bb9dc7d636b30b0bdc76ab75f2cf2fb70d04de56510",
+    "chay_demo.ps1": "48730b7d9cf8a062296d1f5c13a4e33f07fa943282edf34643d8f06769af6648",
+    "Script/store_agent.py": "0e18f0c3be3f0ff520a60bf71cafcc1b9b6a38e4a459e6cfa2579a8ae634edd4",
+    "Script/hq_receiver.py": "18ab051cb8575cab7dca076f9a782b59748e203d53f97e80d1283ddf3b3badfd",
+    "Script/auto_sync.py": "0533a32071265e603f2118ad038dbc50b5630c3d75d413b939d2e41af5e48f91",
+    "Script/kiem_tra_trung.py": "7c91701991f570e751878dd48624df2646d7a65980a22760a924ec03be6a6840",
+    "Script/doi_chieu.py": "9e81136497054ed764d7dbbc311bd48194c88144b0150e651043af57005e9c49",
+    "Script/sao_luu_tru_so.py": "6629c394718cad58cf7c59e6d3ba23d734d99698f56485f823f192a6f6d30db5",
+    "Script/sao_luu.py": "8f4046f52c642536b94f61e10511c6ba343834ac173d6f1f3fbc351be904f3f0",
+    "Script/kiem_tra_phuc_hoi.py": "573beec4887b3b095835e4d4628f0292e9a193691a043dc6c03efff63ff23bd4",
+    "Script/xuat_giao_dich.py": "805a289de662236e4287b27fc3ebf0388b204dafd5a712a3d67fd33998356b79"
+  }
+}
