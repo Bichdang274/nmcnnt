@@ -1,4 +1,5 @@
 # Runtime databases and journals
+/runtime/
 *.db
 *.db-*
 *.sqlite
