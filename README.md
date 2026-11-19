@@ -1,5 +1,10 @@
 # nmcnnt
+
+báo cáo:
 https://ptiteduvn-my.sharepoint.com/:w:/g/personal/bichdt_b24cc037_stu_ptit_edu_vn/IQCvtzTWkGmDQYF9XVSPaBLoASkYUkZ-vrL6jOpMxALC0WE?e=oKaM1G
+
+video demo:
+https://drive.google.com/drive/folders/1B1mVk81plK14Q8pVvmNtc4KDcfttziR7?usp=sharing
 
 Hồ sơ nộp chung cho mọi đề
 
