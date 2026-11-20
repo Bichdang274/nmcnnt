@@ -1,7 +1,7 @@
 # nmcnnt
 
 báo cáo:
-https://ptiteduvn-my.sharepoint.com/:w:/g/personal/bichdt_b24cc037_stu_ptit_edu_vn/IQCZFeQxUi0PQrSEMp-1yLQYAVG9xYyvVS8JRZDOkGorZ2Y?e=ky9Rgd
+https://ptiteduvn-my.sharepoint.com/:w:/g/personal/bichdt_b24cc037_stu_ptit_edu_vn/IQDs5x2BqR8gT68PGej_9I22AR8c1aikfGwTiISCSW3mwc0?e=xvxZ53
 
 video demo:
 https://drive.google.com/drive/folders/1B1mVk81plK14Q8pVvmNtc4KDcfttziR7?usp=sharing
