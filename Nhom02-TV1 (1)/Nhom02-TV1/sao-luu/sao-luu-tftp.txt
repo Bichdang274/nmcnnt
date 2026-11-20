@@ -19,9 +19,3 @@ copy tftp: running-config
 ! Address or name of remote host []? 192.168.0.11
 ! Source filename []? R-CH1-confg-20261020
 ! Destination filename [running-config]? <Enter>
-!
-! ---------- Luu y voi switch cua hang ----------
-! Switch gui TFTP tu IP 192.168.x0.2, di qua G0/0 chieu IN cua router cua hang.
-! ACL cua TV2 can co dong sau, dat TRUOC dong chan POS -> Server-Backup:
-!   permit udp host 192.168.10.2 host 192.168.0.11 eq 69
-!   (tuong tu cho 192.168.20.2 va 192.168.30.2)
