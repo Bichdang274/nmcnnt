@@ -4,7 +4,7 @@ https://ptiteduvn-my.sharepoint.com/:w:/g/personal/bichdt_b24cc037_stu_ptit_edu_
 Nhóm 02 – Đề tài 02: Hạ tầng CNTT cho chuỗi cửa hàng bán lẻ
 Phần của TV1 (Đặng Thị Bích) – WAN, định tuyến, bảo mật thiết bị, sao lưu cấu hình
 Môn: Nhập môn công nghệ nền tảng (RIPT1304-20261-03) · GVHD: Nguyễn Xuân Dũng
-Công cụ: Cisco Packet Tracer 7.3.1
+Công cụ: Cisco Packet Tracer 9.0.1
 Cấu trúc thư mục
 ```
 .
