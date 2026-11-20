@@ -3,6 +3,7 @@
 Môn: Nhập môn công nghệ nền tảng (RIPT1304-20261-03) · GVHD: Nguyễn Xuân Dũng
 
 | Thành viên | MSSV | Vai trò | Nhánh |
+|---|---|---|---|
 | Đặng Thị Bích | B24DCCC037 | TV1 – topology, WAN, OSPF, bảo mật thiết bị, sao lưu cấu hình (TFTP), so sánh PA1/PA2 | `tv1` |
 | Lê Minh Đạo | B24DCCC058 | TV2 – IP máy trạm, dịch vụ máy chủ, ACL, SSH, port security, NTP/Syslog, sao lưu – đối chiếu CSDL | `tv2` |
 | Phan Hải Đức | B24DCCC072 | TV3 – lưu tạm, gửi lại, chống trùng, tự đồng bộ, kiểm thử tích hợp | `tv3`, `tich-hop-tv2-tv3-test`, `tv3-nang-cao-demo` |
